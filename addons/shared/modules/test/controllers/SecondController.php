@@ -1,9 +1,9 @@
-<?php namespace App\Addons\Modules\Test;
+<?php
 
 class SecondController extends \AdminController
 {
     public function index()
     {
-        echo 'Hello World!';
+        echo 'Suck nuts!';
     }
 }

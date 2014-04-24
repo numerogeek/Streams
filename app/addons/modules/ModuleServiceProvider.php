@@ -1,19 +1,21 @@
 <?php namespace App\Addons\Modules;
 
-use App\Addons\AddonsServiceProviderAbstract;
+use App\Addons\AddonServiceProviderAbstract;
 
-class ModuleServiceProvider extends AddonsServiceProviderAbstract
+class ModuleServiceProvider extends AddonServiceProviderAbstract
 {
-    /**
-     * Type
-     *
-     * @var string
-     */
-    protected $type = 'modules';
+    public function __construct()
+    {
+        $this->manager = new ModuleManager();
+    }
 
     public function boot()
     {
-        parent::boot('test');
-        parent::register('test');
+        foreach (glob(base_path() . '/addons/shared/modules/*') as $module) {
+            if ($module = $this->manager->make($module)) {
+                parent::boot($module);
+                parent::register($module);
+            }
+        }
     }
 }

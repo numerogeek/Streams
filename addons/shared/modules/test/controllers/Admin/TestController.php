@@ -1,9 +1,9 @@
-<?php namespace App\Addons\Modules\Test;
+<?php namespace Addon\Module\Test\Controller\Admin;
 
 class TestController extends \AdminController
 {
     public function index()
     {
-        echo 'Hello World!';
+        echo 'Hello Bitches!';
     }
 }
