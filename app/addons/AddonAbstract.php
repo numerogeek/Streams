@@ -14,6 +14,6 @@ abstract class AddonAbstract
      */
     public function getAutoloadDirectories()
     {
-        return $this->autoloadDirectories;
+        return (array)$this->autoloadDirectories;
     }
 }

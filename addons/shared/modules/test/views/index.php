@@ -1,0 +1,1 @@
+<?php echo Lang::get('TestModule::messages.welcome'); ?>

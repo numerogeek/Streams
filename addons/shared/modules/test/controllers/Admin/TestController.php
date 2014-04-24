@@ -4,6 +4,6 @@ class TestController extends \AdminController
 {
     public function index()
     {
-        echo 'Hello Bitches!';
+        return \View::make('TestModule::index');
     }
 }

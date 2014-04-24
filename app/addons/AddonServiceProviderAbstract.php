@@ -32,6 +32,8 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
      */
     public function boot()
     {
+        parent::boot();
+
         $this->loader = new ClassLoader();
     }
 
@@ -42,7 +44,7 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
     {
         if ($addon = $this->getAddon(func_get_args())) {
 
-            // Register the PSR class paths
+            // Register PSR class directories
             foreach ($addon->getAutoloadDirectories() as $directory => $suffix) {
                 $this->loader->addPsr4(
                     'Addon\Module\\' . Str::studly($addon->slug) . '\\' . $suffix . '\\',
@@ -51,6 +53,12 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
             }
 
             $this->loader->register();
+
+            // Add view namespace
+            \View::addNamespace(get_class($addon), $addon->path.'/views');
+
+            // Add language namespace
+            \Lang::addNamespace(get_class($addon), $addon->path.'/lang');
 
             // Add routes
             $routes = $addon->path . '/config/routes.php';
