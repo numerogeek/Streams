@@ -1,1 +1,1 @@
-<?php echo Lang::get('TestModule::messages.welcome'); ?>
+<?php echo trans('TestModule::messages.welcome'); ?>
