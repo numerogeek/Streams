@@ -7,7 +7,8 @@ class AdminController extends BaseController
      */
     public function index()
     {
-        echo 'Boom.';
+        // @todo - This should redirect to admin/dashboard
+        return View::make('app');
     }
 
     /**

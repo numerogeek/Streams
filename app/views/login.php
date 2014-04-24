@@ -3,7 +3,7 @@
 <?php echo Form::open(array('url' => 'admin/login', 'method' => 'post')); ?>
 <?php echo Form::text('email'); ?>
 <br>
-<?php echo Form::text('password'); ?>
+<?php echo Form::password('password'); ?>
 <br>
 <?php echo Form::submit('Login'); ?>
 <?php echo Form::close(); ?>

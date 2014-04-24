@@ -1,0 +1,1 @@
+<?php echo HTML::link('admin/logout', 'Logout'); ?>
