@@ -1,6 +1,6 @@
 <?php namespace App\Addons\Modules\Test;
 
-class TestController extends \AdminController
+class SecondController extends \AdminController
 {
     public function index()
     {
