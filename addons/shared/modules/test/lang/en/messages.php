@@ -1,7 +1,5 @@
 <?php
 
 return array(
-    'messages' => array(
-        'welcome' => 'Hi there.',
-    ),
+    'welcome' => 'Hi there.'
 );
