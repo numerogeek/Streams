@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+
+    # Make sure directory listing is disabled
+	Options +FollowSymLinks -Indexes
+
+	# Disable the Apache MultiViews directive
+	# if it is enabled on the server. It plays havoc with URL rewriting
+	Options -MultiViews
+	RewriteEngine on
+
+	# You think you can just go wherever you want? That's wrong!
+	# RedirectMatch 403 ^/.*/(composer\.json|composer\.lock|system/cms/cache|system/codeigniter|system/vendor|system/cms/config|system/cms/logs|system/cms/modules/streams_core/models|\.git|\.hg).*$
+
+	# Send request via index.php (again, not if its a real file or folder)
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+
+	<IfModule mod_php5.c>
+		RewriteRule ^(.*)$ index.php/$1 [L]
+	</IfModule>
+
+	<IfModule !mod_php5.c>
+		RewriteRule ^(.*)$ index.php?/$1 [L]
+	</IfModule>
+
+</IfModule>
