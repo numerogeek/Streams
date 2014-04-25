@@ -19,8 +19,12 @@
             "app/tests/TestCase.php",
             "app/addon",
             "app/addon/module",
-            "app/addon/block"
-        ]
+            "app/addon/block",
+            "app/addon/tag"
+        ],
+        "psr-0": {
+            "Addon": "addons"
+        }
     },
     "scripts": {
         "post-install-cmd": [

@@ -115,7 +115,8 @@ return array(
         'Illuminate\Workbench\WorkbenchServiceProvider',
         'Cartalyst\Sentry\SentryServiceProvider',
         'App\Addon\Module\ModuleServiceProvider',
-        'App\Addon\Block\BlockServiceProvider'
+        'App\Addon\Block\BlockServiceProvider',
+        'App\Addon\Tag\TagServiceProvider'
 
     ),
     /*
