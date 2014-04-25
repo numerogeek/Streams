@@ -6,6 +6,6 @@ class TestController extends \AdminController
     {
         \Event::fire('test.test_event', null);
 
-        return \View::make('TestModule::index');
+        return \View::make('module.test::index');
     }
 }

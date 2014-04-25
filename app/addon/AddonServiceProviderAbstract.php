@@ -60,17 +60,17 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
 
             // Add views namespace
             if (is_dir($addon->path . '/views')) {
-                \View::addNamespace(get_class($addon), $addon->path . '/views');
+                \View::addNamespace($addon->type . '.' . $addon->slug, $addon->path . '/views');
             }
 
             // Add lang namespace
             if (is_dir($addon->path . '/lang')) {
-                \Lang::addNamespace(get_class($addon), $addon->path . '/lang');
+                \Lang::addNamespace($addon->type . '.' . $addon->slug, $addon->path . '/lang');
             }
 
             // Add config namespace
             if (is_dir($addon->path . '/config')) {
-                \Config::addNamespace(get_class($addon), $addon->path . '/config');
+                \Config::addNamespace($addon->type . '.' . $addon->slug, $addon->path . '/config');
             }
 
             // Load routes file
