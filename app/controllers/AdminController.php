@@ -24,7 +24,7 @@ class AdminController extends BaseController
      *
      * @return mixed
      */
-    public function attempt()
+    public function attemptLogin()
     {
         try {
             $credentials = array(

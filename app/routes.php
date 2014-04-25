@@ -27,4 +27,4 @@ Route::get(
     }
 );
 Route::get('admin/login', 'AdminController@login');
-Route::post('admin/login', 'AdminController@attempt');
+Route::post('admin/login', 'AdminController@attemptLogin');
