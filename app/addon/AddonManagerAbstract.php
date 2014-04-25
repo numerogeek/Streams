@@ -42,7 +42,7 @@ abstract class AddonManagerAbstract
      */
     public function make($path)
     {
-        require $path . '/' . Str::studly(basename($path)) . '.php';
+        require $path . '/addon.php';
 
         $class = Str::studly(basename($path)) . 'Module';
 
