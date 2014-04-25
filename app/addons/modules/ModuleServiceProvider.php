@@ -21,7 +21,9 @@ class ModuleServiceProvider extends AddonServiceProviderAbstract
 
         foreach (glob(base_path() . '/addons/shared/modules/*') as $module) {
             if ($module = $this->manager->make($module)) {
-                parent::register($module);
+                if (parent::register($module)) {
+                    $this->registered[$module->slug] = $module;
+                }
             }
         }
     }

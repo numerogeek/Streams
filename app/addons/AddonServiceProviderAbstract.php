@@ -66,7 +66,11 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
             if (file_exists($routes)) {
                 require $routes;
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**
