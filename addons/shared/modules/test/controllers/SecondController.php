@@ -1,4 +1,4 @@
-<?php
+<?php namespace Addon\Module\Test\Controller;
 
 class SecondController extends \AdminController
 {
