@@ -18,11 +18,9 @@
             "app/database/seeds",
             "app/tests/TestCase.php",
             "app/addons",
-            "app/addons/modules"
-        ],
-        "psr-0": {
-            "Addon": "addons"
-        }
+            "app/addons/modules",
+            "app/addons/blocks"
+        ]
     },
     "scripts": {
         "post-install-cmd": [

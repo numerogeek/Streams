@@ -114,7 +114,8 @@ return array(
         'Illuminate\View\ViewServiceProvider',
         'Illuminate\Workbench\WorkbenchServiceProvider',
         'Cartalyst\Sentry\SentryServiceProvider',
-        'App\Addons\Modules\ModuleServiceProvider'
+        'App\Addon\Module\ModuleServiceProvider',
+        'App\Addon\Block\BlockServiceProvider'
 
     ),
     /*
