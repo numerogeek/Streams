@@ -1,6 +1,6 @@
-## Streams Rapid Application Deployment
+## Streams
 
-Streams is a platform for rapidly deploying applications of all kinds in a user friendly and highly customizable manner.
+Streams is a platform for rapidly deploying applications of all kinds in a user friendly, customizable and highly automated manner.
 
 ### License
 
