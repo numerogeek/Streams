@@ -116,7 +116,8 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'App\Addon\Module\ModuleServiceProvider',
         'App\Addon\Block\BlockServiceProvider',
-        'App\Addon\Tag\TagServiceProvider'
+        'App\Addon\Tag\TagServiceProvider',
+        'App\Addon\FieldType\FieldTypeServiceProvider'
 
     ),
     /*

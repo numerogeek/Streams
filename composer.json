@@ -20,7 +20,8 @@
             "app/addon",
             "app/addon/module",
             "app/addon/block",
-            "app/addon/tag"
+            "app/addon/tag",
+            "app/addon/field_type"
         ],
         "psr-0": {
             "Addon": "addons"
