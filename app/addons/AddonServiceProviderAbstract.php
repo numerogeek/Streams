@@ -28,6 +28,13 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
     protected $slug = null;
 
     /**
+     * Registered
+     * 
+     * @var array
+     */
+    protected $registered = array();
+
+    /**
      * Boot
      */
     public function boot()
