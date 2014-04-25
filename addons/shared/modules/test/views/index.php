@@ -2,4 +2,4 @@
 
 -
 
-<?php echo Config::get('TestModule::mymodule.test'); ?>
+<?php echo Config::get('TestModule::addon.test'); ?>

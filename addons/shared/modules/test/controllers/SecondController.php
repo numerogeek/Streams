@@ -4,6 +4,6 @@ class SecondController extends \AdminController
 {
     public function index()
     {
-        echo 'Suck nuts!';
+        echo 'I am another controller!';
     }
 }
