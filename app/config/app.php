@@ -117,7 +117,8 @@ return array(
         'App\Addon\Module\ModuleServiceProvider',
         'App\Addon\Block\BlockServiceProvider',
         'App\Addon\Tag\TagServiceProvider',
-        'App\Addon\FieldType\FieldTypeServiceProvider'
+        'App\Addon\FieldType\FieldTypeServiceProvider',
+        'App\Addon\Extension\ExtensionServiceProvider'
 
     ),
     /*
