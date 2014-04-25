@@ -1,6 +1,6 @@
 ## Streams Rapid Application Deployment
 
-[![Build Status](https://travis-ci.org/aiwebsystems/streams.svg)](https://travis-ci.org/aiwebsystems/streams)
+Streams is a platform for rapidly deploying applications of all kinds in a user friendly and highly customizable manner.
 
 ### License
 
