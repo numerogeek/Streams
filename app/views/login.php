@@ -5,5 +5,8 @@
 <br>
 <?php echo Form::password('password'); ?>
 <br>
+<?php echo Form::checkbox('remember', true, false, array('id' => 'remember')); ?>
+<label for="remember">Remember me</label>
+<br>
 <?php echo Form::submit('Login'); ?>
 <?php echo Form::close(); ?>

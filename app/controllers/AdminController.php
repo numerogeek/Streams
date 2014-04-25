@@ -32,7 +32,7 @@ class AdminController extends BaseController
                 'password' => Request::get('password'),
             );
 
-            $user = Sentry::authenticate($credentials, false);
+            $user = Sentry::authenticate($credentials, Request::get('remember'));
 
             return Redirect::to('admin');
         } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {

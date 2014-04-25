@@ -114,6 +114,7 @@ return array(
         'Illuminate\View\ViewServiceProvider',
         'Illuminate\Workbench\WorkbenchServiceProvider',
         'Cartalyst\Sentry\SentryServiceProvider',
+        'Barryvdh\Debugbar\ServiceProvider',
         'App\Addon\Module\ModuleServiceProvider',
         'App\Addon\Block\BlockServiceProvider',
         'App\Addon\Tag\TagServiceProvider',
@@ -184,6 +185,7 @@ return array(
         'URL'         => 'Illuminate\Support\Facades\URL',
         'Validator'   => 'Illuminate\Support\Facades\Validator',
         'View'        => 'Illuminate\Support\Facades\View',
+        'Debug'       => 'Barryvdh\Debugbar\Facade',
 
     ),
 

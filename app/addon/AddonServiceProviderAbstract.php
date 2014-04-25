@@ -73,9 +73,14 @@ abstract class AddonServiceProviderAbstract extends ServiceProvider
                 \Config::addNamespace(get_class($addon), $addon->path . '/config');
             }
 
-            // Add routes file
+            // Load routes file
             if (is_file($addon->path . '/routes.php')) {
-                require $addon->path . '/routes.php';
+                require_once $addon->path . '/routes.php';
+            }
+
+            // Load events file
+            if (is_file($addon->path . '/events.php')) {
+                require_once $addon->path . '/events.php';
             }
         }
     }
