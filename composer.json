@@ -23,7 +23,8 @@
             "app/addon/block",
             "app/addon/tag",
             "app/addon/field_type",
-            "app/addon/extension"
+            "app/addon/extension",
+            "app/addon/theme"
         ],
         "psr-0": {
             "Addon": "addons"
