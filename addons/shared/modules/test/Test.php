@@ -1,6 +1,6 @@
 <?php
 
-use App\Addons\Modules\ModuleAbstract;
+use App\Addon\Module\ModuleAbstract;
 
 class TestModule extends ModuleAbstract
 {

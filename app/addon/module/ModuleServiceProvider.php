@@ -9,5 +9,5 @@ class ModuleServiceProvider extends AddonServiceProviderAbstract
      *
      * @var string
      */
-    protected $managerClass = 'App\Addons\Modules\ModuleManager';
+    protected $managerClass = 'App\Addon\Module\ModuleManager';
 }

@@ -9,5 +9,5 @@ class BlockServiceProvider extends AddonServiceProviderAbstract
      *
      * @var string
      */
-    protected $managerClass = 'App\Addons\Blocks\BlockManager';
+    protected $managerClass = 'App\Addon\Block\BlockManager';
 }
