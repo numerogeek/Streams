@@ -14,7 +14,6 @@ class ModuleServiceProvider extends ServiceProvider
             }
         );
 
-        $modules = $this->app->make('streams.modules');
-        $modules->register($this->app);
+        $this->app['streams.modules']->register($this->app);
     }
 }

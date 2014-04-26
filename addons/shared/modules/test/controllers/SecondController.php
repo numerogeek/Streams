@@ -1,6 +1,8 @@
 <?php namespace Addon\Module\Test\Controller;
 
-class SecondController extends \AdminController
+use Streams\Controller\AdminController;
+
+class SecondController extends AdminController
 {
     public function index()
     {

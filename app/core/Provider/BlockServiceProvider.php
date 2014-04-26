@@ -10,7 +10,7 @@ class BlockServiceProvider extends ServiceProvider
         $this->app->singleton(
             'streams.blocks',
             function () {
-                return new BlockManager();
+                return new BlockManager;
             }
         );
 
