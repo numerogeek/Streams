@@ -115,13 +115,12 @@ return array(
         'Illuminate\Workbench\WorkbenchServiceProvider',
         'Cartalyst\Sentry\SentryServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
-        'App\Addon\Module\ModuleServiceProvider',
-        'App\Addon\Block\BlockServiceProvider',
-        'App\Addon\Tag\TagServiceProvider',
-        'App\Addon\FieldType\FieldTypeServiceProvider',
-        'App\Addon\Extension\ExtensionServiceProvider',
-        'App\Addon\Theme\ThemeServiceProvider'
-
+        'Streams\Provider\BlockServiceProvider',
+        'Streams\Provider\ExtensionServiceProvider',
+        'Streams\Provider\FieldTypeServiceProvider',
+        'Streams\Provider\ModuleServiceProvider',
+        'Streams\Provider\TagServiceProvider',
+        'Streams\Provider\ThemeServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
@@ -187,6 +186,12 @@ return array(
         'Validator'   => 'Illuminate\Support\Facades\Validator',
         'View'        => 'Illuminate\Support\Facades\View',
         'Debug'       => 'Barryvdh\Debugbar\Facade',
+        'Block'       => 'Streams\Facade\BlockFacade',
+        'Extension'   => 'Streams\Facade\ExtensionFacade',
+        'FieldType'   => 'Streams\Facade\FieldTypeFacade',
+        'Module'      => 'Streams\Facade\ModuleFacade',
+        'Tag'         => 'Streams\Facade\TagFacade',
+        'Theme'       => 'Streams\Facade\ThemeFacade',
 
     ),
 
