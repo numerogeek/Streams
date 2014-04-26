@@ -24,6 +24,10 @@ abstract class AddonManagerAbstract
         $this->loader = new ClassLoader;
     }
 
+    /**
+     * @param $slug
+     * @return AddonAbstract
+     */
     public function get($slug)
     {
         return isset($this->registeredAddons[$slug]) ? $this->registeredAddons[$slug] : null;

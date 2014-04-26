@@ -25,17 +25,17 @@ class  ModuleInstallAllCommand extends BaseCommand {
 	 */
 	public function fire()
 	{
-/*        $slug = $this->argument('slug');
+        foreach(\Module::getAllAddons() as $addon) {
+            $name = ucfirst($addon->slug);
 
-        $name = ucfirst($slug);
-
-		if ($module = Module::get($slug)) {
-            if ($module->install()) {
-                $this->info("{$name} module installed.");
+            if ($module = \Module::get($addon->slug)) {
+                if ($module->install()) {
+                    $this->info("{$name} module installed.");
+                }
+            } else {
+                $this->info("{$name} module not found.");
             }
-        } else {
-            $this->info("{$name} module not found.");
-        }*/
+        }
 	}
 
 }
