@@ -1,7 +1,7 @@
 <?php
 
 // Public Routes
-Route::get('/', 'PublicController@showWelcome');
+Route::get('/', 'Streams\Controller\PublicController@showWelcome');
 
 // Authentication Filter
 Route::filter(
