@@ -12,21 +12,11 @@
     },
     "autoload": {
         "classmap": [
-            "app/commands",
-            "app/controllers",
-            "app/models",
-            "app/database/migrations",
-            "app/database/seeds",
-            "app/tests/TestCase.php",
-            "app/streams",
-            "app/addon",
-            "app/addon/module",
-            "app/addon/block",
-            "app/addon/tag",
-            "app/addon/field_type",
-            "app/addon/extension",
-            "app/addon/theme"
-        ]
+            "app/tests/TestCase.php"
+        ],
+        "psr-4" : {
+            "Streams\\" : "app/core"
+        }
     },
     "scripts": {
         "post-install-cmd": [
