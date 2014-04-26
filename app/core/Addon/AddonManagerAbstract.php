@@ -138,7 +138,7 @@ abstract class AddonManagerAbstract
     {
         $paths = array();
 
-        //$paths = $paths + $this->getCoreAddonPaths();
+        $paths = $paths + $this->getCoreAddonPaths();
         $paths = $paths + $this->getSharedAddonPaths();
         $paths = $paths + $this->getApplicationAddonPaths();
 
@@ -152,7 +152,7 @@ abstract class AddonManagerAbstract
      */
     public function getCoreAddonPaths()
     {
-        return glob(base_path() . '/core/' . $this->folder . '/*');
+        return glob(base_path() . '/app/addons/' . $this->folder . '/*');
     }
 
     /**

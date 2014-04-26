@@ -18,7 +18,7 @@ Route::filter(
 Route::when('admin*', 'authenticate');
 
 // Admin Routes
-Route::get('admin', 'AdminController@index');
+Route::get('admin', 'Streams\Controller\AdminController@index');
 Route::get(
     'admin/logout',
     function () {
@@ -26,5 +26,5 @@ Route::get(
         return Redirect::to('admin/login');
     }
 );
-Route::get('admin/login', 'AdminController@login');
-Route::post('admin/login', 'AdminController@attemptLogin');
+Route::get('admin/login', 'Streams\Controller\AdminController@login');
+Route::post('admin/login', 'Streams\Controller\AdminController@attemptLogin');
