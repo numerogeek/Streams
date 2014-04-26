@@ -24,6 +24,11 @@ abstract class AddonManagerAbstract
         $this->loader = new ClassLoader;
     }
 
+    public function get($slug)
+    {
+        return isset($this->registeredAddons[$slug]) ? $this->registeredAddons[$slug] : null;
+    }
+
     /**
      * Register an addon's path and structure.
      */
