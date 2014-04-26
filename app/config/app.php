@@ -121,6 +121,7 @@ return array(
         'Streams\Provider\ModuleServiceProvider',
         'Streams\Provider\TagServiceProvider',
         'Streams\Provider\ThemeServiceProvider',
+        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
