@@ -14,7 +14,6 @@ class BlockServiceProvider extends ServiceProvider
             }
         );
 
-        $blocks = $this->app->make('streams.blocks');
-        $blocks->register($this->app);
+        $this->app['streams.blocks']->register($this->app);
     }
 }
