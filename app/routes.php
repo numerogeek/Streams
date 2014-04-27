@@ -3,7 +3,7 @@
 
 
 // Public Routes
-Route::get('/', 'Streams\Controller\PublicController@showWelcome');
+Route::get('/', 'Streams\Controller\PublicController@hello');
 Route::get('installer/{step?}', 'Streams\Controller\InstallerController@run');
 
 Route::when('admin*', 'authenticate');
