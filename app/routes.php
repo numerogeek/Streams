@@ -1,19 +1,12 @@
 <?php
 
+Route::get('installer/{step?}', function($step = null) {
+    $installerSetup = new \Streams\Setup\InstallerSetup;
+    return $installerSetup->run($step);
+});
+
 // Public Routes
 Route::get('/', 'Streams\Controller\PublicController@showWelcome');
-
-// Authentication Filter
-Route::filter(
-    'authenticate',
-    function () {
-        $ignore = array('login', 'logout');
-
-        if (!in_array(Request::segment(2), $ignore) and !Sentry::check()) {
-            return Redirect::to('admin/login');
-        }
-    }
-);
 
 Route::when('admin*', 'authenticate');
 
@@ -26,5 +19,6 @@ Route::get(
         return Redirect::to('admin/login');
     }
 );
+
 Route::get('admin/login', 'Streams\Controller\AdminController@login');
 Route::post('admin/login', 'Streams\Controller\AdminController@attemptLogin');

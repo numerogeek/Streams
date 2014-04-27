@@ -33,6 +33,27 @@ App::after(function($request, $response)
 |
 */
 
+// Authentication Filter
+Route::filter(
+    'installer',
+    function () {
+        if (Request::segment(1) != 'installer' and is_dir(base_path('installer'))) {
+            return Redirect::to('installer');
+        }
+    }
+);
+
+Route::filter(
+    'authenticate',
+    function () {
+        $ignore = array('login', 'logout');
+
+        if (!in_array(Request::segment(2), $ignore) and !Sentry::check()) {
+            return Redirect::to('admin/login');
+        }
+    }
+);
+
 Route::filter('auth', function()
 {
 	if (Auth::guest()) return Redirect::guest('login');
