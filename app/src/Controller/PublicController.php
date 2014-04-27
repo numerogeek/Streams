@@ -3,11 +3,11 @@
 class PublicController extends BaseController {
 
     /**
-     * Show welcome
+     * Hello
      *
      * @return mixed
      */
-    public function showWelcome()
+    public function hello()
 	{
 		return \View::make('hello');
 	}
