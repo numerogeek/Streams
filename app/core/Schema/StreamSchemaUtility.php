@@ -1,6 +1,6 @@
 <?php namespace Streams\Schema;
 
-class Utility
+class StreamSchemaUtility
 {
 
 }

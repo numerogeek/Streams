@@ -1,11 +1,22 @@
-<?php namespace Streams\Setup;
+<?php namespace Streams\Controller;
 
-class InstallerSetup
+use Illuminate\Routing\Controller;
+
+class InstallerController extends Controller
 {
+    protected $validSteps = array(
+        'step1',
+        'step2',
+        'step3',
+        'step4',
+        'install',
+        'complete'
+    );
+
     public function __construct()
     {
         // Check if the installer folder was removed
-        if (!$this->installerExists()) {
+        if ($this->isInstalled() or !$this->installerExists()) {
             return \Redirect::to('/');
         }
 
@@ -15,15 +26,6 @@ class InstallerSetup
 
         \View::addNamespace('installer', base_path('installer/views'));
     }
-
-    protected $validSteps = array(
-        'step1',
-        'step2',
-        'step3',
-        'step4',
-        'install',
-        'complete'
-    );
 
     public function run($step = 'step1')
     {

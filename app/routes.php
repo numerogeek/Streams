@@ -1,12 +1,10 @@
 <?php
 
-Route::get('installer/{step?}', function($step = null) {
-    $installerSetup = new \Streams\Setup\InstallerSetup;
-    return $installerSetup->run($step);
-});
+
 
 // Public Routes
 Route::get('/', 'Streams\Controller\PublicController@showWelcome');
+Route::get('installer/{step?}', 'Streams\Controller\InstallerController@run');
 
 Route::when('admin*', 'authenticate');
 
