@@ -115,13 +115,14 @@ return array(
         'Illuminate\Workbench\WorkbenchServiceProvider',
         'Cartalyst\Sentry\SentryServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        'Franzl\LaravelPlates\LaravelPlatesServiceProvider',
         'Streams\Provider\BlockServiceProvider',
         'Streams\Provider\ExtensionServiceProvider',
         'Streams\Provider\FieldTypeServiceProvider',
         'Streams\Provider\ModuleServiceProvider',
         'Streams\Provider\TagServiceProvider',
         'Streams\Provider\ThemeServiceProvider',
-        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
