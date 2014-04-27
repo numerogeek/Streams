@@ -33,6 +33,7 @@ class CacheManager extends \Illuminate\Cache\CacheManager
 
     /**
      * Get a cache collection of keys or set the keys to be indexed.
+     * @todo - can this be split into two methods? "or" throws a flag for me
      *
      * @param  string $collectionKey
      * @param  array  $keys
@@ -60,6 +61,6 @@ class CacheManager extends \Illuminate\Cache\CacheManager
      */
     public function isEnabled()
     {
-        return $this->app['config']['cache.enable'];
+        return (bool)$this->app['config']['cache.enable'];
     }
 }
