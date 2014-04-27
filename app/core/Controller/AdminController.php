@@ -32,10 +32,10 @@ class AdminController extends BaseController
                 'password' => \Request::get('password'),
             );
 
-            $user = \Sentry::authenticate($credentials, Request::get('remember'));
+            $user = \Sentry::authenticate($credentials, \Request::get('remember'));
 
             return \Redirect::to('admin');
-        } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
+        } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             return \Redirect::to('admin/login')->with('message', 'Login field is required.');
         } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
             return \Redirect::to('admin/login')->with('message', 'Password field is required.');
