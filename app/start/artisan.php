@@ -14,3 +14,4 @@
 Artisan::add(new \Streams\Command\ModuleInstallAllCommand());
 Artisan::add(new \Streams\Command\ModuleInstallCommand());
 Artisan::add(new \Streams\Command\ModuleUninstallCommand());
+Artisan::add(new \Streams\Command\UserCreateCommand());
