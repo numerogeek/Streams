@@ -5,6 +5,20 @@ use Illuminate\Routing\Controller;
 class InstallerController extends Controller
 {
     /**
+     * Class loader
+     *
+     * @var \Composer\Autoload\ClassLoader
+     */
+    protected $loader;
+
+    /**
+     * Installer handler
+     *
+     * @var \StreamsInstaller\Installer
+     */
+    protected $installer;
+
+    /**
      * Installation steps
      *
      * @var array
@@ -24,15 +38,17 @@ class InstallerController extends Controller
     public function __construct()
     {
         // Check if Streams is installed.
-        if ($this->isInstalled() or !$this->installerExists()) {
+        if (!$this->installerExists()) {
             return \Redirect::to('/');
         }
 
-        $this->loader    = new \Composer\Autoload\ClassLoader();
-        $this->installer = new \StreamsInstaller\Installer;
+        $this->loader = new \Composer\Autoload\ClassLoader;
 
         $this->loader->addPsr4('StreamsInstaller\\', base_path('installer/src'));
+
         $this->loader->register();
+
+        $this->installer = new \StreamsInstaller\Installer;
 
         \View::addNamespace('installer', base_path('installer/views'));
     }

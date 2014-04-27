@@ -38,11 +38,12 @@ abstract class AddonManagerAbstract
      */
     public function register($app)
     {
+        $type = null;
         foreach ($this->getAllAddonPaths() as $path) {
 
             $slug = basename($path);
 
-            $type = strtolower(dirname($path));
+            $type = strtolower(Str::singular(dirname($path)));
 
             // All we are going to do here is add namespaces,
             // include dependent files and register PSR-4 paths.
@@ -77,6 +78,8 @@ abstract class AddonManagerAbstract
                 $app['config']->addNamespace($type . '.' . $slug, $addon->path . '/config');
             }
         }
+
+
     }
 
     /**
@@ -88,7 +91,7 @@ abstract class AddonManagerAbstract
      */
     public function getNamespace($type, $slug)
     {
-        return 'Addon\\' . Str::studly($type) . '\\' . Str::studly($slug);
+        return 'Addon\\' . Str::studly(basename($type)) . '\\' . Str::studly($slug);
     }
 
     /**
@@ -126,13 +129,11 @@ abstract class AddonManagerAbstract
      */
     public function make($path)
     {
-        $class = Str::studly(basename($path)) . $this->classSuffix;
+        $type = Str::singular(basename(dirname($path)));
+        $class = $this->getNamespace($type, basename($path)).'\\'.Str::studly(basename($path)).Str::studly($type);
 
         $addon = new $class;
-
-        $reflection = new \ReflectionClass($addon);
-
-        $addon->path = basename($reflection->getFileName());
+        $addon->path = $path;
         $addon->slug = basename($path);
 
         // Load routes file
