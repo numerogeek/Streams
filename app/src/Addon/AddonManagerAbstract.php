@@ -19,31 +19,20 @@ abstract class AddonManagerAbstract
      */
     protected $registeredAddons = array();
 
-    public function __construct()
+    public function __construct(Classloader $loader)
     {
-        $this->loader = new ClassLoader;
-    }
-
-    /**
-     * @param $slug
-     * @return AddonAbstract
-     */
-    public function get($slug)
-    {
-        return isset($this->registeredAddons[$slug]) ? $this->registeredAddons[$slug] : null;
+        $this->loader = $loader;
     }
 
     /**
      * Register an addon's path and structure.
      */
-    public function register($app)
+    public function register()
     {
-        $type = null;
         foreach ($this->getAllAddonPaths() as $path) {
 
             $slug = basename($path);
-
-            $type = strtolower(Str::singular(dirname($path)));
+            $type = strtolower(Str::singular(basename(dirname($path))));
 
             // All we are going to do here is add namespaces,
             // include dependent files and register PSR-4 paths.
@@ -63,23 +52,78 @@ abstract class AddonManagerAbstract
             // Register paths added above
             $this->loader->register();
 
-            // Add views namespace
-            if (is_dir($path . '/views')) {
-                $app['view']->addNamespace($type . '.' . $slug, $path . '/views');
-            }
+            $this->registeredAddons[$slug] = array(
+                'path'      => $path,
+                'slug'      => $slug,
+                'type'      => $type,
+                'namespace' => $this->getNamespace($type, $slug),
+            );
 
-            // Add lang namespace
-            if (is_dir($path . '/lang')) {
-                //$app['translator']->addNamespace($type . '.' . $slug, $path . '/lang');
-            }
-
-            // Add config namespace
-            if (is_dir($path . '/config')) {
-                $app['config']->addNamespace($type . '.' . $slug, $path . '/config');
-            }
         }
 
+        foreach ($this->registeredAddons as $info) {
 
+            \App::singleton(
+                'streams.' . $this->folder . '.' . $info['slug'],
+                function () use ($info) {
+
+                    $addonClass = $this->getClass($info['slug']);
+
+                    $addon = new $addonClass;
+
+                    $addon->path = $info['path'];
+                    $addon->slug = $info['slug'];
+
+                    $loaderNamespace = $addon->type . '.' . $addon->slug;
+
+                    // Add config namespace
+                    \Config::addNamespace($loaderNamespace, $addon->path . '/config');
+
+                    // Add views namespace
+                    \View::addNamespace($loaderNamespace, $addon->path . '/views');
+
+                    // Add lang namespace
+                    \Lang::addNamespace($loaderNamespace, $addon->path . '/lang');
+
+                    // Load routes file
+                    if (is_file($addon->path . '/routes.php')) {
+                        require_once $addon->path . '/routes.php';
+                    }
+
+                    // Load events file
+                    if (is_file($addon->path . '/events.php')) {
+                        require_once $addon->path . '/events.php';
+                    }
+
+                    return $addon;
+                }
+            );
+        }
+    }
+
+    /**
+     * @param $slug
+     * @return AddonAbstract
+     */
+    public function get($slug)
+    {
+        return \App::make('streams.' . $this->folder . '.' . $slug);
+    }
+
+    /**
+     * Get all instantiated addons.
+     *
+     * @return array
+     */
+    public function getAll()
+    {
+        $addons = array();
+
+        foreach ($this->registeredAddons as $info) {
+            $addons[$info['slug']] = $this->get($info['slug']);
+        }
+
+        return $addons;
     }
 
     /**
@@ -94,59 +138,10 @@ abstract class AddonManagerAbstract
         return 'Addon\\' . Str::studly(basename($type)) . '\\' . Str::studly($slug);
     }
 
-    /**
-     * Get and verify addon object passed to the service provider.
-     *
-     * @param $arguments
-     * @return null
-     */
-    public function getAddon($addon)
+    public function getClass($slug)
     {
-        return (isset($addon) and is_object($addon)) ? $addon : null;
-    }
-
-    /**
-     * Get all instantiated addons.
-     *
-     * @return array
-     */
-    public function getAllAddons()
-    {
-        foreach ($this->getAllAddonPaths() as $path) {
-            if (!isset($this->registeredAddons[basename($path)]) and $addon = $this->make($path)) {
-                $this->registeredAddons[$addon->slug] = $addon;
-            }
-        }
-
-        return $this->registeredAddons;
-    }
-
-    /**
-     * Make the addon object from it's class file.
-     *
-     * @param $path
-     * @return \stdClass
-     */
-    public function make($path)
-    {
-        $type = Str::singular(basename(dirname($path)));
-        $class = $this->getNamespace($type, basename($path)).'\\'.Str::studly(basename($path)).Str::studly($type);
-
-        $addon = new $class;
-        $addon->path = $path;
-        $addon->slug = basename($path);
-
-        // Load routes file
-        if (is_file($addon->path . '/routes.php')) {
-            require_once $addon->path . '/routes.php';
-        }
-
-        // Load events file
-        if (is_file($addon->path . '/events.php')) {
-            require_once $addon->path . '/events.php';
-        }
-
-        return $addon;
+        $info = $this->registeredAddons[$slug];
+        return $info['namespace'] . '\\' . Str::studly($info['slug']) . Str::studly($info['type']);
     }
 
     /**
