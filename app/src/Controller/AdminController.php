@@ -3,7 +3,7 @@
 class AdminController extends BaseController
 {
     /**
-     * Show the admin landing page
+     * Display the admin landing page.
      */
     public function index()
     {
@@ -12,7 +12,7 @@ class AdminController extends BaseController
     }
 
     /**
-     * Login
+     * Display the admin login page.
      */
     public function login()
     {
@@ -20,7 +20,7 @@ class AdminController extends BaseController
     }
 
     /**
-     * Attempt to login
+     * Attempt to login.
      *
      * @return mixed
      */
