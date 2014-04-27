@@ -5,6 +5,8 @@ use Illuminate\Support\Str;
 
 abstract class AddonManagerAbstract
 {
+    protected $classSuffix = 'Module';
+
     /**
      * The folder within addons locations to load modules from.
      *
@@ -38,57 +40,50 @@ abstract class AddonManagerAbstract
      */
     public function register($app)
     {
-        foreach($this->getAllAddons() as $addon) {
+        foreach($this->getAllAddonPaths() as $path) {
+
+            $slug = basename($path);
+
+            $type = strtolower($this->classSuffix);
 
             // All we are going to do here is add namespaces,
             // include dependent files and register PSR-4 paths.
-            if ($addon = $this->getAddon($addon)) {
 
-                // Register src directory
-                if (is_dir($addon->path . '/src')) {
-                    $this->loader->addPsr4(
-                        'Addon\Module\\' . Str::studly($addon->slug) . '\\',
-                        $addon->path . '/src'
-                    );
-                }
+            // Register src directory
+            $this->loader->addPsr4(
+                $this->getNamespace($slug) . '\\',
+                $path . '/src'
+            );
 
-                // Register controllers directory
-                if (is_dir($addon->path . '/controllers')) {
-                    $this->loader->addPsr4(
-                        'Addon\Module\\' . Str::studly($addon->slug) . '\Controller\\',
-                        $addon->path . '/controllers'
-                    );
-                }
+            // Register controllers directory
+            $this->loader->addPsr4(
+                $this->getNamespace($slug) . '\\Controller\\',
+                $path . '/controllers'
+            );
 
-                // Register paths added above
-                $this->loader->register();
+            // Register paths added above
+            $this->loader->register();
 
-                // Add views namespace
-                if (is_dir($addon->path . '/views')) {
-                    $app['view']->addNamespace($addon->type . '.' . $addon->slug, $addon->path . '/views');
-                }
+            // Add views namespace
+            if (is_dir($path . '/views')) {
+                $app['view']->addNamespace($type . '.' . $slug, $path . '/views');
+            }
 
-                // Add lang namespace
-                if (is_dir($addon->path . '/lang')) {
-                    //$app['translator']->addNamespace($addon->type . '.' . $addon->slug, $addon->path . '/lang');
-                }
+            // Add lang namespace
+            if (is_dir($path . '/lang')) {
+                //$app['translator']->addNamespace($type . '.' . $slug, $path . '/lang');
+            }
 
-                // Add config namespace
-                if (is_dir($addon->path . '/config')) {
-                    $app['config']->addNamespace($addon->type . '.' . $addon->slug, $addon->path . '/config');
-                }
-
-                // Load routes file
-                if (is_file($addon->path . '/routes.php')) {
-                    require_once $addon->path . '/routes.php';
-                }
-
-                // Load events file
-                if (is_file($addon->path . '/events.php')) {
-                    require_once $addon->path . '/events.php';
-                }
+            // Add config namespace
+            if (is_dir($path . '/config')) {
+                $app['config']->addNamespace($type . '.' . $slug, $addon->path . '/config');
             }
         }
+    }
+
+    public function getNamespace($slug)
+    {
+        return "Addon\\{$this->classSuffix}\\" . Str::studly($slug);
     }
 
     /**
@@ -126,14 +121,24 @@ abstract class AddonManagerAbstract
      */
     public function make($path)
     {
-        require $path . '/addon.php';
-
-        $class = Str::studly(basename($path)) . 'Module';
+        $class = Str::studly(basename($path)) . $this->classSuffix;
 
         $addon = new $class;
 
-        $addon->path = $path;
+        $reflection = new \ReflectionClass($addon);
+
+        $addon->path = basename($reflection->getFileName());
         $addon->slug = basename($path);
+
+        // Load routes file
+        if (is_file($addon->path . '/routes.php')) {
+            require_once $addon->path . '/routes.php';
+        }
+
+        // Load events file
+        if (is_file($addon->path . '/events.php')) {
+            require_once $addon->path . '/events.php';
+        }
 
         return $addon;
     }

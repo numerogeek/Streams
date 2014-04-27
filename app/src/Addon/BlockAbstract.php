@@ -1,7 +1,5 @@
 <?php namespace Streams\Addon;
 
-use App\Addon\AddonAbstract;
-
 abstract class BlockAbstract extends AddonAbstract
 {
     /**
