@@ -34,8 +34,22 @@ class EncryptedFieldType extends FieldTypeAbstract
      */
     public $author = array(
         'name' => 'AI Web Systems, Inc.',
-        'url'  => 'http://aiwebsystems.com/'
+        'url'  => 'http://aiwebsystems.com/',
     );
+
+    /**
+     * Return the input used for forms.
+     *
+     * @return mixed
+     */
+    public function formInput()
+    {
+        $value = \Crypt::decrypt($this->value);
+
+        $type = $this->getParameter('hide_typing', true) ? 'password' : 'text';
+
+        return \Form::input($type, $this->formSlug, $value);
+    }
 
     /**
      * Process value before saving.
@@ -55,19 +69,5 @@ class EncryptedFieldType extends FieldTypeAbstract
     public function stringOutput()
     {
         return \Crypt::decrypt($this->value);
-    }
-
-    /**
-     * Return the input used for forms.
-     *
-     * @return mixed
-     */
-    public function formInput()
-    {
-        $value = \Crypt::decrypt($this->value);
-
-        $type = $this->getParameter('hide_typing', true) ? 'password' : 'text';
-
-        return \Form::input($type, $this->form_slug, $value);
     }
 }

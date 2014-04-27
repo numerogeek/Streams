@@ -2,175 +2,113 @@
 
 use Streams\Addon\FieldTypeAbstract;
 
-use Streams\Ui\EntryUi;
-use Streams\Model\FieldModel;
-use Streams\Model\UserModel;
-//use Streams\Model\GroupModel;
-
-/**
- * PyroStreams User Field Type
- *
- * @package        PyroCMS\Core\Modules\Streams Core\Field Types
- * @author         Parse19
- * @copyright      Copyright (c) 2011 - 2012, Parse19
- * @license        http://parse19.com/pyrostreams/docs/license
- * @link           http://parse19.com/pyrostreams
- */
 class UserFieldType extends FieldTypeAbstract
 {
-    public $field_type_slug = 'user';
-
-    public $db_col_type = 'string';
-
-    public $custom_parameters = array('restrict_group');
-
-    public $version = '1.0.0';
-
-    public $author = array(
-        'name' => 'Ryan Thompson - PyroCMS',
-        'url'  => 'http://pyrocms.com/'
-    );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------      METHODS     ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
+    /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'string';
 
     /**
-     * The field type relation
+     * Field type version
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @var string
+     */
+    public $version = '1.1.0';
+
+    /**
+     * Available field type settings.
+     *
+     * @var array
+     */
+    public $settings = array(
+        'groups',
+    );
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
+
+    /**
+     * Create a new UserFieldType instance.
+     *
+     * @param \Streams\Model\UserModel $users
+     */
+    public function __construct(\Streams\Model\UserModel $users)
+    {
+        parent::__construct();
+
+        $this->users = $users;
+    }
+
+    /**
+     * The field type relation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function relation()
     {
-        return $this->belongsTo($this->getRelationClass('Pyro\Module\Users\Model\User'));
+        return $this->belongsTo($this->getRelationClass('Streams\Model\UserModel'));
     }
 
     /**
-     * Output form input
+     * Return the input used for forms.
      *
-     * @param    array
-     * @param    array
-     * @return    string
+     * @return mixed
      */
     public function formInput()
     {
-        // Start the HTML
-        $html = form_dropdown(
-            $this->form_slug,
-            array(),
-            null,
-            'id="' . $this->form_slug . '" class="skip" placeholder="' . lang_label(
-                $this->getParameter('placeholder', 'lang:streams:user.placeholder')
-            ) . '"'
-        );
-
-        // Append our JS to the HTML since it's special
-        $html .= $this->view(
-            'fragments/user.js.php',
-            array(
-                'form_slug'        => $this->form_slug,
-                'field_slug'       => $this->field->field_slug,
-                'stream_namespace' => $this->stream->stream_namespace,
-                'value'            => $this->getValueEntry(),
-            ),
-            false
-        );
-
-        return $html;
+        \Form::select($this->formSlug, $this->users->get()->lists('username', 'id'), $this->value);
     }
 
     /**
-     * Output filter input
+     * Return the string output value.
      *
-     * @param    array
-     * @param    array
-     * @return    string
-     */
-    public function filterInput()
-    {
-        // Start the HTML
-        $html = form_dropdown(
-            $this->getFilterSlug('contains'),
-            array(),
-            null,
-            'id="' . $this->getFilterSlug('contains') . '" class="skip" placeholder="' . $this->field->field_name . '"'
-        );
-
-        // Append our JS to the HTML since it's special
-        $html .= $this->view(
-            'fragments/user.js.php',
-            array(
-                'form_slug'        => $this->form_slug,
-                'field_slug'       => $this->field->field_slug,
-                'stream_namespace' => $this->stream->stream_namespace,
-                'value'            => $this->getValueEntry(ci()->input->get($this->getFilterSlug('contains'))),
-            ),
-            false
-        );
-
-        return $html;
-    }
-
-    /**
-     * Format the Admin output
-     *
-     * @return [type] [description]
+     * @return null
      */
     public function stringOutput()
     {
         if ($user = $this->getRelationResult()) {
-            return anchor('admin/users/edit/' . $user->id, $user->username);
-        } else {
-            return $this->value;
+            return $user->username;
         }
+
+        return null;
     }
 
     /**
-     * Pre Ouput Plugin
-     * This takes the data from the join array
-     * and formats it using the row parser.
+     * Return the plugin output value.
      *
-     * @return array
+     * @return null
      */
     public function pluginOutput()
     {
-        if ($entry = $this->getRelationResult() and is_object($entry)) {
-            return $entry->toArray();
+        if ($user = $this->getRelationResult()) {
+            return $user->toArray();
         }
 
         return null;
     }
 
     /**
-     * Pre Ouput Data
+     * Return the data output value.
      *
-     * @return array
+     * @return null
      */
     public function dataOutput()
     {
-        if ($entry = $this->getRelationResult()) {
-            return $entry;
+        if ($user = $this->getRelationResult()) {
+            return $user;
         }
 
         return null;
-    }
-
-    /**
-     * Overide the column name like field_slug_id
-     *
-     * @param  Illuminate\Database\Schema $schema
-     * @return void
-     */
-    public function fieldAssignmentConstruct($schema)
-    {
-        $tableName = $this->getStream()->stream_prefix . $this->getStream()->stream_slug;
-
-        $schema->table(
-            $tableName,
-            function ($table) {
-                $table->integer($this->field->field_slug . '_id')->nullable();
-            }
-        );
     }
 
     /**
@@ -181,83 +119,5 @@ class UserFieldType extends FieldTypeAbstract
     public function getColumnName()
     {
         return parent::getColumnName() . '_id';
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------	PARAMETERS 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Restrict to Group
-     */
-    public function paramRestrictGroup($value = null)
-    {
-        $groups = array('no' => lang('streams:user.dont_restrict_groups'));
-
-        if (ci()->current_user->isSuperUser()) {
-            $groups = array_merge($groups, GroupModel::getGroupOptions());
-        } else {
-            $groups = array_merge($groups, GroupModel::getGeneralGroupOptions());
-        }
-
-        return form_dropdown('restrict_group', $groups, $value);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // -------------------------	AJAX 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////
-
-    public function ajaxSearch()
-    {
-        /**
-         * Grab the stream namespace
-         */
-        $stream_namespace = ci()->uri->segment(6);
-
-
-        /**
-         * Determine our field / type
-         */
-        $field      = FieldModel::findBySlugAndNamespace(ci()->uri->segment(7), $stream_namespace);
-        $field_type = $field->getType(null);
-
-
-        /**
-         * Get users
-         */
-        $users = UserModel::getUserOptions($this->getParameter('restrict_group'), ci()->input->get('query'));
-
-        // Prep return
-        $results = array();
-
-        foreach ($users as $k => $username) {
-            $results[] = array(
-                'id'       => $k,
-                'username' => $username,
-            );
-        }
-
-
-        header('Content-type: application/json');
-        echo json_encode(array('users' => $results));
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------	UTILITIES 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Get value for dropdown
-     *
-     * @param  mixed $value string or bool
-     * @return object
-     */
-    protected function getValueEntry($value = false)
-    {
-        // Determine a value
-        $value = ($value) ? $value : $this->value;
-
-        // Boom
-        return UserModel::find($value);
     }
 }

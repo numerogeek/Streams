@@ -2,104 +2,292 @@
 
 use Streams\Addon\FieldTypeAbstract;
 
-/**
- * PyroCMS Language Field Type
- * Shows a drop down of languages to choose from. You
- * can filter them by available languages for the
- * current thtme.
- *
- * @package        PyroCMS\Core\Modules\Streams Core\Field Types
- * @author         PyroCMS
- * @copyright      Copyright (c) 2011 - 2012, PyroCMS
- */
 class LanguageFieldType extends FieldTypeAbstract
 {
-    public $field_type_slug = 'pyro_lang';
-
-    public $db_col_type = 'string';
-
-    public $version = '1.0.0';
-
-    public $author = array('name' => 'PyroCMS', 'url' => 'http://www.pyrocms.com');
-
-    public $custom_parameters = array('filter_theme');
-
-    // --------------------------------------------------------------------------
+    /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'string';
 
     /**
-     * Output form input
+     * Field type version
      *
-     * @param    array
-     * @param    array
-     * @return    string
+     * @var string
+     */
+    public $version = '1.1.0';
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
+
+    /**
+     * Return the input used for forms.
+     *
+     * @return mixed
      */
     public function formInput()
     {
-        $languages = array();
-
-        if ($this->getParameter('filter_theme') == 'yes') {
-            // get the languages offered on the front-end
-            $site_public_lang = explode(',', \Settings::get('site_public_lang'));
-
-            foreach (ci()->config->item('supported_languages') as $lang_code => $lang) {
-                // if the supported language is offered on the front-end
-                if (in_array($lang_code, $site_public_lang)) {
-                    // add it to the dropdown list
-                    $languages[$lang_code] = $lang['name'];
-                }
-            }
-        } else {
-            foreach (ci()->config->item('supported_languages') as $lang_code => $lang) {
-                // add it to the dropdown list
-                $languages[$lang_code] = $lang['name'];
-            }
+        if ($languages = $this->getLanguages() and !$this->field->is_required) {
+            $languages = array(null => $this->getPlaceholder()) + $languages;
         }
 
-        return form_dropdown($this->form_slug, $languages, $this->value);
+        \Form::select($this->formSlug, $languages, $this->value);
     }
 
-    // --------------------------------------------------------------------------
-
     /**
-     * Should we filter by the current theme
-     * and what languages they support?
+     * Return the input used for filters.
      *
-     * @param    string
-     * @return    string
+     * @return mixed
      */
-    public function paramFilterTheme($value = null)
+    public function filterInput()
     {
-        if ($value == 'no') {
-            $no_select  = true;
-            $yes_select = false;
-        } else {
-            $no_select  = false;
-            $yes_select = true;
-        }
-
-        $form = '<ul><li><label>' . form_radio('filter_theme', 'yes', $yes_select) . ' Yes</label></li>';
-
-        $form .= '<li><label>' . form_radio('filter_theme', 'no', $no_select) . ' No</label></li></ul>';
-
-        return $form;
+        \Form::select(
+            $this->getFilterSlug('is'),
+            $this->getLanguages(),
+            $this->getFilterValue('is')
+        );
     }
 
-    // --------------------------------------------------------------------------
-
     /**
-     * Pre-Ouput
+     * Return the string output value.
      *
-     * @param    array
-     * @param    array
-     * @return    string
+     * @return null
      */
     public function stringOutput()
     {
-        $langs = ci()->config->item('supported_languages');
-
-        if (!empty($langs) and isset($langs[$this->value])) {
-            return $langs[$this->value]['name'];
-        }
+        return $this->getLanguage($this->value);
     }
 
+    /**
+     * Return the plugin output value.
+     *
+     * @return null
+     */
+    public function pluginOutput()
+    {
+        if ($this->value) {
+            return array(
+                'name' => $this->getLanguage($this->value),
+                'code' => $this->value,
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the language value from it's code.
+     *
+     * @param null $code
+     * @return null
+     */
+    public function getLanguage($code)
+    {
+        $languages = $this->getLanguages();
+
+        return isset($languages[$code]) ? $languages[$code] : null;
+    }
+
+    /**
+     * Return available languages as associative array.
+     *
+     * @return array
+     */
+    public function getLanguages()
+    {
+        return array(
+            'aa' => 'Afar',
+            'ab' => 'Abkhaz',
+            'ae' => 'Avestan',
+            'af' => 'Afrikaans',
+            'ak' => 'Akan',
+            'am' => 'Amharic',
+            'an' => 'Aragonese',
+            'ar' => 'Arabic',
+            'as' => 'Assamese',
+            'av' => 'Avaric',
+            'ay' => 'Aymara',
+            'az' => 'Azerbaijani',
+            'ba' => 'Bashkir',
+            'be' => 'Belarusian',
+            'bg' => 'Bulgarian',
+            'bh' => 'Bihari',
+            'bi' => 'Bislama',
+            'bm' => 'Bambara',
+            'bn' => 'Bengali',
+            'bo' => 'Tibetan Standard, Tibetan, Central',
+            'br' => 'Breton',
+            'bs' => 'Bosnian',
+            'ca' => 'Catalan; Valencian',
+            'ce' => 'Chechen',
+            'ch' => 'Chamorro',
+            'co' => 'Corsican',
+            'cr' => 'Cree',
+            'cs' => 'Czech',
+            'cu' => 'Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic',
+            'cv' => 'Chuvash',
+            'cy' => 'Welsh',
+            'da' => 'Danish',
+            'de' => 'German',
+            'dv' => 'Divehi; Dhivehi; Maldivian;',
+            'dz' => 'Dzongkha',
+            'ee' => 'Ewe',
+            'el' => 'Greek, Modern',
+            'en' => 'English',
+            'eo' => 'Esperanto',
+            'es' => 'Spanish; Castilian',
+            'et' => 'Estonian',
+            'eu' => 'Basque',
+            'fa' => 'Persian',
+            'ff' => 'Fula; Fulah; Pulaar; Pular',
+            'fi' => 'Finnish',
+            'fj' => 'Fijian',
+            'fo' => 'Faroese',
+            'fr' => 'French',
+            'fy' => 'Western Frisian',
+            'ga' => 'Irish',
+            'gd' => 'Scottish Gaelic; Gaelic',
+            'gl' => 'Galician',
+            'gn' => 'GuaranÃ­',
+            'gu' => 'Gujarati',
+            'gv' => 'Manx',
+            'ha' => 'Hausa',
+            'he' => 'Hebrew (modern)',
+            'hi' => 'Hindi',
+            'ho' => 'Hiri Motu',
+            'hr' => 'Croatian',
+            'ht' => 'Haitian; Haitian Creole',
+            'hu' => 'Hungarian',
+            'hy' => 'Armenian',
+            'hz' => 'Herero',
+            'ia' => 'Interlingua',
+            'id' => 'Indonesian',
+            'ie' => 'Interlingue',
+            'ig' => 'Igbo',
+            'ii' => 'Nuosu',
+            'ik' => 'Inupiaq',
+            'io' => 'Ido',
+            'is' => 'Icelandic',
+            'it' => 'Italian',
+            'iu' => 'Inuktitut',
+            'ja' => 'Japanese (ja)',
+            'jv' => 'Javanese (jv)',
+            'ka' => 'Georgian',
+            'kg' => 'Kongo',
+            'ki' => 'Kikuyu, Gikuyu',
+            'kj' => 'Kwanyama, Kuanyama',
+            'kk' => 'Kazakh',
+            'kl' => 'Kalaallisut, Greenlandic',
+            'km' => 'Khmer',
+            'kn' => 'Kannada',
+            'ko' => 'Korean',
+            'kr' => 'Kanuri',
+            'ks' => 'Kashmiri',
+            'ku' => 'Kurdish',
+            'kv' => 'Komi',
+            'kw' => 'Cornish',
+            'ky' => 'Kirghiz, Kyrgyz',
+            'la' => 'Latin',
+            'lb' => 'Luxembourgish, Letzeburgesch',
+            'lg' => 'Luganda',
+            'li' => 'Limburgish, Limburgan, Limburger',
+            'ln' => 'Lingala',
+            'lo' => 'Lao',
+            'lt' => 'Lithuanian',
+            'lu' => 'Luba-Katanga',
+            'lv' => 'Latvian',
+            'mg' => 'Malagasy',
+            'mh' => 'Marshallese',
+            'mi' => 'Maori',
+            'mk' => 'Macedonian',
+            'ml' => 'Malayalam',
+            'mn' => 'Mongolian',
+            'mr' => 'Marathi (Mara?hi)',
+            'ms' => 'Malay',
+            'mt' => 'Maltese',
+            'my' => 'Burmese',
+            'na' => 'Nauru',
+            'nb' => 'Norwegian BokmÃ¥l',
+            'nd' => 'North Ndebele',
+            'ne' => 'Nepali',
+            'ng' => 'Ndonga',
+            'nl' => 'Dutch',
+            'nn' => 'Norwegian Nynorsk',
+            'no' => 'Norwegian',
+            'nr' => 'South Ndebele',
+            'nv' => 'Navajo, Navaho',
+            'ny' => 'Chichewa; Chewa; Nyanja',
+            'oc' => 'Occitan',
+            'oj' => 'Ojibwe, Ojibwa',
+            'om' => 'Oromo',
+            'or' => 'Oriya',
+            'os' => 'Ossetian, Ossetic',
+            'pa' => 'Panjabi, Punjabi',
+            'pi' => 'Pali',
+            'pl' => 'Polish',
+            'ps' => 'Pashto, Pushto',
+            'pt' => 'Portuguese',
+            'qu' => 'Quechua',
+            'rm' => 'Romansh',
+            'rn' => 'Kirundi',
+            'ro' => 'Romanian, Moldavian, Moldovan',
+            'ru' => 'Russian',
+            'rw' => 'Kinyarwanda',
+            'sa' => 'Sanskrit (Sa?sk?ta)',
+            'sc' => 'Sardinian',
+            'sd' => 'Sindhi',
+            'se' => 'Northern Sami',
+            'sg' => 'Sango',
+            'si' => 'Sinhala, Sinhalese',
+            'sk' => 'Slovak',
+            'sl' => 'Slovene',
+            'sm' => 'Samoan',
+            'sn' => 'Shona',
+            'so' => 'Somali',
+            'sq' => 'Albanian',
+            'sr' => 'Serbian',
+            'ss' => 'Swati',
+            'st' => 'Southern Sotho',
+            'su' => 'Sundanese',
+            'sv' => 'Swedish',
+            'sw' => 'Swahili',
+            'ta' => 'Tamil',
+            'te' => 'Telugu',
+            'tg' => 'Tajik',
+            'th' => 'Thai',
+            'ti' => 'Tigrinya',
+            'tk' => 'Turkmen',
+            'tl' => 'Tagalog',
+            'tn' => 'Tswana',
+            'to' => 'Tonga (Tonga Islands)',
+            'tr' => 'Turkish',
+            'ts' => 'Tsonga',
+            'tt' => 'Tatar',
+            'tw' => 'Twi',
+            'ty' => 'Tahitian',
+            'ug' => 'Uighur, Uyghur',
+            'uk' => 'Ukrainian',
+            'ur' => 'Urdu',
+            'uz' => 'Uzbek',
+            've' => 'Venda',
+            'vi' => 'Vietnamese',
+            'vo' => 'VolapÃ¼k',
+            'wa' => 'Walloon',
+            'wo' => 'Wolof',
+            'xh' => 'Xhosa',
+            'yi' => 'Yiddish',
+            'yo' => 'Yoruba',
+            'za' => 'Zhuang, Chuang',
+            'zh' => 'Chinese',
+            'zu' => 'Zulu',
+        );
+    }
 }

@@ -23,7 +23,9 @@ class EmailFieldType extends FieldTypeAbstract
      *
      * @var array
      */
-    public $validation = array('email');
+    public $validation = array(
+        'email'
+    );
 
     /**
      * Field type author information.
@@ -32,7 +34,7 @@ class EmailFieldType extends FieldTypeAbstract
      */
     public $author = array(
         'name' => 'AI Web Systems, Inc.',
-        'url'  => 'http://aiwebsystems.com/'
+        'url'  => 'http://aiwebsystems.com/',
     );
 
     /**
@@ -44,7 +46,7 @@ class EmailFieldType extends FieldTypeAbstract
     {
         return \Form::input(
             'text',
-            $this->form_slug,
+            $this->formSlug,
             $this->value,
             array(
                 'placeholder' => $this->getPlacehoder()

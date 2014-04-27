@@ -25,7 +25,7 @@ class CountryFieldType extends FieldTypeAbstract
      */
     public $author = array(
         'name' => 'AI Web Systems, Inc.',
-        'url'  => 'http://aiwebsystems.com/'
+        'url'  => 'http://aiwebsystems.com/',
     );
 
     /**
@@ -43,20 +43,6 @@ class CountryFieldType extends FieldTypeAbstract
             $this->formSlug,
             $countries,
             $this->value
-        );
-    }
-
-    /**
-     * Return the input used for filters.
-     *
-     * @return mixed
-     */
-    public function filterInput()
-    {
-        \Form::select(
-            $this->getFilterSlug('is'),
-            $this->getCountries(),
-            $this->getFilterValue('is')
         );
     }
 
@@ -88,7 +74,7 @@ class CountryFieldType extends FieldTypeAbstract
     }
 
     /**
-     * Get the country value from it's code.
+     * Get the country name from it's code.
      *
      * @param null $code
      * @return null
@@ -107,7 +93,7 @@ class CountryFieldType extends FieldTypeAbstract
      */
     public function getCountries()
     {
-        $countries = array(
+        return array(
             "AD" => "Andorra",
             "AE" => "United Arab Emirates",
             "AF" => "Afghanistan",
@@ -356,7 +342,5 @@ class CountryFieldType extends FieldTypeAbstract
             "ZM" => "Zambia",
             "ZW" => "Zimbabwe",
         );
-
-        return $countries;
     }
 }

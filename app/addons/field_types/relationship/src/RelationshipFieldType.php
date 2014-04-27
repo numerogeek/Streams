@@ -74,7 +74,7 @@ class RelationshipFieldType extends FieldTypeAbstract
 
             $data = array(
                 'value'          => null,
-                'jquerySelector' => $this->form_slug . '-selectize',
+                'jquerySelector' => $this->formSlug . '-selectize',
                 'valueField'     => $model->getFieldTypeRelationshipValueField(),
                 'searchFields'   => $model->getFieldTypeRelationshipSearchFields(),
                 'itemTemplate'   => $model->getPresenter()->getFieldTypeRelationshipItemTemplate(),
@@ -101,10 +101,10 @@ class RelationshipFieldType extends FieldTypeAbstract
         if (!$this->getParameter('use_ajax')) {
             $attributes = '';
         } else {
-            $attributes = 'class="' . $this->form_slug . '-selectize skip"';
+            $attributes = 'class="' . $this->formSlug . '-selectize skip"';
         }
 
-        return form_dropdown($this->form_slug, $options, $this->value, $attributes);
+        return form_dropdown($this->formSlug, $options, $this->value, $attributes);
     }
 
     /**
@@ -116,7 +116,7 @@ class RelationshipFieldType extends FieldTypeAbstract
     {
         $this->isFilter = false;
 
-        return form_dropdown($this->form_slug, $this->getOptions(), $this->value);
+        return form_dropdown($this->formSlug, $this->getOptions(), $this->value);
     }
 
     /**

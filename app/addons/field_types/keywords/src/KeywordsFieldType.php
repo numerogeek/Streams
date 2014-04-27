@@ -2,49 +2,40 @@
 
 use Streams\Addon\FieldTypeAbstract;
 
-/**
- * PyroStreams Keywords Field Type
- *
- * @package        PyroCMS\Core\Modules\Streams Core\Field Types
- * @author         Parse19
- * @copyright      Copyright (c) 2011 - 2012, Parse19
- * @license        http://parse19.com/pyrostreams/docs/license
- * @link           http://parse19.com/pyrostreams
- */
 class KeywordsFieldType extends FieldTypeAbstract
 {
     /**
-     * Field type slug
+     * The database column type this field type uses.
      *
      * @var string
      */
-    public $field_type_slug = 'keywords';
+    public $columnType = 'string';
 
     /**
-     * DB column type
-     *
-     * @var string
-     */
-    public $db_col_type = 'string';
-
-    /**
-     * Version
+     * Field type version
      *
      * @var string
      */
     public $version = '1.1.0';
 
     /**
-     * Author
-     */
-    public $author = array('name' => 'Osvaldo Brignoni', 'url' => 'http://obrignoni.com');
-
-    /**
-     * Custom parameters
+     * Available field type settings.
      *
      * @var array
      */
-    public $custom_parameters = array('return_type');
+    public $settings = array(
+        'return_type',
+    );
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
 
     /**
      * Output form input
@@ -55,7 +46,7 @@ class KeywordsFieldType extends FieldTypeAbstract
      */
     public function formInput()
     {
-        $options['name']        = $this->form_slug;
+        $options['name']        = $this->formSlug;
         $options['id']          = 'id_' . rand(100, 10000);
         $options['class']       = 'tags';
         $options['value']       = \Keywords::get_string($this->value);

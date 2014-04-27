@@ -2,80 +2,48 @@
 
 use Streams\Addon\FieldTypeAbstract;
 
-/**
- * PyroStreams URL Field Type
- *
- * @package        PyroCMS\Core\Modules\Streams Core\Field Types
- * @author         Parse19
- * @copyright      Copyright (c) 2011 - 2012, Parse19
- * @license        http://parse19.com/pyrostreams/docs/license
- * @link           http://parse19.com/pyrostreams
- */
 class UrlFieldType extends FieldTypeAbstract
 {
-    public $field_type_slug = 'url';
-
-    public $db_col_type = 'string';
-
-    public $extra_validation = 'valid_url';
-
-    public $version = '1.0.0';
-
-    public $custom_parameters = array(
-        'placeholder',
-    );
-
-    public $author = array(
-        'name' => 'Ryan Thompson - PyroCMS',
-        'url'  => 'http://pyrocms.com/',
-    );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------	METHODS 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
+    /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'string';
 
     /**
-     * Output form input
+     * Field type version
      *
-     * @param    array
-     * @param    array
-     * @return    string
+     * @var string
+     */
+    public $version = '1.1.0';
+
+    /**
+     * Initial field type validation requirements.
+     *
+     * @var array
+     */
+    public $validation = array(
+        'url'
+    );
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
+
+    /**
+     * Return the input used for forms.
+     *
+     * @return mixed
      */
     public function formInput()
     {
-        $options['name']        = $this->form_slug;
-        $options['id']          = $this->form_slug;
-        $options['value']       = $this->value;
-        $options['class']       = 'form-control';
-        $options['placeholder'] = 'http://example.com';
-
-        return form_input($options);
-    }
-
-    /**
-     * Pre Output
-     * No PyroCMS tags in URL fields.
-     *
-     * @return string
-     */
-    public function stringOutput()
-    {
-        ci()->load->helper('text');
-
-        return escape_tags($this->value);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------	PARAMETERS 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Placeholder!
-     *
-     * @return    string
-     */
-    public function paramPlaceholder($value = 'http://example.com/')
-    {
-        return form_input('placeholder', $value);
+        return \Form::input('email', $this->formSlug, $this->value);
     }
 }

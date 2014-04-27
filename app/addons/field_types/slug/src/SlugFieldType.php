@@ -1,135 +1,110 @@
 <?php namespace Addon\FieldType\Slug;
 
 use Streams\Addon\FieldTypeAbstract;
-use Streams\Model\FieldModel;
 
-/**
- * PyroStreams Slug Field Type
- *
- * @package        PyroCMS\Core\Modules\Streams Core\Field Types
- * @author         Parse19
- * @copyright      Copyright (c) 2011 - 2012, Parse19
- * @license        http://parse19.com/pyrostreams/docs/license
- * @link           http://parse19.com/pyrostreams
- */
 class SlugFieldType extends FieldTypeAbstract
 {
-    public $field_type_slug = 'slug';
-
-    public $db_col_type = 'string';
-
-    public $custom_parameters = array('space_type', 'slug_field');
-
-    public $version = '1.0.0';
-
-    public $author = array('name' => 'Parse19', 'url' => 'http://parse19.com');
-
-    // --------------------------------------------------------------------------
+    /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'string';
 
     /**
-     * Event
-     * Add the slugify plugin
+     * Field type version
      *
-     * @return    void
+     * @var string
+     */
+    public $version = '1.1.0';
+
+    /**
+     * Available field type settings.
+     *
+     * @var array
+     */
+    public $settings = array(
+        'slug_type',
+        'slug_field',
+    );
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
+
+    /**
+     * Process logic before everything is rendered to screen.
      */
     public function event()
     {
-        if (!defined('ADMIN_THEME')) {
-            $this->js('jquery.slugify.js');
-        }
+        $this->js('jquery.slugify.js');
     }
 
-    // --------------------------------------------------------------------------
-
     /**
-     * Pre Save
-     * No PyroCMS tags in slug fields.
+     * Process before saving.
      *
      * @return string
      */
     public function preSave()
     {
-        ci()->load->helper('text');
-        return escape_tags($this->value);
+        return $this->slugify($this->value);
     }
 
-    // --------------------------------------------------------------------------
+    /**
+     * Return the input used for forms.
+     *
+     * @return mixed
+     */
+    public function formInput()
+    {
+        $options = array(
+            'autocomplete' => 'off',
+        );
+
+       $js = "
+            <script>
+                $(document).ready(function(){
+                    Pyro.GenerateSlug('#{$this->formSlug}', '#{$this->formSlug}', '{$this->getParameter('slug_type')}');
+                });
+            </script>
+            ";
+
+        return \Form::input('text', $this->formSlug, $this->value, $options) . "\n" . $js;
+    }
 
     /**
-     * Pre Output
-     * No PyroCMS tags in slugs.
+     * Return the string output value.
      *
      * @return string
      */
     public function stringOutput()
     {
-        ci()->load->helper('text');
-        return escape_tags($this->value);
+        return $this->slugify($this->value);
     }
 
-    // --------------------------------------------------------------------------
-
     /**
-     * Output form input
+     * Return a slugified a string.
      *
-     * @param    array
-     * @return    string
+     * @param $text
+     * @return string
      */
-    public function formInput()
+    public function slugify($text)
     {
-        $options['name']         = $this->form_slug;
-        $options['id']           = $this->form_slug;
-        $options['value']        = $this->value;
-        $options['autocomplete'] = 'off';
-        $options['class']        = 'form-control';
-        $jquery                  = null;
+        // Replace non letter or digits by our slug type
+        $text = trim(preg_replace('~[^\\pL\d]+~u', $this->getParameter('slug_type', '-'), $text));
 
-        $stream    = $this->entry->getStream();
-        $slugField = $this->getParameter('slug_field');
-        $id        = $stream->stream_namespace . '-' . $stream->stream_slug . '-' . $slugField;
+        // Transliterate
+        $text = strtolower(iconv('utf-8', 'us-ascii//TRANSLIT', $text));
 
-        $jquery = "
-            <script>
-                $(document).ready(function(){
-                    Pyro.GenerateSlug('#{$id}', '#{$this->form_slug}', '{$this->getParameter('space_type')}');
-                });
-            </script>
-            ";
+        // Remove unwanted characters
+        $value = preg_replace('~[^-\w]+~', '', $text);
 
-        return form_input($options) . "\n" . $jquery;
-    }
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * Dash or Underscore?
-     */
-    public function paramSpaceType($value = null)
-    {
-        $options = array(
-            '-' => lang('streams:slug.dash'),
-            '_' => lang('streams:slug.underscore')
-        );
-
-        return form_dropdown('space_type', $options, $value);
-    }
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * What field to slugify?
-     */
-    public function paramSlugField($value = null)
-    {
-        $field_slug = null;
-
-        if ($this->field) {
-            $field_slug = $this->field->field_slug;
-        }
-
-        // Get all the fields
-        $options = FieldModel::getFieldOptions($field_slug);
-
-        return form_dropdown('slug_field', $options, $value);
+        return $text;
     }
 }

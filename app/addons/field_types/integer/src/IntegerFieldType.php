@@ -2,74 +2,49 @@
 
 use Streams\Addon\FieldTypeAbstract;
 
-/**
- * PyroStreams Integer Field Type
- *
- * @package        PyroCMS\Core\Modules\Streams Core\Field Types
- * @author         Parse19
- * @copyright      Copyright © 2011 - 2012, Parse19
- * @license        http://parse19.com/pyrostreams/docs/license
- * @link           http://parse19.com/pyrostreams
- */
 class IntegerFieldType extends FieldTypeAbstract
 {
-    public $field_type_slug = 'integer';
-
-    public $db_col_type = 'integer';
-
-    public $custom_parameters = array(
-        'max_length',
-        'default_value',
-        'placeholder',
-    );
-
-    public $extra_validation = 'integer';
-
-    public $version = '1.0.0';
-
-    public $author = array(
-        'name' => 'Ryan Thompson - PyroCMS',
-        'url'  => 'http://pyrocms.com/'
-    );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------	METHODS 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
+    /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'integer';
 
     /**
-     * Output form input
+     * Field type version
      *
-     * @param    array
-     * @param    array
-     * @return    string
+     * @var string
+     */
+    public $version = '1.1.0';
+
+    /**
+     * Available field type settings.
+     *
+     * @var array
+     */
+    public $settings = array(
+        'minimum',
+        'maximum',
+    );
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
+
+    /**
+     * Return the input used for forms.
+     *
+     * @return mixed
      */
     public function formInput()
     {
-        $options['name']        = $this->form_slug;
-        $options['id']          = $this->form_slug;
-        $options['value']       = $this->value;
-        $options['placeholder'] = lang_label($this->getParameter('placeholder'));
-        $options['class']       = 'form-control';
-
-        // Max length
-        if ($max_length = $this->getParameter('max_length')) {
-            $options['maxlength'] = $max_length;
-        }
-
-        return form_input($options);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // -------------------------	PARAMETERS 	  ------------------------------ //
-    ///////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Placeholder!
-     *
-     * @return    string
-     */
-    public function paramPlaceholder($value = '')
-    {
-        return form_input('placeholder', $value);
+        return \Form::input('integer', $this->formSlug, $this->value);
     }
 }

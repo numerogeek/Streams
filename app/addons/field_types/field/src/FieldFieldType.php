@@ -112,10 +112,10 @@ class FieldFieldType extends FieldTypeAbstract
             $selected_field = $selectedType->getField();
 
             // Build the selected field form
-            $form .= form_hidden($this->form_slug . '_field_slug', $selected_field->field_slug);
+            $form .= form_hidden($this->formSlug . '_field_slug', $selected_field->field_slug);
             $form .= $selectedType->formInput();
         } elseif ($options = $this->getSelectableFields($selectable_fields_namespace) and !empty($options)) {
-            $form = form_dropdown($this->form_slug, $options, $this->getFieldSlugValue());
+            $form = form_dropdown($this->formSlug, $options, $this->getFieldSlugValue());
         } else {
             $form = lang('streams:field.must_add_fields');
         }

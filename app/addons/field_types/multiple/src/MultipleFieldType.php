@@ -80,7 +80,7 @@ class MultipleFieldType extends FieldTypeAbstract
 
             $data = array(
                 'value'          => $this->getRelationResult(),
-                'jquerySelector' => $this->form_slug . '-selectize',
+                'jquerySelector' => $this->formSlug . '-selectize',
                 'valueField'     => $model->getFieldTypeRelationshipValueField(),
                 'searchFields'   => $model->getFieldTypeRelationshipSearchFields(),
                 'itemTemplate'   => $model->getPresenter()->getFieldTypeRelationshipItemTemplate(),
@@ -105,10 +105,10 @@ class MultipleFieldType extends FieldTypeAbstract
         if (!$this->getParameter('use_ajax')) {
             $attributes = '';
         } else {
-            $attributes = 'class="' . $this->form_slug . '-selectize skip"';
+            $attributes = 'class="' . $this->formSlug . '-selectize skip"';
         }
 
-        return form_multiselect($this->form_slug . '[]', $options, $this->value, $attributes);
+        return form_multiselect($this->formSlug . '[]', $options, $this->value, $attributes);
     }
 
     /**
@@ -118,7 +118,7 @@ class MultipleFieldType extends FieldTypeAbstract
      */
     public function publicFormInput()
     {
-        return form_dropdown($this->form_slug, $this->getOptions(), $this->value);
+        return form_dropdown($this->formSlug, $this->getOptions(), $this->value);
     }
 
     /**
@@ -134,7 +134,7 @@ class MultipleFieldType extends FieldTypeAbstract
 
         $insert = array();
 
-        foreach ((array)ci()->input->post($this->form_slug) as $id) {
+        foreach ((array)ci()->input->post($this->formSlug) as $id) {
             if ($id) {
                 $insert[] = array(
                     'entry_id'   => $this->entry->getKey(),
