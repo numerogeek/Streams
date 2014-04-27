@@ -116,7 +116,6 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-        'Franzl\LaravelPlates\LaravelPlatesServiceProvider',
         'Streams\Provider\BlockServiceProvider',
         'Streams\Provider\ExtensionServiceProvider',
         'Streams\Provider\FieldTypeServiceProvider',
