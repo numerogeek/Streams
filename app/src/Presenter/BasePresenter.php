@@ -1,10 +1,10 @@
 <?php namespace Streams\Presenter;
 
 use Illuminate\Support\Str;
-use McCool\LaravelAutoPresenter\BasePresenter;
-use Pyro\Support\Contracts\ArrayableInterface;
+use McCool\LaravelAutoPresenter\BasePresenter as Presenter;
+use Streams\Contract\ArrayableInterface;
 
-class Presenter extends BasePresenter implements ArrayableInterface
+class BasePresenter extends Presenter implements ArrayableInterface
 {
     /**
      * The array of appended attributes
