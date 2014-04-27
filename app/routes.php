@@ -6,6 +6,8 @@
 Route::get('/', 'Streams\Controller\PublicController@hello');
 Route::get('installer/{step?}', 'Streams\Controller\InstallerController@run');
 
+Route::get('test', 'TestController@index');
+
 Route::when('admin*', 'authenticate');
 
 // Admin Routes
