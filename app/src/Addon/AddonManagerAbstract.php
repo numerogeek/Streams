@@ -75,7 +75,7 @@ abstract class AddonManagerAbstract
 
             // Add config namespace
             if (is_dir($path . '/config')) {
-                $app['config']->addNamespace($type . '.' . $slug, $addon->path . '/config');
+                $app['config']->addNamespace($type . '.' . $slug, $path . '/config');
             }
         }
 
