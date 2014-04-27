@@ -2,8 +2,6 @@
 
 class FieldTypeManager extends AddonManagerAbstract
 {
-    protected $classSuffix = 'FieldType';
-
     /**
      * The folder within addons locations to load field_types from.
      *

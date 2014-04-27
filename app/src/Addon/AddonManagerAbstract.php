@@ -5,8 +5,6 @@ use Illuminate\Support\Str;
 
 abstract class AddonManagerAbstract
 {
-    protected $classSuffix = 'Module';
-
     /**
      * The folder within addons locations to load modules from.
      *
@@ -40,24 +38,24 @@ abstract class AddonManagerAbstract
      */
     public function register($app)
     {
-        foreach($this->getAllAddonPaths() as $path) {
+        foreach ($this->getAllAddonPaths() as $path) {
 
             $slug = basename($path);
 
-            $type = strtolower($this->classSuffix);
+            $type = strtolower(dirname($path));
 
             // All we are going to do here is add namespaces,
             // include dependent files and register PSR-4 paths.
 
             // Register src directory
             $this->loader->addPsr4(
-                $this->getNamespace($slug) . '\\',
+                $this->getNamespace($type, $slug) . '\\',
                 $path . '/src'
             );
 
             // Register controllers directory
             $this->loader->addPsr4(
-                $this->getNamespace($slug) . '\\Controller\\',
+                $this->getNamespace($type, $slug) . '\\Controller\\',
                 $path . '/controllers'
             );
 
@@ -81,9 +79,16 @@ abstract class AddonManagerAbstract
         }
     }
 
-    public function getNamespace($slug)
+    /**
+     * Get the addon class suffix.
+     *
+     * @param $type
+     * @param $slug
+     * @return string
+     */
+    public function getNamespace($type, $slug)
     {
-        return "Addon\\{$this->classSuffix}\\" . Str::studly($slug);
+        return 'Addon\\' . Str::studly($type) . '\\' . Str::studly($slug);
     }
 
     /**
