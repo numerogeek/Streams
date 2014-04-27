@@ -1,5 +1,7 @@
 <?php namespace Streams\Provider;
 
+
+use Composer\Autoload\ClassLoader;
 use Illuminate\Support\ServiceProvider;
 use Streams\Addon\BlockManager;
 use Streams\Addon\ExtensionManager;
@@ -16,23 +18,25 @@ class AddonServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerBlocks();
-        $this->registerExtensions();
-        $this->registerFieldTypes();
-        $this->registerModules();
-        $this->registerTags();
-        $this->registerThemes();
+        $loader = new ClassLoader;
+
+        $this->registerBlocks($loader);
+        $this->registerExtensions($loader);
+        $this->registerFieldTypes($loader);
+        $this->registerModules($loader);
+        $this->registerTags($loader);
+        $this->registerThemes($loader);
     }
 
     /**
      * Register Blocks
      */
-    public function registerBlocks()
+    public function registerBlocks($loader)
     {
         $this->app->singleton(
             'streams.blocks',
-            function () {
-                return new BlockManager;
+            function () use ($loader) {
+                return new BlockManager($loader);
             }
         );
 
@@ -42,12 +46,12 @@ class AddonServiceProvider extends ServiceProvider
     /**
      * Register Extensions
      */
-    public function registerExtensions()
+    public function registerExtensions($loader)
     {
         $this->app->singleton(
             'streams.extensions',
-            function () {
-                return new ExtensionManager;
+            function () use ($loader) {
+                return new ExtensionManager($loader);
             }
         );
 
@@ -57,12 +61,12 @@ class AddonServiceProvider extends ServiceProvider
     /**
      * Register field types
      */
-    public function registerFieldTypes()
+    public function registerFieldTypes($loader)
     {
         $this->app->singleton(
             'streams.fieldtypes',
-            function () {
-                return new FieldTypeManager;
+            function () use ($loader) {
+                return new FieldTypeManager($loader);
             }
         );
 
@@ -72,12 +76,12 @@ class AddonServiceProvider extends ServiceProvider
     /**
      * Register Modules
      */
-    public function registerModules()
+    public function registerModules($loader)
     {
         $this->app->singleton(
             'streams.modules',
-            function () {
-                return new ModuleManager;
+            function () use ($loader) {
+                return new ModuleManager($loader);
             }
         );
 
@@ -87,12 +91,12 @@ class AddonServiceProvider extends ServiceProvider
     /**
      * Register Tags
      */
-    public function registerTags()
+    public function registerTags($loader)
     {
         $this->app->singleton(
             'streams.tags',
-            function () {
-                return new TagManager;
+            function () use ($loader) {
+                return new TagManager($loader);
             }
         );
 
@@ -102,12 +106,12 @@ class AddonServiceProvider extends ServiceProvider
     /**
      * Register Themes
      */
-    public function registerThemes()
+    public function registerThemes($loader)
     {
         $this->app->singleton(
             'streams.themes',
-            function () {
-                return new ThemeManager;
+            function () use ($loader) {
+                return new ThemeManager($loader);
             }
         );
 
