@@ -2,7 +2,7 @@
 
 /**
  * Class Installer
- * Seudo-controller to handle the installer steps.
+ * Controller response handler for the installer steps.
  *
  * @package StreamsInstaller
  */
