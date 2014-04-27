@@ -39,14 +39,10 @@ class UserFieldType extends FieldTypeAbstract
 
     /**
      * Create a new UserFieldType instance.
-     *
-     * @param \Streams\Model\UserModel $users
      */
-    public function __construct(\Streams\Model\UserModel $users)
+    public function __construct()
     {
-        parent::__construct();
-
-        $this->users = $users;
+        $this->users = new \Streams\Model\UserModel;
     }
 
     /**
