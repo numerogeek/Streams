@@ -24,7 +24,7 @@ class CacheCollection extends Collection
     }
 
     /**
-     * Set a collection key.
+     * Set the collection key.
      *
      * @param null $key
      * @return $this
@@ -37,7 +37,7 @@ class CacheCollection extends Collection
     }
 
     /**
-     * Make cached items unique.
+     * Filter cached items as unique only.
      *
      * @return $this|Collection
      */
@@ -51,7 +51,7 @@ class CacheCollection extends Collection
     }
 
     /**
-     * Add multiple keys.
+     * Add cache keys.
      *
      * @param array $keys
      * @return $this
