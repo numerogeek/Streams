@@ -2,7 +2,7 @@
 
 /**
  * Class InstallerEnvironment
- * Validate php modules, supported database drives and other environment factors.
+ * Validate php modules, supported database drivers and other environment factors.
  *
  * @package StreamsInstaller
  */
