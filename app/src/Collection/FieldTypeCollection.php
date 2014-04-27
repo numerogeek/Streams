@@ -1,6 +1,4 @@
-<?php namespace Pyro\Module\Streams\FieldType;
-
-use Illuminate\Support\Collection;
+<?php namespace Streams\Collection;
 
 class FieldTypeCollection extends Collection
 {

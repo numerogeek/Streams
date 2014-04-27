@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Field;
+<?php namespace Streams\Collection;
 
 class FieldAssignmentCollection extends FieldCollection
 {

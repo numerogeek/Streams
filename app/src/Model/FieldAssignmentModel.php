@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Field;
+<?php namespace Streams\Model;
 
 use Illuminate\Database\Query\Expression as DBExpression;
 use Pyro\Module\Streams\Exception\FieldAssignmentModelNotFoundException;
@@ -8,17 +8,19 @@ use Pyro\Module\Streams\Stream\StreamModel;
 class FieldAssignmentModel extends FieldModel
 {
     /**
+     * Define the table name
+     *
+     * @var string
+     */
+    protected $table = 'streams_fields_assignments';
+
+    /**
      * Disable updated_at and created_at on table
      *
      * @var boolean
      */
     public $timestamps = false;
-    /**
-     * Define the table name
-     *
-     * @var string
-     */
-    protected $table = 'data_field_assignments';
+
     /**
      * The attributes that aren't mass assignable
      *

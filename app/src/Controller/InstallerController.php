@@ -34,7 +34,6 @@ class InstallerController extends Controller
         }
 
         $installer = new \StreamsInstaller\Installer;
-
         return $installer->{$step}();
     }
 

@@ -1,6 +1,6 @@
-<?php namespace Pyro\Module\Streams\Entry;
+<?php namespace Streams\Collection;
 
-use Pyro\Model\EloquentCollection;
+use Streams\Model\EntryModel;
 
 class EntryCollection extends EloquentCollection
 {

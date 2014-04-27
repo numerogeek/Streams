@@ -1,17 +1,17 @@
 <?php namespace Pyro\Module\Streams\Stream;
 
 use Illuminate\Support\Str;
-use Pyro\Model\Eloquent;
 use Pyro\Module\Streams\Entry\EntryModelGenerator;
 use Pyro\Module\Streams\Exception\EmptyFieldNamespaceException;
 use Pyro\Module\Streams\Exception\EmptyFieldSlugException;
 use Pyro\Module\Streams\Exception\InvalidStreamModelException;
 use Pyro\Module\Streams\Exception\StreamModelNotFoundException;
-use Pyro\Module\Streams\Field\FieldAssignmentCollection;
-use Pyro\Module\Streams\Field\FieldAssignmentModel;
-use Pyro\Module\Streams\Field\FieldModel;
+use Streams\Collection\FieldAssignmentCollection;
+use Streams\Model\FieldAssignmentModel;
+use Streams\Model\FieldModel;
+use Streams\Model\EloquentModel;
 
-class StreamModel extends Eloquent
+class StreamModel extends EloquentModel
 {
     protected static $streamsCache = array();
 

@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Field;
+<?php namespace Streams\Collection;
 
 use Illuminate\Support\Collection;
 

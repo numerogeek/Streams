@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Field;
+<?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
 use Pyro\Model\Eloquent;

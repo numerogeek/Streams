@@ -1,6 +1,4 @@
-<?php namespace Pyro\Module\Streams\Stream;
-
-use Pyro\Model\EloquentCollection;
+<?php namespace Streams\Collection;
 
 class StreamCollection extends EloquentCollection
 {

@@ -1,11 +1,9 @@
-<?php namespace Pyro\Module\Streams\Entry;
+<?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
-use Pyro\FieldType\RelationshipInterface;
-use Pyro\Model\Eloquent;
-use Pyro\Module\Search\Model\Search;
-use Pyro\Module\Streams\Exception\EntryModelNotFoundException;
-use Pyro\Module\Streams\Stream\StreamModel;
+//use Pyro\Module\Search\Model\Search;
+use Streams\Exception\EntryModelNotFoundException;
+use Streams\Model\StreamModel;
 
 /**
  * Entry model
@@ -13,7 +11,7 @@ use Pyro\Module\Streams\Stream\StreamModel;
  * @author   PyroCMS Dev Team
  * @package  PyroCMS\Core\Modules\Streams\Model
  */
-class EntryModel extends Eloquent implements RelationshipInterface
+class EntryModel extends EloquentModel
 {
     /**
      * The name of the "created at" column.
