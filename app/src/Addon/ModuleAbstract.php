@@ -7,5 +7,5 @@ abstract class ModuleAbstract extends AddonAbstract
      *
      * @var string
      */
-    public $type = 'module';
+    public $addonType = 'module';
 }
