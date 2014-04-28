@@ -30,31 +30,32 @@ class TableHtml extends Table
      */
     public function __construct($collection)
     {
-        $this->buildHeader($collection);
-        //$this->rows($this->getRows());
+        $this->setAttribute('border', '1');
+
+        $this->setHeaders($collection);
+        $this->setRows($collection);
     }
 
     /**
-     * Build the table's header row.
+     * Set the tables headers.
      *
      * @return $this|Table
      */
-    public function buildHeader($items)
+    public function setHeaders($items)
     {
         if (!$items) {
             return $this;
         }
 
-        $header = new $this->tableHeaderClass();
+        $headerClass = new $this->tableHeaderClass();
 
-        $thead   = $header->fireOnCreateTableHeader(Element::create('tr'), $items);
         $headers = $this->getHeaders($items);
+        $thead   = $headerClass->fireOnCreateTableHeaderRow(Element::create('tr'), $items);
 
         foreach ($headers as $header) {
-            $thead->nest('th', $header);
+            $headerClass->fireOnCreateTableHeaderCell($thead, $header);
         }
 
-        // Nest into table
         $this->nest(
             array(
                 'thead' => Element::create('thead')->nest(
@@ -62,6 +63,41 @@ class TableHtml extends Table
                             'tr' => $thead,
                         )
                     ),
+            )
+        );
+
+        return $this;
+    }
+
+    /**
+     * Set the table's rows
+     *
+     * @param array $rows
+     * @return self
+     */
+    public function setRows($items)
+    {
+        if (!$items) {
+            return $this;
+        }
+
+        $bodyClass = new $this->tableBodyClass();
+
+        $tbody = $bodyClass->fireOnCreateTableBody(Element::create('tbody'), $items);
+
+        foreach ($items as $item) {
+            $tr = $bodyClass->fireOnCreateTableRow(Element::create('tr'), $item);
+
+            foreach ($this->getHeaders($items) as $header) {
+                $tr->setChild($bodyClass->fireOnCreateTableCell(Element::create('td'), $header));
+            }
+
+            $tbody->setChild($tr);
+        }
+
+        $this->nest(
+            array(
+                'tbody' => $tbody,
             )
         );
 

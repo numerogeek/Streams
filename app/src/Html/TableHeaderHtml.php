@@ -11,20 +11,39 @@ class TableHeaderHtml extends Fluent
     {
         parent::boot();
 
-        $this->onCreateTableHeader(
-            function ($tr, $items) {
-                return $tr;
-            }
-        );
+        $this
+            ->onCreateTableHeaderRow(
+                function ($tr, $items) {
+                    return $tr;
+                }
+            )
+            ->onCreateTableHeaderCell(
+                function ($th, $header) {
+                    return $th->nest('th', $header);
+                }
+            );
     }
 
     /**
      * Add a callback that fires when a table header is being added.
      *
      * @param  Closure $callback
-     * @return \Streams\Html\TableHtml
+     * @return \Streams\Html\TableHeaderHtml
      */
     public function onCreateTableHeader(\Closure $callback = null)
+    {
+        $this->addCallback(__FUNCTION__, $callback);
+
+        return $this;
+    }
+
+    /**
+     * Add a callback that fires when a table header cell is being added.
+     *
+     * @param  Closure $callback
+     * @return \Streams\Html\TableHeaderHtml
+     */
+    public function onCreateTableHeaderCell(\Closure $callback = null)
     {
         $this->addCallback(__FUNCTION__, $callback);
 
