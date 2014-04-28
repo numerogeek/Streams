@@ -10,6 +10,6 @@ class TestController extends Controller
                \FieldType::getAll();
             });
 
-        return 'test';
+        return \Lang::get('module.users::messages.welcome');
     }
 }

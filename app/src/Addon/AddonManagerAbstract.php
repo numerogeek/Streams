@@ -65,10 +65,10 @@ abstract class AddonManagerAbstract
             $loaderNamespace = $info['type'] . '.' . $info['slug'];
 
             // Add config namespace
-            \Config::addNamespace($loaderNamespace, $path . '/config');
+            \Config::addNamespace($loaderNamespace,  $info['path'] . '/config');
 
             // Add views namespace
-            \View::addNamespace($loaderNamespace, $path . '/views');
+            \View::addNamespace($loaderNamespace, $info['path'] . '/views');
 
             // Load events file
             if (is_file($path . '/events.php')) {
@@ -81,7 +81,7 @@ abstract class AddonManagerAbstract
             }
 
             \App::singleton(
-                'streams.' . $this->folder . '.' . $info['slug'],
+                'streams.' . $info['type'] . '.' . $info['slug'],
                 function () use ($info, $loaderNamespace) {
 
                     $addonClass = $this->getClass($info['slug']);
@@ -106,7 +106,7 @@ abstract class AddonManagerAbstract
      */
     public function get($slug)
     {
-        return \App::make('streams.' . $this->folder . '.' . $slug);
+        return \App::make('streams.' . Str::singular($this->folder) . '.' . $slug);
     }
 
     /**
