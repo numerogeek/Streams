@@ -94,10 +94,10 @@ class StreamModel extends EloquentModel
                 $attributes['prefix'] . $attributes['slug'],
                 function ($table) {
                     $table->increments('id');
+                    $table->integer('sort_order')->nullable();
                     $table->datetime('created_at');
                     $table->datetime('updated_at')->nullable();
                     $table->integer('created_by')->nullable();
-                    $table->integer('sort_order')->nullable();
                 }
             );
         }
@@ -846,7 +846,7 @@ class StreamModel extends EloquentModel
      */
     public function assignments()
     {
-        return $this->hasMany('Stream\Model\FieldAssignmentModel', 'stream_id')->orderBy('sort_order');
+        return $this->hasMany('Streams\Model\FieldAssignmentModel', 'stream_id')->orderBy('sort_order');
     }
 
     /**

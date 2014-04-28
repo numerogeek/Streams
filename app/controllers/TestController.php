@@ -15,6 +15,6 @@ class TestController extends Controller
                 'slug' => 'dogs',
             ));
 
-        return \Lang::get('module.users::messages.welcome');
+        return 'Test!';
     }
 }

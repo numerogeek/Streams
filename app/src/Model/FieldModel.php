@@ -26,6 +26,13 @@ class FieldModel extends EloquentModel
     protected $guarded = array();
 
     /**
+     * FieldAssignmentCollection
+     *
+     * @var string
+     */
+    protected $collectionClass = 'Streams\Collection\FieldCollection';
+
+    /**
      * Stream
      *
      * @var object
@@ -739,18 +746,6 @@ class FieldModel extends EloquentModel
         }
 
         return $parameter;
-    }
-
-
-    /**
-     * New collection instance
-     *
-     * @param  array $models
-     * @return object
-     */
-    public function newCollection(array $models = array())
-    {
-        return new FieldCollection($models);
     }
 
     /**

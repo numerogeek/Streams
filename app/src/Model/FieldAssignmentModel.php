@@ -28,6 +28,13 @@ class FieldAssignmentModel extends FieldModel
     protected $guarded = array();
 
     /**
+     * Collection class
+     *
+     * @var string
+     */
+    protected $collectionClass = 'Streams\Collection\FieldAssignmentCollection';
+
+    /**
      * Find by field id and stream id
      *
      * @param  integer $field_id
@@ -362,17 +369,6 @@ class FieldAssignmentModel extends FieldModel
     public function getIsLockedAttribute($isLocked)
     {
         return $this->field->is_locked;
-    }
-
-    /**
-     * New collection instance
-     *
-     * @param  array $models
-     * @return object
-     */
-    public function newCollection(array $models = array())
-    {
-        return new FieldAssignmentCollection($models);
     }
 
     /**
