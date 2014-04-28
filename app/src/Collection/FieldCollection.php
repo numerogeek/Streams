@@ -1,7 +1,5 @@
-<?php namespace Pyro\Module\Streams\Field;
+<?php namespace Streams\Collection;
 
-use Streams\Collection\EloquentCollection;
-use Streams\Collection\FieldTypeCollection;
 use Streams\Model\StreamModel;
 
 class FieldCollection extends EloquentCollection

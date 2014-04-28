@@ -16,7 +16,7 @@ class FieldModel extends EloquentModel
      *
      * @var string
      */
-    protected $table = 'data_fields';
+    protected $table = 'streams_fields';
 
     /**
      * The attributes that aren't mass assignable
@@ -24,6 +24,13 @@ class FieldModel extends EloquentModel
      * @var array
      */
     protected $guarded = array();
+
+    /**
+     * FieldAssignmentCollection
+     *
+     * @var string
+     */
+    protected $collectionClass = 'Streams\Collection\FieldCollection';
 
     /**
      * Stream
@@ -739,18 +746,6 @@ class FieldModel extends EloquentModel
         }
 
         return $parameter;
-    }
-
-
-    /**
-     * New collection instance
-     *
-     * @param  array $models
-     * @return object
-     */
-    public function newCollection(array $models = array())
-    {
-        return new FieldCollection($models);
     }
 
     /**

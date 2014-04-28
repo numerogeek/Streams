@@ -1,14 +1,16 @@
 <?php namespace Streams\Model;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Pyro\Module\Streams\Entry\EntryModelGenerator;
+use Streams\Collection\FieldAssignmentCollection;
+use Streams\Collection\StreamCollection;
 use Streams\Exception\EmptyFieldNameException;
-use Streams\Exception\EmptyFieldNamespaceException;
-use Streams\Exception\EmptyFieldSlugException;
 use Streams\Exception\EmptyStreamNamespaceException;
 use Streams\Exception\EmptyStreamSlugException;
+use Streams\Exception\Exception;
 use Streams\Exception\InvalidStreamModelException;
 use Streams\Exception\StreamModelNotFoundException;
-use Streams\Collection\FieldAssignmentCollection;
 
 class StreamModel extends EloquentModel
 {
@@ -45,7 +47,7 @@ class StreamModel extends EloquentModel
      *
      * @var array
      */
-    protected $guarded = array();
+    protected $guarded = array('id');
 
     /**
      * Create
@@ -59,73 +61,43 @@ class StreamModel extends EloquentModel
         // Validate Data
         // -------------------------------------
 
-        // Do we have a slug?
-        if (!isset($attributes['slug']) or !trim($attributes['slug'])) {
-            throw new EmptyStreamSlugException;
-        }
-
         // Do we have a namespace?
         if (!isset($attributes['namespace']) or !trim($attributes['namespace'])) {
             throw new EmptyStreamNamespaceException;
         }
 
-        // Do we have a name?
-        if (!isset($attributes['name']) or !trim($attributes['name'])) {
-            throw new EmptyFieldNameException;
+        // Do we have a slug?
+        if (!isset($attributes['slug']) or !trim($attributes['slug'])) {
+            throw new EmptyStreamSlugException;
+        }
+
+        // Check if it doesn't exist
+        if (static::findBySlugAndNamespace($attributes['slug'], $attributes['namespace'])) {
+            return false;
         }
 
         // -------------------------------------
         // Create Stream
         // -------------------------------------
 
-        $stream = array(
-            'stream_slug'      => $stream_slug,
-            'stream_namespace' => $stream_namespace,
-            'stream_name'      => $stream_name,
-            'stream_prefix'    => $stream_prefix,
-            'about'            => $about,
-        );
-
-        $stream['view_options'] = (isset($extra['view_options']) and is_array(
-                $extra['view_options']
-            )) ? $extra['view_options'] : array('id', 'created_at');
-
-        $stream['title_column'] = isset($extra['title_column']) ? $extra['title_column'] : null;
-        $stream['sorting']      = isset($extra['sorting']) ? $extra['sorting'] : 'title';
-        $stream['permissions']  = isset($extra['permissions']) ? $extra['permissions'] : null;
-        $stream['is_hidden']    = isset($extra['is_hidden']) ? $extra['is_hidden'] : false;
-        $stream['menu_path']    = isset($extra['menu_path']) ? $extra['menu_path'] : null;
-
-        // Slug and namespace are required attributes
-        if (!isset($attributes['stream_slug']) and !isset($attributes['stream_namespace'])) {
-            return false;
-        }
-
-        // Check if it doesn't exist
-        if (static::findBySlugAndNamespace($attributes['stream_slug'], $attributes['stream_namespace'])) {
-            return false;
-        }
-
-        $attributes['is_hidden']    = isset($attributes['is_hidden']) ? $attributes['is_hidden'] : false;
-        $attributes['sorting']      = isset($attributes['sorting']) ? $attributes['sorting'] : 'title';
+        $attributes['sort_by']      = isset($attributes['sort_by']) ? $attributes['sort_by'] : 'title';
         $attributes['view_options'] = isset($attributes['view_options']) ? $attributes['view_options'] : array(
             'id',
             'created_at'
         );
-
-        $schema = ci()->pdb->getSchemaBuilder();
+        $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : null;
 
         // See if table exists. You never know if it sneaked past validation
-        if (!\Schema::hasTable($attributes['stream_prefix'] . $attributes['stream_slug'])) {
+        if (!\Schema::hasTable($attributes['prefix'] . $attributes['slug'])) {
             // Create the table for our new stream
             \Schema::create(
                 $attributes['prefix'] . $attributes['slug'],
                 function ($table) {
                     $table->increments('id');
+                    $table->integer('sort_order')->nullable();
                     $table->datetime('created_at');
                     $table->datetime('updated_at')->nullable();
                     $table->integer('created_by')->nullable();
-                    $table->integer('sort_order')->nullable();
                 }
             );
         }
@@ -138,87 +110,27 @@ class StreamModel extends EloquentModel
      * This returns a consistent Eloquent
      * model from either the cache or a new query
      *
-     * @param  string $stream_slug
-     * @param  string $stream_namespace
+     * @param  string $slug
+     * @param  string $namespace
      * @return object
      */
-    public static function findBySlugAndNamespace($stream_slug, $stream_namespace = null)
+    public static function findBySlugAndNamespace($namespace, $slug)
     {
-        if (!$stream_namespace) {
-            @list($stream_slug, $stream_namespace) = explode('.', $stream_slug);
+        if (!$namespace) {
+            @list($namespace, $slug) = explode('.', $slug);
         }
 
-        return static::with('assignments.field')->where('stream_slug', $stream_slug)
-            ->where('stream_namespace', $stream_namespace)
+        $stream = static::with('assignments.field')
+            ->where('namespace', $namespace)
+            ->where('slug', $slug)
             ->take(1)
             ->first();
-    }
 
-    /**
-     * Delete a stream
-     *
-     * @access    public
-     * @param    mixed  $stream           object, int or string stream
-     * @param    string $stream_namespace namespace if first param is string
-     * @return    object
-     */
-    public static function deleteStream($stream_slug, $stream_namespace = null)
-    {
-        if ($stream = static::getStream($stream_slug, $stream_namespace)) {
-            return $stream->delete();
-        }
-
-        return false;
-    }
-
-    /**
-     * Get Stream
-     *
-     * @access    public
-     * @param    mixed  $stream           object, int or string stream
-     * @param    string $stream_namespace namespace if first param is string
-     * @return    object
-     */
-    public static function getStream($stream_slug, $stream_namespace = null)
-    {
-        if (!$stream = static::findBySlugAndNamespace($stream_slug, $stream_namespace)) {
-            throw new InvalidStreamModelException('Invalid stream. Attempted [' . $stream_slug . ',' . $stream_namespace . ']');
+        if (!$stream) {
+            //throw new InvalidStreamModelException('Invalid stream. Attempted [' . $namespace . ',' . $slug . ']');
         }
 
         return $stream;
-    }
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * Update a stream
-     *
-     * @access    public
-     * @param    mixed  $stream           object, int or string stream
-     * @param    string $stream_namespace namespace if first param is string
-     * @param    array  $data             associative array of new data
-     * @return    object
-     */
-    public static function updateStream($stream_slug, $stream_namespace = null, $data = array())
-    {
-        $stream = static::getStream($stream_slug, $stream_namespace);
-
-        return $stream->update($data);
-    }
-
-    /**
-     * Get stream field assignments
-     *
-     * @access    public
-     * @param    mixed  $stream           object, int or string stream
-     * @param    string $stream_namespace namespace if first param is string
-     * @return    object
-     */
-    public static function getFieldAssignments($stream_slug, $stream_namespace = null)
-    {
-        $stream = static::getStream($stream_slug, $stream_namespace);
-
-        return $stream->assignments;
     }
 
     /**
@@ -236,21 +148,21 @@ class StreamModel extends EloquentModel
      *
      * @access    public
      * @param    mixed  $stream           object, int or string stream
-     * @param    string $stream_namespace namespace if first param is string
+     * @param    string $namespace namespace if first param is string
      * @return    object
      */
-    public static function getStreamMetadata($stream_slug = null, $stream_namespace = null)
+    public static function getStreamMetadata($slug = null, $namespace = null)
     {
-        $stream = static::getStream($stream_slug, $stream_namespace);
+        $stream = static::getStream($slug, $namespace);
 
         $data = array();
 
-        $data['name']      = $stream->stream_name;
-        $data['slug']      = $stream->stream_slug;
-        $data['namespace'] = $stream->stream_namespace;
+        $data['name']      = $stream->name;
+        $data['slug']      = $stream->slug;
+        $data['namespace'] = $stream->namespace;
 
         // Get DB table name
-        $data['db_table'] = $stream->stream_prefix . $stream->stream_slug;
+        $data['db_table'] = $stream->prefix . $stream->slug;
 
         // @todo - convert to Query Builder
 
@@ -282,14 +194,14 @@ class StreamModel extends EloquentModel
      * This returns a consistent Eloquent
      * Collection from either the cache or a new query
      *
-     * @param  string  $stream_namespace
+     * @param  string  $namespace
      * @param  string  $limit
      * @param  integer $offset
      * @return object
      */
-    public static function findManyByNamespace($stream_namespace, $take = 0, $skip = null)
+    public static function findManyByNamespace($namespace, $take = 0, $skip = null)
     {
-        $query = static::where('stream_namespace', '=', $stream_namespace);
+        $query = static::where('namespace', '=', $namespace);
 
         if ($take > 0) {
             $query = $query->take($take)->skip($skip);
@@ -303,11 +215,11 @@ class StreamModel extends EloquentModel
      *
      * @param  mixed $id
      * @param  array $columns
-     * @return \Pyro\Module\Streams\StreamModel|Collection|static
+     * @return \Streams\Model\StreamModel|Collection|static
      */
-    public static function findBySlugAndNamespaceOrFail($stream_slug = null, $stream_namespace = null)
+    public static function findBySlugAndNamespaceOrFail($namespace, $slug)
     {
-        if (!is_null($model = static::findBySlugAndNamespace($stream_slug, $stream_namespace))) {
+        if (!is_null($model = static::findBySlugAndNamespace($namespace, $slug))) {
             return $model;
         }
 
@@ -317,24 +229,24 @@ class StreamModel extends EloquentModel
     /**
      * Find by slug
      *
-     * @param  string $stream_slug
+     * @param  string $slug
      * @return object
      */
-    public static function findBySlug($stream_slug = '')
+    public static function findBySlug($slug = '')
     {
-        return static::where('stream_slug', $stream_slug)->take(1)->first();
+        return static::where('slug', $slug)->take(1)->first();
     }
 
     /**
      * Get ID from slug and namespace
      *
-     * @param  string $stream_slug
-     * @param  string $stream_namespace
+     * @param  string $slug
+     * @param  string $namespace
      * @return mixed
      */
-    public static function getIdFromSlugAndNamespace($stream_slug = '', $stream_namespace = '')
+    public static function getIdFromSlugAndNamespace($namespace, $slug)
     {
-        if ($stream = static::findBySlugAndNamespace($stream_slug, $stream_namespace)) {
+        if ($stream = static::findBySlugAndNamespace($namespace, $slug)) {
             return $stream->id;
         }
 
@@ -375,17 +287,17 @@ class StreamModel extends EloquentModel
      */
     public static function getStreamOptions()
     {
-        return static::all(array('id', 'stream_name', 'stream_namespace'))->getStreamOptions();
+        return static::all(array('id', 'name', 'namespace'))->getStreamOptions();
     }
 
     /**
      * Get Stream associative options
      *
-     * @return array The array of Stream options indexed by "stream_slug.stream_namespace"
+     * @return array The array of Stream options indexed by "slug.namespace"
      */
     public static function getStreamAssociativeOptions()
     {
-        return static::all(array('stream_name', 'stream_slug', 'stream_namespace'))->getStreamAssociativeOptions();
+        return static::all(array('namespace', 'slug', 'name'))->getStreamAssociativeOptions();
     }
 
     /**
@@ -400,7 +312,7 @@ class StreamModel extends EloquentModel
         $schema = ci()->pdb->getSchemaBuilder();
 
         if ($stream instanceof static) {
-            $table = $stream->stream_prefix . $stream->stream_slug;
+            $table = $stream->prefix . $stream->slug;
         } else {
             $table = $prefix . $stream;
         }
@@ -421,20 +333,14 @@ class StreamModel extends EloquentModel
             return $model;
         }
 
-        throw new StreamNotFoundException;
+        throw new StreamModelNotFoundException;
     }
 
     public static function find($id, $columns = array('*'))
     {
-        if (isset(static::$streamsCache[$id])) {
-            return static::$streamsCache[$id];
-        }
-
         $stream = static::with('assignments.field')->where('id', $id)
             ->take(1)
             ->first();
-
-        return static::$streamsCache[$id] = static::$streamsCache[$id] = $stream;
     }
 
     /**
@@ -446,12 +352,6 @@ class StreamModel extends EloquentModel
     public static function object($streamData)
     {
         $assignments = array();
-
-        if (isset($streamData['stream_namespace'], $streamData['stream_slug'])) {
-            if (isset(static::$streamsCache[$streamData['stream_namespace'] . '.' . $streamData['stream_slug']])) {
-                return static::$streamsCache[$streamData['stream_namespace'] . '.' . $streamData['stream_slug']];
-            }
-        }
 
         if (is_array($streamData) and !empty($streamData['assignments'])) {
 
@@ -484,19 +384,19 @@ class StreamModel extends EloquentModel
 
         $streamModel->assignments = $assignmentsCollection;
 
-        return static::$streamsCache[$streamModel->stream_namespace . '.' . $streamModel->stream_slug] = $streamModel;
+        return static::$streamsCache[$streamModel->namespace . '.' . $streamModel->slug] = $streamModel;
     }
 
     /**
      * Get stream cache name
      *
-     * @param  string $stream_slug
-     * @param  string $stream_namespace
+     * @param  string $slug
+     * @param  string $namespace
      * @return object
      */
-    protected static function getStreamCacheName($stream_slug = '', $stream_namespace = '')
+    protected static function getStreamCacheName($slug = '', $namespace = '')
     {
-        return 'stream[' . $stream_slug . ',' . $stream_namespace . ']';
+        return 'stream[' . $slug . ',' . $namespace . ']';
     }
 
     /**
@@ -510,14 +410,14 @@ class StreamModel extends EloquentModel
      */
     public function validationArray(
         $stream,
-        $stream_namespace = null,
+        $namespace = null,
         $method = 'new',
         $skips = array(),
         $row_id = null
     ) {
         if (!$stream instanceof static) {
             if (!$stream = static::findBySlugAndNamespace($stream, $namespace)) {
-                throw new InvalidStreamModelException('Invalid stream. Attempted [' . $stream_slug . ',' . $namespace . ']');
+                throw new InvalidStreamModelException('Invalid stream. Attempted [' . $slug . ',' . $namespace . ']');
             }
         }
 
@@ -554,7 +454,7 @@ class StreamModel extends EloquentModel
         }
 
         try {
-            $schema->dropIfExists($this->getAttribute('stream_prefix') . $this->getAttribute('stream_slug'));
+            $schema->dropIfExists($this->getAttribute('prefix') . $this->getAttribute('slug'));
         } catch (Exception $e) {
             // @todo - log error
         }
@@ -639,7 +539,7 @@ class StreamModel extends EloquentModel
         if (isset($data['instructions'])) {
             $assignment->instructions = $data['instructions'];
         } else {
-            $assignment->instructions = "lang:{$this->stream_namespace}.field.{$field->field_slug}.instructions";
+            $assignment->instructions = "lang:{$this->namespace}.field.{$field->field_slug}.instructions";
         }
 
         // First one! Make it 1
@@ -670,7 +570,7 @@ class StreamModel extends EloquentModel
         $prefix = ci()->pdb->getQueryGrammar()->getTablePrefix();
 
         // Check if the table exists
-        if (!\Schema::hasTable($stream->stream_prefix . $stream->stream_slug)) {
+        if (!\Schema::hasTable($stream->prefix . $stream->slug)) {
             return false;
         }
 
@@ -680,7 +580,7 @@ class StreamModel extends EloquentModel
         }
 
         $schema->table(
-            $stream->stream_prefix . $stream->stream_slug,
+            $stream->prefix . $stream->slug,
             function ($table) use ($type, $field) {
 
                 $db_type_method = camel_case($type->db_col_type);
@@ -742,17 +642,16 @@ class StreamModel extends EloquentModel
      */
     public function update(array $attributes = array())
     {
-        $attributes['stream_prefix'] = isset($attributes['stream_prefix']) ? $attributes['stream_prefix'] : $this->getAttribute(
-            'stream_prefix'
-        );
-        $attributes['stream_slug']   = isset($attributes['stream_slug']) ? $attributes['stream_slug'] : $this->getAttribute(
-            'stream_slug'
+        $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : $this->getAttribute(
+            'prefix'
         );
 
-        $schema = ci()->pdb->getSchemaBuilder();
+        $attributes['slug'] = isset($attributes['slug']) ? $attributes['slug'] : $this->getAttribute(
+            'slug'
+        );
 
-        $from = $this->getAttribute('stream_prefix') . $this->getAttribute('stream_slug');
-        $to   = $attributes['stream_prefix'] . $attributes['stream_slug'];
+        $from = $this->getAttribute('prefix') . $this->getAttribute('slug');
+        $to   = $attributes['prefix'] . $attributes['slug'];
 
         try {
             if (!empty($to) and \Schema::hasTable($from) and $from != $to) {
@@ -788,7 +687,7 @@ class StreamModel extends EloquentModel
 
     public function save(array $options = array())
     {
-        $this->compileEntryModel();
+        //$this->compileEntryModel();
         return parent::save($options);
     }
 
@@ -813,9 +712,6 @@ class StreamModel extends EloquentModel
      */
     public function removeFieldAssignment($field)
     {
-        $schema = ci()->pdb->getSchemaBuilder();
-        $prefix = ci()->pdb->getQueryGrammar()->getTablePrefix();
-
         if (!$field instanceof FieldModel) {
             return false;
         }
@@ -831,10 +727,10 @@ class StreamModel extends EloquentModel
             // Remove from db structure
             // -------------------------------------
             if (!$type->alt_process) {
-                $schema->table(
+                \Schema::table(
                     $this->prefix . $this->slug,
                     function ($table) use ($type, $schema) {
-                        if ($schema->hasColumn($table->getTable(), $type->getColumnName())) {
+                        if (\Schema::hasColumn($table->getTable(), $type->getColumnName())) {
                             $table->dropColumn($type->getColumnName());
                         }
                     }
@@ -950,7 +846,7 @@ class StreamModel extends EloquentModel
      */
     public function assignments()
     {
-        return $this->hasMany('Stream\Model\FieldAssignmentModel', 'stream_id')->orderBy('sort_order');
+        return $this->hasMany('Streams\Model\FieldAssignmentModel', 'stream_id')->orderBy('sort_order');
     }
 
     /**

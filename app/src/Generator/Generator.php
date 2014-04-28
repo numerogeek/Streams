@@ -1,7 +1,7 @@
-<?php namespace Pyro\Support;
+<?php namespace Streams\Generator;
 
 use Illuminate\Filesystem\Filesystem as File;
-use Lex\Parser;
+//use Lex\Parser;
 
 abstract class Generator {
 
@@ -32,7 +32,6 @@ abstract class Generator {
     public function __construct()
     {
         $this->file = new File;
-        $this->parser = new Parser;
     }
 
     public function setTemplateFilename($templateFilename)

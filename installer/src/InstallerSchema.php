@@ -53,7 +53,7 @@ class InstallerSchema
             'streams_fields_assignments',
             function ($table) {
                 $table->increments('id');
-                $table->integer('ordering');
+                $table->integer('sort_order');
                 $table->integer('stream_id');
                 $table->integer('field_id');
                 $table->boolean('is_required')->default(0);
