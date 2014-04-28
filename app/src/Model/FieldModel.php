@@ -16,7 +16,7 @@ class FieldModel extends EloquentModel
      *
      * @var string
      */
-    protected $table = 'data_fields';
+    protected $table = 'streams_fields';
 
     /**
      * The attributes that aren't mass assignable

@@ -2,17 +2,7 @@
 
 trait PresentableTrait
 {
-    /**
-     * Collection class
-     *
-     * @var string
-     */
-    protected $collectionClass;
 
-    /**
-     * Presenter class
-     */
-    protected $presenterClass;
 
     /**
      * Set presenter class

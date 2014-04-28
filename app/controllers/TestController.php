@@ -10,6 +10,11 @@ class TestController extends Controller
                \FieldType::getAll();
             });
 
+        \Streams\Model\StreamModel::create(array(
+                'namespace' => 'dogs',
+                'slug' => 'dogs',
+            ));
+
         return \Lang::get('module.users::messages.welcome');
     }
 }
