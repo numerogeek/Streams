@@ -58,42 +58,41 @@ abstract class AddonManagerAbstract
                 'type'      => $type,
                 'namespace' => $this->getNamespace($type, $slug),
             );
-
         }
 
         foreach ($this->registeredAddons as $info) {
 
+            $loaderNamespace = $info['type'] . '.' . $info['slug'];
+
+            // Add config namespace
+            \Config::addNamespace($loaderNamespace, $path . '/config');
+
+            // Add views namespace
+            \View::addNamespace($loaderNamespace, $path . '/views');
+
+            // Load events file
+            if (is_file($path . '/events.php')) {
+                require_once $path . '/events.php';
+            }
+
+            // Load routes file
+            if (is_file($path . '/routes.php')) {
+                require_once $path . '/routes.php';
+            }
+
             \App::singleton(
                 'streams.' . $this->folder . '.' . $info['slug'],
-                function () use ($info) {
+                function () use ($info, $loaderNamespace) {
 
                     $addonClass = $this->getClass($info['slug']);
 
                     $addon = new $addonClass;
 
+                    // Add lang namespace
+                    \Lang::addNamespace($loaderNamespace, $info['path'] . '/lang');
+
                     $addon->path = $info['path'];
                     $addon->slug = $info['slug'];
-
-                    $loaderNamespace = $addon->type . '.' . $addon->slug;
-
-                    // Add config namespace
-                    \Config::addNamespace($loaderNamespace, $addon->path . '/config');
-
-                    // Add views namespace
-                    \View::addNamespace($loaderNamespace, $addon->path . '/views');
-
-                    // Add lang namespace
-                    \Lang::addNamespace($loaderNamespace, $addon->path . '/lang');
-
-                    // Load routes file
-                    if (is_file($addon->path . '/routes.php')) {
-                        require_once $addon->path . '/routes.php';
-                    }
-
-                    // Load events file
-                    if (is_file($addon->path . '/events.php')) {
-                        require_once $addon->path . '/events.php';
-                    }
 
                     return $addon;
                 }

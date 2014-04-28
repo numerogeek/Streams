@@ -3,6 +3,16 @@
 class AdminController extends BaseController
 {
     /**
+     * Create a new AdminController instance
+     */
+    public function __construct()
+    {
+        if (\Request::segment(2) !== null) {
+            \Module::get(strtolower(\Request::segment(2)));
+        }
+    }
+
+    /**
      * Display the admin landing page.
      */
     public function index()
