@@ -1,6 +1,6 @@
 <?php namespace Streams\Collection;
 
-class FieldTypeCollection extends Collection
+class FieldTypeCollection extends AddonCollectionAbstract
 {
 
     /**
