@@ -1,16 +1,8 @@
 <?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
-//use Pyro\Module\Search\Model\Search;
 use Streams\Exception\EntryModelNotFoundException;
-use Streams\Model\StreamModel;
 
-/**
- * Entry model
- *
- * @author   PyroCMS Dev Team
- * @package  PyroCMS\Core\Modules\Streams\Model
- */
 class EntryModel extends EloquentModel
 {
     /**
@@ -45,36 +37,53 @@ class EntryModel extends EloquentModel
      * @var array
      */
     protected static $customRelationFieldsMethods = array();
+
+    /**
+     * Columns.
+     *
+     * @var array
+     */
     protected $columns = array('*');
+
     /**
      * The attributes that aren't mass assignable
      *
      * @var array
      */
     protected $guarded = array('id');
+
     /**
      * The array of user columns that will be selected
      *
      * @var array
      */
     protected $createdByUserColumns = array('id', 'username', 'email');
+
     /**
      * Search index template
      *
      * @var mixed The configuration array or false
      */
     protected $searchIndexTemplate = false;
+
     /**
      * Collection class
      *
      * @var string
      */
     protected $collectionClass = 'Pyro\Module\Streams\Entry\EntryCollection';
+
     /**
      * Presenter class
      */
     protected $presenterClass = 'Pyro\Module\Streams\Entry\EntryPresenter';
 
+    /**
+     * Return eager fields.
+     *
+     * @param $relations
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
     public static function eager($relations)
     {
         if ($relations === true) {
@@ -133,18 +142,14 @@ class EntryModel extends EloquentModel
     }
 
     /**
-     * Run fields through their pre-process
-     * Just used for updating right now
+     * Run fields through their pre-process. Just used for updating right now.
      *
-     * @access  public
-     * @param   obj
-     * @param   string
-     * @param   int
-     * @param   array   - update data
-     * @param   skips   - optional array of skips
-     * @param   bool    - set_missing_to_null. Should we set missing pieces of data to null
-     *                  for the database?
-     * @return  bool
+     * @param       $fields
+     * @param null  $entry
+     * @param array $form_data
+     * @param array $skips
+     * @param bool  $set_missing_to_null
+     * @return array
      */
     public static function runFieldPreProcesses(
         $fields,
@@ -222,6 +227,11 @@ class EntryModel extends EloquentModel
         return $reflection->isSubclassOf($class);
     }
 
+    /**
+     * Get default fields.
+     *
+     * @return array
+     */
     public function getDefaultFields()
     {
         return array($this->getKeyName(), static::CREATED_AT, 'createdByUser');
@@ -399,7 +409,7 @@ class EntryModel extends EloquentModel
      *
      * @param array  $viewOptions
      * @param string $defaultFormat
-     * @return Pyro\Support\Presenter|Pyro\Model\Eloquent
+     * @return \Streams\Presenter\EntryPrenter
      */
     public function getPresenter($viewOptions = array(), $defaultFormat = null)
     {
@@ -556,6 +566,12 @@ class EntryModel extends EloquentModel
         return $this;
     }
 
+    /**
+     * Save the model.
+     *
+     * @param array $options
+     * @return bool
+     */
     public function save(array $options = array())
     {
         $new    = (!isset($this->id));
@@ -748,6 +764,11 @@ class EntryModel extends EloquentModel
         return $this->getAssignments()->getFieldSlugs();
     }
 
+    /**
+     * Return the created by user object.
+     *
+     * @return mixed
+     */
     public function createdByUser()
     {
         return $this->belongsTo('\Pyro\Module\Users\Model\User', 'created_by')->select($this->createdByUserColumns);

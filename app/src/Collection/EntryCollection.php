@@ -4,9 +4,20 @@ use Streams\Model\EntryModel;
 
 class EntryCollection extends EloquentCollection
 {
+    /**
+     * The entry model object.
+     *
+     * @var \Streams\Model\EntryModel
+     */
     protected $model;
 
-    public function __construct(array $items = array(), EntryModel $model = null)
+    /**
+     * Create a new EntryCollection instance.
+     *
+     * @param array      $items
+     * @param EntryModel $model
+     */
+    public function __construct(array $items = array(), \Streams\Model\EntryModel $model = null)
     {
         parent::__construct($items);
 
@@ -16,8 +27,7 @@ class EntryCollection extends EloquentCollection
     /**
      * Get entry options
      *
-     * @param  string or null $attribute
-     *
+     * @param null $attribute
      * @return array
      */
     public function getEntryOptions($attribute = null)
@@ -36,7 +46,7 @@ class EntryCollection extends EloquentCollection
     }
 
     /**
-     * Lists
+     * Overload the lists method in eloquent.
      *
      * @return array
      */
@@ -56,12 +66,11 @@ class EntryCollection extends EloquentCollection
     }
 
     /**
-     * Get the presenter object
+     * Get the presenter object.
      *
      * @param array  $viewOptions
      * @param string $defaultFormat
-     *
-     * @return Pyro\Support\Presenter|Pyro\Model\Eloquent
+     * @return \Streams\Presenter\EntryPresenter
      */
     public function getPresenter($viewOptions = array(), $defaultFormat = null)
     {
@@ -73,7 +82,7 @@ class EntryCollection extends EloquentCollection
     }
 
     /**
-     * To array
+     * Return the collection of models as an array.
      *
      * @return array
      */

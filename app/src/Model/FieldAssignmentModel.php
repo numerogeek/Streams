@@ -1,9 +1,8 @@
 <?php namespace Streams\Model;
 
 use Illuminate\Database\Query\Expression as DBExpression;
-use Pyro\Module\Streams\Exception\FieldAssignmentModelNotFoundException;
-use Pyro\Module\Streams\FieldType\FieldTypeManager;
-use Pyro\Module\Streams\Stream\StreamModel;
+use Streams\Exception\FieldAssignmentModelNotFoundException;
+use Streams\Addon\FieldTypeManager;
 
 class FieldAssignmentModel extends FieldModel
 {
@@ -33,7 +32,6 @@ class FieldAssignmentModel extends FieldModel
      *
      * @param  integer $field_id
      * @param  integer $stream_id
-     *
      * @return object
      */
     public static function findByFieldIdAndStreamId($field_id = null, $stream_id = null, $fresh = false)
@@ -51,7 +49,6 @@ class FieldAssignmentModel extends FieldModel
      * @param  integer $limit
      * @param  integer $offset
      * @param  string  $order
-     *
      * @return array
      */
     public static function findManyByStreamId($stream_id, $limit = null, $offset = 0, $order = 'asc')
@@ -113,7 +110,6 @@ class FieldAssignmentModel extends FieldModel
      *
      * @param  integer $id         The assignment id
      * @param  integer $sort_order The sort order
-     *
      * @return boolean
      */
     public static function updateSortOrder($id, $sort_order = 0)
@@ -125,7 +121,6 @@ class FieldAssignmentModel extends FieldModel
      * Get incremental sort order
      *
      * @param  integer $stream_id
-     *
      * @return integer
      */
     public static function getIncrementalSortNumber($stream_id = null)
@@ -145,7 +140,6 @@ class FieldAssignmentModel extends FieldModel
      *
      * @param  mixed $id
      * @param  array $columns
-     *
      * @return \Pyro\Module\Streams\FieldAssignmentModel|Collection|static
      */
     public static function findOrFail($id, $columns = array('*'))
@@ -161,7 +155,6 @@ class FieldAssignmentModel extends FieldModel
      * Field garbage cleanup
      *
      * @param   obj - the assignment
-     *
      * @return  void
      */
     public function delete()
@@ -231,7 +224,6 @@ class FieldAssignmentModel extends FieldModel
      * Save the model
      *
      * @param  array $options
-     *
      * @return boolean
      */
     public function save(array $options = array())
@@ -291,7 +283,6 @@ class FieldAssignmentModel extends FieldModel
      * Get the field name attr
      *
      * @param  string $field_name
-     *
      * @return string
      */
     public function getFieldNameAttribute($field_name)
@@ -314,7 +305,6 @@ class FieldAssignmentModel extends FieldModel
      * Get field slug attribute from the field relation
      *
      * @param  string $field_slug
-     *
      * @return string
      */
     public function getFieldSlugAttribute($field_slug)
@@ -330,7 +320,6 @@ class FieldAssignmentModel extends FieldModel
      * Get field namespace attribute
      *
      * @param  string $field_namespace
-     *
      * @return string
      */
     public function getFieldNamespaceAttribute($field_namespace)
@@ -342,7 +331,6 @@ class FieldAssignmentModel extends FieldModel
      * Get field type attribute
      *
      * @param  string $field_namespace
-     *
      * @return string
      */
     public function getFieldTypeAttribute($field_type)
@@ -358,7 +346,6 @@ class FieldAssignmentModel extends FieldModel
      * Get field data attribute
      *
      * @param  string $field_namespace
-     *
      * @return array
      */
     public function getFieldDataAttribute($field_data)
@@ -370,7 +357,6 @@ class FieldAssignmentModel extends FieldModel
      * Get is_locked attribute
      *
      * @param  string $field_namespace
-     *
      * @return boolean
      */
     public function getIsLockedAttribute($isLocked)
@@ -382,7 +368,6 @@ class FieldAssignmentModel extends FieldModel
      * New collection instance
      *
      * @param  array $models
-     *
      * @return object
      */
     public function newCollection(array $models = array())
@@ -414,7 +399,6 @@ class FieldAssignmentModel extends FieldModel
      * Get is_required attr
      *
      * @param  string $isRequired
-     *
      * @return boolean
      */
     public function getIsRequiredAttribute($isRequired = false)
@@ -436,7 +420,6 @@ class FieldAssignmentModel extends FieldModel
      * Get is_unique attr
      *
      * @param  string $isUnique
-     *
      * @return boolean
      */
     public function getIsUniqueAttribute($isUnique = false)

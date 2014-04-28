@@ -4,8 +4,19 @@ use Illuminate\Support\Collection;
 
 class FieldGroupCollection extends Collection
 {
+    /**
+     * Field collection.
+     *
+     * @var FieldCollection
+     */
     protected $fieldCollection;
 
+    /**
+     * Create a new FieldGroupCollection instance.
+     *
+     * @param array           $fieldGroups
+     * @param FieldCollection $fieldCollection
+     */
     public function __construct(array $fieldGroups, FieldCollection $fieldCollection)
     {
         $this->items = $fieldGroups;

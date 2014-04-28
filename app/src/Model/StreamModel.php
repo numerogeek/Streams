@@ -1,18 +1,19 @@
 <?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
-//use Streams\Generator\EntryModelGenerator;
 use Streams\Exception\EmptyFieldNamespaceException;
 use Streams\Exception\EmptyFieldSlugException;
 use Streams\Exception\InvalidStreamModelException;
 use Streams\Exception\StreamModelNotFoundException;
 use Streams\Collection\FieldAssignmentCollection;
-use Streams\Model\FieldAssignmentModel;
-use Streams\Model\FieldModel;
-use Streams\Model\EloquentModel;
 
 class StreamModel extends EloquentModel
 {
+    /**
+     * Streams cache
+     *
+     * @var array
+     */
     protected static $streamsCache = array();
 
     /**

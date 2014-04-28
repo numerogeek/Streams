@@ -22,6 +22,11 @@ class FieldAssignmentCollection extends FieldCollection
         return array_values($this->lists('field_id'));
     }
 
+    /**
+     * Return relation fields.
+     *
+     * @return mixed
+     */
     public function getRelationFields()
     {
         return $this->filter(

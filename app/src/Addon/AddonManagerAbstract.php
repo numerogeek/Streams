@@ -80,6 +80,7 @@ abstract class AddonManagerAbstract
                 require_once $path . '/routes.php';
             }
 
+            // Register a singleton addon
             \App::singleton(
                 'streams.' . $this->folder . '.' . $info['slug'],
                 function () use ($info, $loaderNamespace) {
@@ -137,6 +138,12 @@ abstract class AddonManagerAbstract
         return 'Addon\\' . Str::studly(basename($type)) . '\\' . Str::studly($slug);
     }
 
+    /**
+     * Return the addon class.
+     *
+     * @param $slug
+     * @return string
+     */
     public function getClass($slug)
     {
         $info = $this->registeredAddons[$slug];

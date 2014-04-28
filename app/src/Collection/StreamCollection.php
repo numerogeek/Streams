@@ -7,7 +7,6 @@ class StreamCollection extends EloquentCollection
      *
      * @param  string $slug
      * @param  string $namespace
-     *
      * @return object
      */
     public function findBySlugAndNamespace($slug = null, $namespace = null)
@@ -29,7 +28,6 @@ class StreamCollection extends EloquentCollection
      * Find many by namespace
      *
      * @param  string $namespace
-     *
      * @return array
      */
     public function findManyByNamespace($namespace = null)

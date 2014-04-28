@@ -1,19 +1,15 @@
 <?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
-use Pyro\Model\Eloquent;
-use Pyro\Module\Streams\Entry\EntryModel;
-use Pyro\Module\Streams\Exception\EmptyFieldNameException;
-use Pyro\Module\Streams\Exception\EmptyFieldNamespaceException;
-use Pyro\Module\Streams\Exception\EmptyFieldSlugException;
-use Pyro\Module\Streams\Exception\FieldModelNotFoundException;
-use Pyro\Module\Streams\Exception\InvalidFieldModelException;
-use Pyro\Module\Streams\Exception\InvalidFieldTypeException;
-use Pyro\Module\Streams\Exception\InvalidStreamModelException;
-use Pyro\Module\Streams\FieldType\FieldTypeManager;
-use Pyro\Module\Streams\Stream\StreamModel;
+use Streams\Exception\EmptyFieldNamespaceException;
+use Streams\Exception\EmptyFieldSlugException;
+use Streams\Exception\FieldModelNotFoundException;
+use Streams\Exception\InvalidFieldModelException;
+use Streams\Exception\InvalidFieldTypeException;
+use Streams\Exception\InvalidStreamModelException;
+use Streams\Addon\FieldTypeManager;
 
-class FieldModel extends Eloquent
+class FieldModel extends EloquentModel
 {
     /**
      * Define the table name
@@ -36,6 +32,11 @@ class FieldModel extends Eloquent
      */
     protected $_stream = null;
 
+    /**
+     * Type
+     *
+     * @var null
+     */
     protected $_type = null;
 
     /**
@@ -478,6 +479,12 @@ class FieldModel extends Eloquent
         throw new FieldModelNotFoundException;
     }
 
+    /**
+     * Get field options.
+     *
+     * @param array $skips
+     * @return mixed
+     */
     public static function getFieldOptions($skips = array())
     {
         if (is_string($skips)) {
@@ -501,7 +508,12 @@ class FieldModel extends Eloquent
         return static::all()->getFieldNamespaceOptions();
     }
 
-
+    /**
+     * Save
+     *
+     * @param array $options
+     * @return bool
+     */
     public function save(array $options = array())
     {
         $attributes = $this->getAttributes();
