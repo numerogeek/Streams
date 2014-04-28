@@ -19,6 +19,18 @@ abstract class AddonManagerAbstract
      */
     protected $registeredAddons = array();
 
+    /**
+     * Collection class
+     *
+     * @var null
+     */
+    protected $collectionClass = null;
+
+    /**
+     * Create a new AddonManagerAbstract instance.
+     *
+     * @param ClassLoader $loader
+     */
     public function __construct(Classloader $loader)
     {
         $this->loader = $loader;
@@ -33,6 +45,8 @@ abstract class AddonManagerAbstract
 
             $slug = basename($path);
             $type = strtolower(Str::singular(basename(dirname($path))));
+
+            $this->collectionClass = 'Streams\Collection\\' . Str::studly($type . 'Collection');
 
             // All we are going to do here is add namespaces,
             // include dependent files and register PSR-4 paths.
@@ -123,7 +137,7 @@ abstract class AddonManagerAbstract
             $addons[$info['slug']] = $this->get($info['slug']);
         }
 
-        return $addons;
+        return new $this->collectionClass($addons);
     }
 
     /**
