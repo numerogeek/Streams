@@ -11,6 +11,7 @@ use Streams\Exception\EmptyStreamSlugException;
 use Streams\Exception\Exception;
 use Streams\Exception\InvalidStreamModelException;
 use Streams\Exception\StreamModelNotFoundException;
+use Streams\Schema\StreamSchemaColumnCreator;
 
 class StreamModel extends EloquentModel
 {
@@ -309,15 +310,13 @@ class StreamModel extends EloquentModel
      */
     public static function tableExists($stream, $prefix = null)
     {
-        $schema = ci()->pdb->getSchemaBuilder();
-
         if ($stream instanceof static) {
             $table = $stream->prefix . $stream->slug;
         } else {
             $table = $prefix . $stream;
         }
 
-        return $schema->hasTable($table);
+        return \Schema::hasTable($table);
     }
 
     /**
@@ -351,24 +350,24 @@ class StreamModel extends EloquentModel
      */
     public static function object($streamData)
     {
-        $assignments = array();
+        $fieldAssignments = array();
 
         if (is_array($streamData) and !empty($streamData['assignments'])) {
 
-            foreach ($streamData['assignments'] as $assignment) {
+            foreach ($streamData['assignments'] as $fieldAssignment) {
 
-                if (!empty($assignment['field'])) {
-                    $fieldModel = new FieldModel($assignment['field']);
-                    unset($assignment['field']);
+                if (!empty($fieldAssignment['field'])) {
+                    $fieldModel = new FieldModel($fieldAssignment['field']);
+                    unset($fieldAssignment['field']);
                 }
 
-                $assignmentModel = new FieldAssignmentModel($assignment);
+                $fieldAssignmentModel = new FieldAssignmentModel($fieldAssignment);
 
-                $assignmentModel->setRawAttributes($assignment);
+                $fieldAssignmentModel->setRawAttributes($fieldAssignment);
 
-                $assignmentModel->setRelation('field', $fieldModel);
+                $fieldAssignmentModel->setRelation('field', $fieldModel);
 
-                $assignments[] = $assignmentModel;
+                $fieldAssignments[] = $fieldAssignmentModel;
             }
 
             unset($streamData['assignments']);
@@ -378,11 +377,11 @@ class StreamModel extends EloquentModel
 
         $streamModel->setRawAttributes($streamData);
 
-        $assignmentsCollection = new FieldAssignmentCollection($assignments);
+        $fieldAssignmentsCollection = new FieldAssignmentCollection($fieldAssignments);
 
-        $streamModel->setRelation('assignments', $assignmentsCollection);
+        $streamModel->setRelation('assignments', $fieldAssignmentsCollection);
 
-        $streamModel->assignments = $assignmentsCollection;
+        $streamModel->assignments = $fieldAssignmentsCollection;
 
         return static::$streamsCache[$streamModel->namespace . '.' . $streamModel->slug] = $streamModel;
     }
@@ -445,8 +444,6 @@ class StreamModel extends EloquentModel
      */
     public function delete()
     {
-        $schema = ci()->pdb->getSchemaBuilder();
-
         foreach ($this->assignments as $field) {
             if ($type = $field->getType()) {
                 $type->setStream($this)->namespaceDestruct();
@@ -454,14 +451,13 @@ class StreamModel extends EloquentModel
         }
 
         try {
-            $schema->dropIfExists($this->getAttribute('prefix') . $this->getAttribute('slug'));
+            \Schema::dropIfExists($this->prefix . $this->slug);
         } catch (Exception $e) {
             // @todo - log error
         }
 
         if ($success = parent::delete()) {
             FieldAssignmentModel::cleanup();
-
             FieldModel::cleanup();
         }
 
@@ -475,10 +471,8 @@ class StreamModel extends EloquentModel
      * @param  mixed  $data
      * @return boolean
      */
-    public function assignField($field = null, $data = array(), $createColumn = true)
+    public function assignField(FieldModel $field = null, $data = array(), $createColumn = true)
     {
-        // TODO This whole method needs to be recoded to use Schema...
-
         // -------------------------------------
         // Get the field data
         // -------------------------------------
@@ -487,34 +481,30 @@ class StreamModel extends EloquentModel
             $field = FieldModel::findOrFail($field);
         }
 
-        if (!$field instanceof FieldModel) {
-            return false;
-        }
-
-        if (!$assignment = FieldAssignmentModel::findByFieldIdAndStreamId($field->getKey(), $this->getKey(), true)) {
-            $assignment = new FieldAssignmentModel;
+        if (!$fieldAssignment = FieldAssignmentModel::findByFieldIdAndStreamId($field->getKey(), $this->getKey(), true)) {
+            $fieldAssignment = new FieldAssignmentModel;
         }
 
         // -------------------------------------
         // Load the field type
         // -------------------------------------
 
-        if (!$field_type = $field->getType()) {
+        if (!$fieldType = $field->getType()) {
             return false;
         }
 
         // Do we have a pre-add function?
-        if (method_exists($field_type, 'fieldAssignmentConstruct')) {
-            $field_type->setStream($this);
-            $field_type->fieldAssignmentConstruct(ci()->pdb->getSchemaBuilder());
+        if (method_exists($fieldType, 'fieldAssignmentConstruct')) {
+            $fieldType->setStream($this);
+            $fieldType->fieldAssignmentConstruct();
         }
 
         // -------------------------------------
         // Create database column
         // -------------------------------------
 
-        if ($field_type->db_col_type !== false and $createColumn === true) {
-            $this->schema_thing($this, $field_type, $field);
+        if ($this->fieldType->columnType !== false and $createColumn === true) {
+            with(new StreamSchemaColumnCreator($field))->createColumn();
         }
 
         // -------------------------------------
@@ -524,7 +514,7 @@ class StreamModel extends EloquentModel
         // -------------------------------------
 
         if (isset($data['title_column']) and ($data['title_column'] == 'yes' or $data['title_column'] === true)) {
-            $update_data['title_column'] = $field->field_slug;
+            $update_data['title_column'] = $field->slug;
 
             $this->update($update_data);
         }
@@ -533,105 +523,29 @@ class StreamModel extends EloquentModel
         // Create record in assignments
         // -------------------------------------
 
-        $assignment->stream_id = $this->getKey();
-        $assignment->field_id  = $field->getKey();
+        $fieldAssignment->stream_id = $this->getKey();
+        $fieldAssignment->field_id  = $field->getKey();
 
         if (isset($data['instructions'])) {
-            $assignment->instructions = $data['instructions'];
+            $fieldAssignment->instructions = $data['instructions'];
         } else {
-            $assignment->instructions = "lang:{$this->namespace}.field.{$field->field_slug}.instructions";
+            $fieldAssignment->instructions = "{$this->namespace}.field.{$field->slug}.instructions";
         }
 
         // First one! Make it 1
-        $assignment->sort_order = FieldAssignmentModel::getIncrementalSortNumber($this->getKey());
+        $fieldAssignment->sort_order = FieldAssignmentModel::getIncrementalSortNumber($this->getKey());
 
         // Is Required
-        $assignment->is_required = isset($data['is_required']) ? $data['is_required'] : false;
+        $fieldAssignment->is_required = isset($data['is_required']) ? $data['is_required'] : false;
 
         // Is unique
-        $assignment->is_unique = isset($data['is_unique']) ? $data['is_unique'] : false;
+        $fieldAssignment->is_unique = isset($data['is_unique']) ? $data['is_unique'] : false;
 
         // Return the field assignment or false
-        return $assignment->save();
+        return $fieldAssignment->save();
     }
 
-    /**
-     * Schema thing..
-     *
-     * @param  object $stream
-     * @param  object $type
-     * @param  object $field
-     * @return void
-     */
-    public function schema_thing($stream, $type, $field)
-    {
-        $schema = ci()->pdb->getSchemaBuilder();
 
-        $prefix = ci()->pdb->getQueryGrammar()->getTablePrefix();
-
-        // Check if the table exists
-        if (!\Schema::hasTable($stream->prefix . $stream->slug)) {
-            return false;
-        }
-
-        // Check if the column does not exist already to avoid "duplicate column" errors
-        if (\Schema::hasColumn($stream->prefix . $stream->slug, $type->getColumnName())) {
-            return false;
-        }
-
-        $schema->table(
-            $stream->prefix . $stream->slug,
-            function ($table) use ($type, $field) {
-
-                $db_type_method = camel_case($type->db_col_type);
-
-                // This seems like a sane default, and allows for 2.2 style widgets
-                // Bad boy.. whomever.
-                if (!method_exists($type, $db_type_method)) {
-                    //$db_type_method = 'text';
-                }
-
-                // -------------------------------------
-                // Constraint
-                // -------------------------------------
-
-                $constraint = 255;
-
-                // First we check and see if a constraint has been added
-                if (isset($type->col_constraint) and $type->col_constraint) {
-                    $constraint = $type->col_constraint;
-
-                    // Otherwise, we'll check for a max_length field
-                } elseif (isset($field->field_data['max_length']) and is_numeric($field->field_data['max_length'])) {
-                    $constraint = $field->field_data['max_length'];
-                }
-
-                // Only the string method cares about a constraint
-                if ($db_type_method === 'string') {
-                    $col = $table->{$db_type_method}($type->getColumnName(), $constraint);
-                } else {
-                    $col = $table->{$db_type_method}($type->getColumnName());
-                }
-
-                // -------------------------------------
-                // Default
-                // -------------------------------------
-                if (!empty($field->field_data['default_value']) and !in_array(
-                        $db_type_method,
-                        array('text', 'longText')
-                    )
-                ) {
-                    $col->default($field->field_data['default_value']);
-                }
-
-                // -------------------------------------
-                // Default to allow null
-                // -------------------------------------
-
-                $col->nullable();
-            }
-        );
-    }
 
     /**
      * Update Stream
@@ -642,15 +556,10 @@ class StreamModel extends EloquentModel
      */
     public function update(array $attributes = array())
     {
-        $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : $this->getAttribute(
-            'prefix'
-        );
+        $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : $this->prefix;
+        $attributes['slug'] = isset($attributes['slug']) ? $attributes['slug'] : $this->slug;
 
-        $attributes['slug'] = isset($attributes['slug']) ? $attributes['slug'] : $this->getAttribute(
-            'slug'
-        );
-
-        $from = $this->getAttribute('prefix') . $this->getAttribute('slug');
+        $from = $this->prefix . $this->slug;
         $to   = $attributes['prefix'] . $attributes['slug'];
 
         try {
@@ -667,18 +576,18 @@ class StreamModel extends EloquentModel
     /**
      * Add view option
      *
-     * @param string $field_slug
+     * @param string $slug
      * @return bool
      */
-    public function addViewOption($field_slug = null)
+    public function addViewOption($slug = null)
     {
-        if (!$field_slug) {
+        if (!$slug) {
             return false;
         }
 
-        $view_options = $this->getAttribute('view_options');
+        $view_options = $this->view_options;
 
-        $view_options[] = $field_slug;
+        $view_options[] = $slug;
 
         $this->view_options = array_unique($view_options);
 
@@ -738,11 +647,11 @@ class StreamModel extends EloquentModel
             }
         }
 
-        if ($assignment = FieldAssignmentModel::findByFieldIdAndStreamId($field->getKey(), $this->getKey())) {
+        if ($fieldAssignment = FieldAssignmentModel::findByFieldIdAndStreamId($field->getKey(), $this->getKey())) {
             // -------------------------------------
             // Remove from field assignments table
             // -------------------------------------
-            if (!$assignment->delete()) {
+            if (!$fieldAssignment->delete()) {
                 return false;
             }
         }
@@ -759,20 +668,20 @@ class StreamModel extends EloquentModel
     /**
      * Remove view option
      *
-     * @param string $field_slug
+     * @param string $slug
      * @return bool
      */
-    public function removeViewOption($field_slug = null)
+    public function removeViewOption($slug = null)
     {
-        if (!$field_slug) {
+        if (!$slug) {
             return false;
         }
 
         $view_options = $this->view_options;
 
-        if (in_array($field_slug, $view_options)) {
+        if (in_array($slug, $view_options)) {
             foreach ($view_options as $key => $view_option) {
-                if ($field_slug == $view_option) {
+                if ($slug == $view_option) {
                     unset($view_options[$key]);
                 }
             }
