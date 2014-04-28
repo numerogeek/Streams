@@ -2,12 +2,16 @@
 
 class AdminController extends BaseController
 {
+    protected $ignore = array('login');
+
     /**
      * Create a new AdminController instance
      */
     public function __construct()
     {
-        if (\Request::segment(2) !== null) {
+        $moduleSlug = \Request::segment(2);
+
+        if ($moduleSlug !== null and !in_array($moduleSlug, $this->ignore)) {
             \Module::get(strtolower(\Request::segment(2)));
         }
     }
@@ -43,6 +47,8 @@ class AdminController extends BaseController
             );
 
             $user = \Sentry::authenticate($credentials, \Request::get('remember'));
+
+            \Event::fire('user.login', array($user));
 
             return \Redirect::to('admin');
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
