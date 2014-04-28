@@ -17,7 +17,7 @@ class CacheCollection extends Collection
      * @param array  $items
      * @param string $key
      */
-    public function __construct(array $items, string $key = null)
+    public function __construct(array $items, $key = null)
     {
         $this->collectionKey = $key;
         $this->items         = $items;
@@ -32,7 +32,6 @@ class CacheCollection extends Collection
     public function setKey($key = null)
     {
         $this->collectionKey = $key;
-
         return $this;
     }
 
@@ -74,17 +73,17 @@ class CacheCollection extends Collection
      */
     public function index()
     {
-        if ($keys = ci()->cache->get($this->collectionKey)) {
+        if ($keys = \Cache::get($this->collectionKey)) {
             $this->addKeys($keys);
         }
 
         $this->unique();
 
-        ci()->cache->forget($this->collectionKey);
+        \Cache::forget($this->collectionKey);
 
         $self = $this;
 
-        ci()->cache->rememberForever(
+        \Cache::rememberForever(
             $this->collectionKey,
             function () use ($self) {
                 return $self->all();
@@ -102,10 +101,10 @@ class CacheCollection extends Collection
     public function flush()
     {
         foreach ($this->items as $key) {
-            ci()->cache->forget($key);
+            \Cache::forget($key);
         }
 
-        ci()->cache->forget($this->collectionKey);
+        \Cache::forget($this->collectionKey);
 
         $this->items = array();
 

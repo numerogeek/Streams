@@ -1,8 +1,11 @@
 <?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
+use Streams\Exception\EmptyFieldNameException;
 use Streams\Exception\EmptyFieldNamespaceException;
 use Streams\Exception\EmptyFieldSlugException;
+use Streams\Exception\EmptyStreamNamespaceException;
+use Streams\Exception\EmptyStreamSlugException;
 use Streams\Exception\InvalidStreamModelException;
 use Streams\Exception\StreamModelNotFoundException;
 use Streams\Collection\FieldAssignmentCollection;
@@ -28,7 +31,7 @@ class StreamModel extends EloquentModel
      *
      * @var string
      */
-    protected $table = 'data_streams';
+    protected $table = 'streams_streams';
 
     /**
      * Cache minutes
@@ -45,65 +48,29 @@ class StreamModel extends EloquentModel
     protected $guarded = array();
 
     /**
-     * Get entry model class
+     * Create
      *
-     * @param $stream_slug
-     * @param $stream_namespace
-     * @return string
+     * @param  array $attributes
+     * @return boolean
      */
-    public static function getEntryModelClass($stream_slug, $stream_namespace)
+    public static function create(array $attributes = array())
     {
-        return static::getEntryModelNamespace() . '\\' . Str::studly(
-            "{$stream_namespace}_{$stream_slug}" . 'EntryModel'
-        );
-    }
-
-    /**
-     * Get entry model namespace
-     *
-     * @return string
-     */
-    public static function getEntryModelNamespace()
-    {
-        return 'Pyro\\Module\\Streams\\Model';
-    }
-
-    /**
-     * Add a Stream.
-     *
-     * @access    public
-     * @param    string - stream name
-     * @param    string - stream slug
-     * @param    string - stream namespace
-     * @param     [string - stream prefix]
-     * @param     [string - about notes for stream]
-     * @param     [array - extra data]
-     * @return    false or new stream ID
-     */
-    public static function addStream(
-        $stream_slug,
-        $stream_namespace,
-        $stream_name,
-        $stream_prefix = null,
-        $about = null,
-        $extra = array()
-    ) {
         // -------------------------------------
         // Validate Data
         // -------------------------------------
 
-        // Do we have a field slug?
-        if (!isset($stream_slug) or !trim($stream_slug)) {
-            throw new EmptyFieldSlugException;
+        // Do we have a slug?
+        if (!isset($attributes['slug']) or !trim($attributes['slug'])) {
+            throw new EmptyStreamSlugException;
         }
 
         // Do we have a namespace?
-        if (!isset($stream_namespace) or !trim($stream_namespace)) {
-            throw new EmptyFieldNamespaceException;
+        if (!isset($attributes['namespace']) or !trim($attributes['namespace'])) {
+            throw new EmptyStreamNamespaceException;
         }
 
-        // Do we have a field name?
-        if (!isset($stream_name) or !trim($stream_name)) {
+        // Do we have a name?
+        if (!isset($attributes['name']) or !trim($attributes['name'])) {
             throw new EmptyFieldNameException;
         }
 
@@ -122,23 +89,13 @@ class StreamModel extends EloquentModel
         $stream['view_options'] = (isset($extra['view_options']) and is_array(
                 $extra['view_options']
             )) ? $extra['view_options'] : array('id', 'created_at');
+
         $stream['title_column'] = isset($extra['title_column']) ? $extra['title_column'] : null;
         $stream['sorting']      = isset($extra['sorting']) ? $extra['sorting'] : 'title';
         $stream['permissions']  = isset($extra['permissions']) ? $extra['permissions'] : null;
         $stream['is_hidden']    = isset($extra['is_hidden']) ? $extra['is_hidden'] : false;
         $stream['menu_path']    = isset($extra['menu_path']) ? $extra['menu_path'] : null;
 
-        return static::create($stream);
-    }
-
-    /**
-     * Create
-     *
-     * @param  array $attributes
-     * @return boolean
-     */
-    public static function create(array $attributes = array())
-    {
         // Slug and namespace are required attributes
         if (!isset($attributes['stream_slug']) and !isset($attributes['stream_namespace'])) {
             return false;
@@ -159,16 +116,16 @@ class StreamModel extends EloquentModel
         $schema = ci()->pdb->getSchemaBuilder();
 
         // See if table exists. You never know if it sneaked past validation
-        if (!$schema->hasTable($attributes['stream_prefix'] . $attributes['stream_slug'])) {
+        if (!\Schema::hasTable($attributes['stream_prefix'] . $attributes['stream_slug'])) {
             // Create the table for our new stream
-            $schema->create(
-                $attributes['stream_prefix'] . $attributes['stream_slug'],
+            \Schema::create(
+                $attributes['prefix'] . $attributes['slug'],
                 function ($table) {
                     $table->increments('id');
                     $table->datetime('created_at');
                     $table->datetime('updated_at')->nullable();
                     $table->integer('created_by')->nullable();
-                    $table->integer('ordering_count')->nullable();
+                    $table->integer('sort_order')->nullable();
                 }
             );
         }
@@ -713,12 +670,12 @@ class StreamModel extends EloquentModel
         $prefix = ci()->pdb->getQueryGrammar()->getTablePrefix();
 
         // Check if the table exists
-        if (!$schema->hasTable($stream->stream_prefix . $stream->stream_slug)) {
+        if (!\Schema::hasTable($stream->stream_prefix . $stream->stream_slug)) {
             return false;
         }
 
         // Check if the column does not exist already to avoid "duplicate column" errors
-        if ($schema->hasColumn($stream->stream_prefix . $stream->stream_slug, $type->getColumnName())) {
+        if (\Schema::hasColumn($stream->prefix . $stream->slug, $type->getColumnName())) {
             return false;
         }
 
@@ -798,8 +755,8 @@ class StreamModel extends EloquentModel
         $to   = $attributes['stream_prefix'] . $attributes['stream_slug'];
 
         try {
-            if (!empty($to) and $schema->hasTable($from) and $from != $to) {
-                $schema->rename($from, $to);
+            if (!empty($to) and \Schema::hasTable($from) and $from != $to) {
+                \Schema::rename($from, $to);
             }
         } catch (Exception $e) {
             // @todo - throw exception
@@ -820,7 +777,7 @@ class StreamModel extends EloquentModel
             return false;
         }
 
-        $view_options = $this->view_options;
+        $view_options = $this->getAttribute('view_options');
 
         $view_options[] = $field_slug;
 
@@ -832,7 +789,6 @@ class StreamModel extends EloquentModel
     public function save(array $options = array())
     {
         $this->compileEntryModel();
-
         return parent::save($options);
     }
 
@@ -844,7 +800,6 @@ class StreamModel extends EloquentModel
     public function compileEntryModel()
     {
         $generator = new EntryModelGenerator;
-
         return $generator->compile($this);
     }
 
@@ -867,6 +822,7 @@ class StreamModel extends EloquentModel
 
         // Do we have a destruct function
         if ($type = $field->getType()) {
+
             // @todo - also pass the schema builder
             $type->setStream($this);
             $type->fieldAssignmentDestruct();
@@ -876,7 +832,7 @@ class StreamModel extends EloquentModel
             // -------------------------------------
             if (!$type->alt_process) {
                 $schema->table(
-                    $this->stream_prefix . $this->stream_slug,
+                    $this->prefix . $this->slug,
                     function ($table) use ($type, $schema) {
                         if ($schema->hasColumn($table->getTable(), $type->getColumnName())) {
                             $table->dropColumn($type->getColumnName());
@@ -899,7 +855,7 @@ class StreamModel extends EloquentModel
         // -------------------------------------
         // Remove from from field options
         // -------------------------------------
-        $this->removeViewOption($field->field_slug);
+        $this->removeViewOption($field->slug);
 
         return true;
     }
@@ -932,27 +888,6 @@ class StreamModel extends EloquentModel
     }
 
     /**
-     * Get is is_hidden attr
-     *
-     * @param  string $isHidden
-     * @return boolean
-     */
-    public function getIsHiddenAttribute($isHidden)
-    {
-        return $isHidden == 'yes' ? true : false;
-    }
-
-    /**
-     * Set is_hidden attr
-     *
-     * @param boolean $isHidden
-     */
-    public function setIsHiddenAttribute($isHidden)
-    {
-        $this->attributes['is_hidden'] = !$isHidden ? 'no' : 'yes';
-    }
-
-    /**
      * Get view options
      *
      * @param  string $view_options
@@ -964,7 +899,7 @@ class StreamModel extends EloquentModel
             return $view_options;
         }
 
-        return unserialize($view_options);
+        return json_decode($view_options);
     }
 
     /**
@@ -974,7 +909,7 @@ class StreamModel extends EloquentModel
      */
     public function setViewOptionsAttribute($view_options)
     {
-        $this->attributes['view_options'] = serialize($view_options);
+        $this->attributes['view_options'] = json_encode($view_options);
     }
 
     /**
@@ -985,7 +920,7 @@ class StreamModel extends EloquentModel
      */
     public function getPermissionsAttribute($permissions)
     {
-        return unserialize($permissions);
+        return json_decode($permissions);
     }
 
     /**
@@ -995,7 +930,7 @@ class StreamModel extends EloquentModel
      */
     public function setPermissionsAttribute($permissions)
     {
-        $this->attributes['permissions'] = serialize($permissions);
+        $this->attributes['permissions'] = json_encode($permissions);
     }
 
     /**
@@ -1005,7 +940,7 @@ class StreamModel extends EloquentModel
      */
     public function getTableName()
     {
-        return $this->stream_prefix . $this->stream_slug;
+        return $this->prefix . $this->slug;
     }
 
     /**
@@ -1015,6 +950,30 @@ class StreamModel extends EloquentModel
      */
     public function assignments()
     {
-        return $this->hasMany('Pyro\Module\Streams\Field\FieldAssignmentModel', 'stream_id')->orderBy('sort_order');
+        return $this->hasMany('Stream\Model\FieldAssignmentModel', 'stream_id')->orderBy('sort_order');
+    }
+
+    /**
+     * Get entry model class
+     *
+     * @param $slug
+     * @param $namespace
+     * @return string
+     */
+    public static function getEntryModelClass($namespace, $slug)
+    {
+        return static::getEntryModelNamespace() . '\\' . Str::studly(
+            "{$namespace}_{$slug}" . 'EntryModel'
+        );
+    }
+
+    /**
+     * Get entry model namespace
+     *
+     * @return string
+     */
+    public static function getEntryModelNamespace()
+    {
+        return 'Streams\\Model';
     }
 }
