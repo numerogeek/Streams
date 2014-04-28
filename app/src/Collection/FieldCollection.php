@@ -1,8 +1,8 @@
 <?php namespace Pyro\Module\Streams\Field;
 
-use Pyro\Model\EloquentCollection;
-use Pyro\Module\Streams\FieldType\FieldTypeCollection;
-use Pyro\Module\Streams\Stream\StreamModel;
+use Streams\Collection\EloquentCollection;
+use Streams\Collection\FieldTypeCollection;
+use Streams\Model\StreamModel;
 
 class FieldCollection extends EloquentCollection
 {
@@ -24,7 +24,6 @@ class FieldCollection extends EloquentCollection
      * Set stream
      *
      * @param StreamModel $stream
-     *
      * @return  object
      */
     public function setStream(StreamModel $stream)
@@ -42,7 +41,6 @@ class FieldCollection extends EloquentCollection
      * Find a field by slug
      *
      * @param  string $field_slug
-     *
      * @return object
      */
     public function findBySlug($field_slug = null)
@@ -64,7 +62,6 @@ class FieldCollection extends EloquentCollection
      * Get field slugs
      *
      * @param  array $columns
-     *
      * @return array
      */
     public function getFieldSlugsExclude(array $columns = array())
@@ -104,7 +101,6 @@ class FieldCollection extends EloquentCollection
      * Get an array of field types
      *
      * @param  Pyro\Module\Streams\Entry\EntryModel $entry An optional entry to instantiate the field types
-     *
      * @return array The array of field types
      */
     public function getTypes($entry = null)
