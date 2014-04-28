@@ -1,1 +1,0 @@
-<?php echo Lang::get('module.users::messages.welcome'); ?>
