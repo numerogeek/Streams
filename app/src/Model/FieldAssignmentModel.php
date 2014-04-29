@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Query\Expression as DBExpression;
 use Streams\Exception\FieldAssignmentModelNotFoundException;
-use Streams\Addon\FieldTypeManager;
 
 class FieldAssignmentModel extends FieldModel
 {
