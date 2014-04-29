@@ -32,7 +32,7 @@ class  ModuleInstallCommand extends BaseCommand {
             $this->error("{$slug} module not found.");
         }
 
-        if ($module and $module->install() and \Module::installSchemas($slug)) {
+        if ($module and $module->install() and $module->installSchemas()) {
             $this->info("{$slug} module installed.");
         } else {
             $this->error("{$slug} module was not installed.");

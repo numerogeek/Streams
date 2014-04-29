@@ -39,7 +39,7 @@ class ModulesController extends AdminController
             // Not found
         }
 
-        if ($module and $module->install() and \Module::installSchemas($slug)) {
+        if ($module and $module->install() and $module->installSchemas()) {
             // Great
         } else {
             // Something went wrong - check logs
@@ -60,7 +60,7 @@ class ModulesController extends AdminController
             // Not found
         }
 
-        if ($module and $module->install() and \Module::uninstallSchemas($slug)) {
+        if ($module and $module->uninstall() and $module->uninstallSchemas()) {
             // Great
         } else {
             // Something went wrong - check logs

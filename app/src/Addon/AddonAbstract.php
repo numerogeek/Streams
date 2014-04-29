@@ -42,4 +42,20 @@ abstract class AddonAbstract
     {
         return true;
     }
+
+    /**
+     * Install module schemas.
+     */
+    public function installSchemas()
+    {
+        return \Module::installSchemas($this->slug);
+    }
+
+    /**
+     * Uninstall module schemas.
+     */
+    public function uninstallSchemas()
+    {
+        return \Module::uninstallSchemas($this->slug);
+    }
 }
