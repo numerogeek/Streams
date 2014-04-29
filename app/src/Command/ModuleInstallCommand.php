@@ -28,14 +28,14 @@ class  ModuleInstallCommand extends BaseCommand {
 	{
         $slug = $this->argument('slug');
 
-        $name = ucfirst($slug);
+        if (!$module = \Module::get($slug)) {
+            $this->error("{$slug} module not found.");
+        }
 
-		if ($module = \Module::get($slug)) {
-            if ($module->install()) {
-                $this->info("{$name} module installed.");
-            }
+        if ($module and $module->install() and \Module::installSchemas($slug)) {
+            $this->info("{$slug} module installed.");
         } else {
-            $this->info("{$name} module not found.");
+            $this->error("{$slug} module was not installed.");
         }
 	}
 
