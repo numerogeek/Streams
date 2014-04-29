@@ -574,25 +574,15 @@ class FieldModel extends EloquentModel
     }
 
     /**
-     * Get a stream that was set on the field model
+     * Get setting
      *
-     * @return object|null
+     * @param      $key
+     * @param null $defaultValue
+     * @return null
      */
-    public function getStream()
+    public function getSetting($key, $defaultValue = null)
     {
-        return $this->_stream;
-    }
-
-    /**
-     * Set stream
-     *
-     * @param object
-     */
-    public function setStream(StreamModel $stream = null)
-    {
-        $this->stream = $stream;
-
-        return $this;
+        return isset($this->settings[$key]) ? $this->settings[$key] : $defaultValue;
     }
 
     /**

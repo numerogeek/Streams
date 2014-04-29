@@ -1,5 +1,6 @@
 <?php namespace Streams\Schema;
 
+use Streams\Addon\FieldTypeAbstract;
 use Streams\Model\FieldAssignmentModel;
 use Streams\Model\FieldModel;
 use Streams\Model\StreamModel;
@@ -66,9 +67,9 @@ class StreamSchemaColumnCreator
 
                 // Only the string method cares about a constraint
                 if ($columnTypeMethod === 'string' and $constraint) {
-                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName(), $constraint);
+                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment), $constraint);
                 } else {
-                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
+                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment));
                 }
 
                 $column->default($defaultValue)->nullable();
