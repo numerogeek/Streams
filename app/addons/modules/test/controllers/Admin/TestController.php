@@ -1,8 +1,8 @@
 <?php namespace Addon\Module\Test\Controller\Admin;
 
-use Streams\Controller\PublicController;
+use Streams\Controller\AdminController;
 
-class TestController extends PublicController
+class TestController extends AdminController
 {
     public function index()
     {
