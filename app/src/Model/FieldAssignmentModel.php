@@ -200,7 +200,7 @@ class FieldAssignmentModel extends FieldModel
             }
 
             // Update that stream's view options
-            $stream->removeViewOption($field->field_slug);
+            $stream->removeViewOption($field->slug);
         }
 
         // Find everything above it, and take each one
@@ -254,33 +254,29 @@ class FieldAssignmentModel extends FieldModel
      */
     public function update(array $attributes = array())
     {
-        $stream = $this->getAttribute('stream');
-
-        $field = $this->getAttribute('field');
-
         // -------------------------------------
         // Title Column
         // -------------------------------------
 
         // Scenario A: The title column is the field slug, and we
         // have it unchecked.
-        if ($stream->title_column == $field->field_slug and
+        if ($this->stream->title_column == $this->field->slug and
             (!isset($attributes['title_column']) or $attributes['title_column'] == 'no' or !$attributes['title_column'])
         ) {
             // In this case, they don't want this to
             // be the title column anymore, so we wipe it out
-            StreamModel::updateTitleColumnByStreamIds($stream->id, $field->field_slug);
+            StreamModel::updateTitleColumnByStreamIds($this->stream->id, $this->field->slug);
         } elseif (isset($attributes['title_column']) and
             ($attributes['title_column'] == 'yes' or $attributes['title_column'] === true) and
-            $stream->title_column != $field->field_slug
+            $this->stream->title_column != $this->field->slug
         ) {
             if ($attributes['title_column'] == 'yes') {
-                $attributes['title_column'] = $field->field_slug;
+                $attributes['title_column'] = $this->field->slug;
             }
 
             // Scenario B: They have checked the title column
             // and this field it not the current field.
-            StreamModel::updateTitleColumnByStreamIds($stream->id, $field->field_slug, $attributes['title_column']);
+            StreamModel::updateTitleColumnByStreamIds($this->stream->id, $this->field->slug, $attributes['title_column']);
         }
 
         return parent::update($attributes);
@@ -289,81 +285,67 @@ class FieldAssignmentModel extends FieldModel
     /**
      * Get the field name attr
      *
-     * @param  string $field_name
+     * @param  string $name
      * @return string
      */
-    public function getFieldNameAttribute($field_name)
+    public function getNameAttribute($name)
     {
-        if (!empty($field_name)) {
-            return $field_name;
-        }
-
         // This guarantees that the language will be loaded
         if ($this->field instanceof FieldModel) {
-            FieldTypeManager::getType($this->field->field_type);
-
-            $field_name = lang_label($this->field->field_name);
+            $name = trans("{$this->namespace}::fields.{$this->slug}");
         }
 
-        return $field_name;
+        return $name;
     }
 
     /**
      * Get field slug attribute from the field relation
      *
-     * @param  string $field_slug
+     * @param  string $slug
      * @return string
      */
-    public function getFieldSlugAttribute($field_slug)
+    public function getSlugAttribute($slug)
     {
-        if ($this->field) {
-            return $this->field->field_slug;
-        }
-
-        return null;
+        return $this->field->slug;
     }
 
     /**
      * Get field namespace attribute
      *
-     * @param  string $field_namespace
+     * @param  string $namespace
      * @return string
      */
-    public function getFieldNamespaceAttribute($field_namespace)
+    public function getNamespaceAttribute($namespace)
     {
-        return $this->field->field_namespace;
+        return $this->field->namespace;
     }
 
     /**
      * Get field type attribute
      *
-     * @param  string $field_namespace
+     * @param  string $namespace
      * @return string
      */
-    public function getFieldTypeAttribute($field_type)
+    public function getTypeAttribute($type)
     {
-        if ($this->field) {
-            return $this->field->field_type;
-        }
-
-        return null;
+        return $this->field->type;
     }
 
     /**
      * Get field data attribute
      *
-     * @param  string $field_namespace
+     * @param  string $namespace
      * @return array
      */
-    public function getFieldDataAttribute($field_data)
+    public function getSettingsAttribute($settings)
     {
-        return $this->field->field_data;
+        return $this->field->settings;
     }
 
     /**
      * Get is_locked attribute
      *
-     * @param  string $field_namespace
+     * @param  string $namespace
      * @return boolean
      */
     public function getIsLockedAttribute($isLocked)

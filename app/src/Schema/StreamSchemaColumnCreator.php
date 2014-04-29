@@ -51,7 +51,7 @@ class StreamSchemaColumnCreator
         }
 
         // Check if the column does not exist already to avoid "duplicate column" errors
-        if (\Schema::hasColumn($this->getTable(), $this->fieldtype->getColumnName())) {
+        if (\Schema::hasColumn($this->getTable(), $this->fieldType->getColumnName())) {
             return false;
         }
 

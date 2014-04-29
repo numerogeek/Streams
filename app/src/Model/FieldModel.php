@@ -1,7 +1,6 @@
 <?php namespace Streams\Model;
 
 use Illuminate\Support\Str;
-use Streams\Addon\FieldTypeManager;
 use Streams\Exception\EmptyFieldNamespaceException;
 use Streams\Exception\EmptyFieldSlugException;
 use Streams\Exception\FieldModelNotFoundException;
@@ -100,6 +99,9 @@ class FieldModel extends EloquentModel
      */
     public static function addField($field)
     {
+        $namespace = null;
+        $slug = null;
+
         extract($field);
 
         // -------------------------------------
@@ -132,7 +134,7 @@ class FieldModel extends EloquentModel
         }
 
         // Is this a valid field type?
-        if (!isset($type) or !FieldTypeManager::getType($type)) {
+        if (!isset($type) or !\FieldType::get($type)) {
             throw new InvalidFieldTypeException('Invalid field type. Attempted [' . $type . ']');
         }
 
@@ -324,7 +326,7 @@ class FieldModel extends EloquentModel
         }
 
         // Is this a valid field type?
-        if (isset($type) and !FieldTypeManager::getType($type)) {
+        if (isset($type) and !\FieldType::get($type)) {
             throw new InvalidFieldTypeException('Invalid field type. Attempted [' . $type . ']');
         }
 
