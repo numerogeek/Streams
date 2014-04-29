@@ -230,8 +230,8 @@ abstract class AddonManagerAbstract
 
         $classes = array();
 
-        if (is_dir("{$addon->path}/src/Schemas")) {
-            foreach (glob("{$addon->path}/src/Schemas/*Schema.php") as $filename) {
+        if (is_dir("{$addon->path}/src/Schema")) {
+            foreach (glob("{$addon->path}/src/Schema/*Schema.php") as $filename) {
                 $classes[] = 'Addon\\Module\\' . Str::studly($slug) . '\\Schema\\' .
                     str_replace(
                         '.php',
