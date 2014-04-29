@@ -50,7 +50,7 @@ abstract class FieldTypeAbstract extends AddonAbstract
     public $field;
 
 
-    public function getColumnName($field)
+    public function getColumnName(FieldModel $field)
     {
         return $field->slug;
     }

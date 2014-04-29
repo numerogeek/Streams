@@ -1,5 +1,6 @@
 <?php namespace Streams\Schema;
 
+use Streams\Addon\FieldTypeAbstract;
 use Streams\Model\FieldAssignmentModel;
 use Streams\Model\FieldModel;
 use Streams\Model\StreamModel;

@@ -9,7 +9,7 @@ class BooleanFieldType extends FieldTypeAbstract
      *
      * @var string
      */
-    public $columnType = 'integer';
+    public $columnType = 'boolean';
 
     /**
      * Column constraint
