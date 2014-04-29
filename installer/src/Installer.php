@@ -35,8 +35,16 @@ class Installer
      */
     public function install()
     {
+        // Install our streams_ tables
         $installerSchema = new \StreamsInstaller\InstallerSchema;
         $installerSchema->install();
+
+        // Install our core modules
+        foreach (\Module::getAll() as $module) {
+            if (!$module->install() or !$module->installSchemas()) {
+                return false;
+            }
+        }
 
         return \Redirect::to('installer/complete');
     }
