@@ -55,15 +55,55 @@ class StreamSchemaColumnCreator
             $this->getTable($assignment->stream),
             function ($table) use ($assignment, $fieldType) {
 
+                // This is the Eloquent method we'll be using
                 $columnTypeMethod = camel_case($fieldType->columnType);
 
-                $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment));
+                // Get the column constraint if any
+                $constraint = $this->getColumnConstraint($assignment);
 
-                $column->nullable();
+                // Save a default value in the table schema
+                $defaultValue = $assignment->getSetting('default_value');
+
+                // Only the string method cares about a constraint
+                if ($columnTypeMethod === 'string' and $constraint) {
+                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName(), $constraint);
+                } else {
+                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
+                }
+
+                $column->default($defaultValue)->nullable();
             }
         );
 
         return true;
     }
 
+    /**
+     * Get the column constraint for an assignment.
+     *
+     * @param $assignment
+     * @return int|string
+     */
+    protected function getColumnConstraint(FieldAssignmentModel $assignment)
+    {
+        $constraint = 255;
+
+        $maxLength = $assignment->getSetting('max_length');
+
+        $fieldType = $assignment->getType();
+
+        // First we check and see if a constraint has been added
+        if ($fieldType instanceof FieldTypeAbstract and
+            isset($fieldType->columnConstraint) and $fieldType->columnConstraint
+        ) {
+            $constraint = $fieldType->columnConstraint;
+
+            // Otherwise, we'll check for a max_length field
+        } elseif (is_numeric($maxLength)
+        ) {
+            $constraint = $maxLength;
+        }
+
+        return $constraint;
+    }
 }
