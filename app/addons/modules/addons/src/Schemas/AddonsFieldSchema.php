@@ -13,13 +13,13 @@ class AddonsFieldSchema extends FieldSchema
     {
         return array(
             'slug' => array(
-                'field_type' => 'text',
+                'type' => 'text',
             ),
             'is_installed' => array(
-                'field_type' => 'boolean',
+                'type' => 'boolean',
             ),
             'is_enabled' => array(
-                'field_type' => 'boolean',
+                'type' => 'boolean',
             ),
         );
     }
