@@ -7,7 +7,7 @@ abstract class AddonAbstract
      *
      * @var string
      */
-    public $type = null;
+    public $addonType = null;
 
     /**
      * The installer logic for the addon.

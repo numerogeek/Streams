@@ -7,5 +7,5 @@ abstract class BlockAbstract extends AddonAbstract
      *
      * @var string
      */
-    public $type = 'block';
+    public $addonType = 'block';
 }

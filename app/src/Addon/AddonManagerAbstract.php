@@ -85,13 +85,13 @@ abstract class AddonManagerAbstract
             \View::addNamespace($loaderNamespace, $info['path'] . '/views');
 
             // Load events file
-            if (is_file($path . '/events.php')) {
-                require_once $path . '/events.php';
+            if (is_file($info['path'] . '/events.php')) {
+                require_once $info['path'] . '/events.php';
             }
 
             // Load routes file
-            if (is_file($path . '/routes.php')) {
-                require_once $path . '/routes.php';
+            if (is_file($info['path'] . '/routes.php')) {
+                require_once $info['path'] . '/routes.php';
             }
 
             // Register a singleton addon

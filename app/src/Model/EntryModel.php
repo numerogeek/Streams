@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Streams\Exception\EntryModelNotFoundException;
+use Streams\Model\Query\EntryQueryBuilder;
 
 class EntryModel extends EloquentModel
 {
@@ -244,7 +245,7 @@ class EntryModel extends EloquentModel
      */
     public function getStreamSlug()
     {
-        return $this->getStream()->stream_slug;
+        return $this->getStream()->slug;
     }
 
     /**
@@ -264,7 +265,7 @@ class EntryModel extends EloquentModel
      */
     public function getStreamNamespace()
     {
-        return $this->getStream()->stream_namespace;
+        return $this->getStream()->namespace;
     }
 
     /**
@@ -471,7 +472,7 @@ class EntryModel extends EloquentModel
      */
     public function getCacheCollectionPrefix()
     {
-        return 'streams.' . $this->getStream()->stream_slug . '.' . $this->getStream()->stream_namespace . '.';
+        return 'streams.' . $this->getStream()->slug . '.' . $this->getStream()->namespace . '.';
     }
 
     /**
@@ -580,13 +581,13 @@ class EntryModel extends EloquentModel
         $this->setEntryMeta();
 
         if ($new) {
-            \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.creating', $this);
+            \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.creating', $this);
         } else {
-            \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.editing', $this);
+            \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.editing', $this);
         }
 
-        \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.saving', $this);
-        \Events::trigger('streams.entry.saving', $this);
+        \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.saving', $this);
+        \Event::fire('streams.entry.saving', $this);
 
         if ($saved = parent::save($options) and $this->searchIndexTemplate) {
             Search::indexEntry($this, $this->searchIndexTemplate);
@@ -599,16 +600,16 @@ class EntryModel extends EloquentModel
         $stream = $this->getStream();
 
         // @todo Deprecate this
-        \Events::trigger('streams_post_insert_entry', $this);
+        \Event::fire('streams_post_insert_entry', $this);
 
         if ($new) {
-            \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.created', $this);
+            \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.created', $this);
         } else {
-            \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.edited', $this);
+            \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.edited', $this);
         }
 
-        \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.saved', $this);
-        \Events::trigger('streams.entry.saved', $this);
+        \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.saved', $this);
+        \Event::fire('streams.entry.saved', $this);
 
         return $saved;
     }
@@ -624,7 +625,7 @@ class EntryModel extends EloquentModel
 
         // Delete index automatically per SAPI conventions
         if (!$search_index_module = $this->getModuleSlug()) {
-            $search_index_module = $stream->stream_namespace;
+            $search_index_module = $stream->namespace;
         }
 
         $search_index_scope = $this->getStreamTypeSlug();
@@ -634,31 +635,32 @@ class EntryModel extends EloquentModel
 
         // Run through destructs
         foreach ($this->getAssignments() as $field) {
-
             $field->getType($this)->entryDestruct();
-
         }
 
         // Fire before deleting an entry
-        \Events::trigger('streams_pre_delete_entry', $this);
-        \Events::trigger('streams.entry.deleting', $this);
-        \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.deleting', $this);
+        \Event::fire('streams_pre_delete_entry', $this);
+        \Event::fire('streams.entry.deleting', $this);
+        \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.deleting', $this);
 
         $deleted = parent::delete();
 
         // Fire after deleting an entry
-        \Events::trigger('streams_post_delete_entry', $this->id);
-        \Events::trigger('streams.entry.deleted', $this);
-        \Events::trigger($stream->stream_namespace . '.' . $stream->stream_slug . '.entry.deleted', $this);
+        \Event::fire('streams_post_delete_entry', $this->id);
+        \Event::fire('streams.entry.deleted', $this);
+        \Event::fire($stream->namespace . '.' . $stream->slug . '.entry.deleted', $this);
 
         return $deleted;
     }
+
+
 
     /**
      * Get model slug
      *
      * @return string
      */
+    // @todo We may not need this method. Remove it.
     public function getModuleSlug()
     {
         $module = false;
@@ -689,7 +691,7 @@ class EntryModel extends EloquentModel
     {
         $stream = $this->getStream();
 
-        return $stream->stream_slug . '.' . $stream->stream_namespace;
+        return $stream->slug . '.' . $stream->namespace;
     }
 
     /**
@@ -771,7 +773,7 @@ class EntryModel extends EloquentModel
      */
     public function createdByUser()
     {
-        return $this->belongsTo('\Pyro\Module\Users\Model\User', 'created_by')->select($this->createdByUserColumns);
+        return $this->belongsTo('Streams\Model\UserModel', 'created_by')->select($this->createdByUserColumns);
     }
 
     /**

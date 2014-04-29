@@ -7,5 +7,5 @@ abstract class TagAbstract extends AddonAbstract
      *
      * @var string
      */
-    public $type = 'tag';
+    public $addonType = 'tag';
 }

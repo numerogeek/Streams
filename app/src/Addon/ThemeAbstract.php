@@ -7,5 +7,5 @@ abstract class ThemeAbstract extends AddonAbstract
      *
      * @var string
      */
-    public $type = 'theme';
+    public $addonType = 'theme';
 }
