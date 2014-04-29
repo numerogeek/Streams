@@ -1,28 +1,107 @@
 <?php namespace Streams\Schema;
 
-class StreamSchema
+use Streams\Traits\InstallableEventsTrait;
+
+class StreamSchema extends SchemaTypeAbstract
 {
+    use InstallableEventsTrait;
 
-    protected $slug;
+    /**
+     * Stream namespace
+     *
+     * @var string
+     */
+    public $namespace;
 
-    protected $namespace;
+    /**
+     * Stream slug
+     *
+     * @var string
+     */
+    public $slug;
 
-    protected $sharedSchema;
+    /**
+     * Stream prefix used for creating the table
+     *
+     * @var string
+     */
+    public $prefix;
 
-    protected $fields = array();
+    /**
+     * Stream name / language string (recommended)
+     *
+     * @var string
+     */
+    public $name;
 
-    public function __construct($install)
+    /**
+     * Stream name / language string (recommended)
+     *
+     * @var string
+     */
+    public $description;
+
+    /**
+     * The title column
+     *
+     * @var string
+     */
+    public $titleColumn;
+
+    /**
+     * Sort by title ($titleColumn) or custom
+     *
+     * @var boolean
+     */
+    public $sortBy = 'title';
+
+    /**
+     * Stream default view options
+     * An array of field slugs
+     *
+     * @var array
+     */
+    public $viewOptions = array('id', 'created_by');
+
+    /**
+     * Menu path
+     *
+     * @var string
+     */
+    public $menuPath;
+
+    /**
+     * Is the stream hidden?
+     *
+     * @var boolean
+     */
+    public $isHidden = false;
+
+    /**
+     * Array of field assignments keyed by field slug
+     * The fields must be in the same namespace as the stream
+     * Example
+     * return array(
+     *      'foo' => array(
+     *          'is_required' => true
+     *          'settings' => array(
+     *              'max_length' => 255
+     *          )
+     *      ),
+     * )
+     *
+     * @var array
+     */
+    public function assignments()
     {
-
+        return array();
     }
 
-    public function install()
-    {
+    /**
+     * Installer class
+     *
+     * @var string
+     */
+    protected $installerClass = 'Streams\Schema\StreamSchemaInstaller';
 
-    }
-
-    public function uninstall()
-    {
-
-    }
 }

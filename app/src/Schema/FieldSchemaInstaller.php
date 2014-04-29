@@ -1,0 +1,73 @@
+<?php namespace Streams\Schema;
+
+use Streams\Addon\AddonAbstract;
+use Streams\Contract\InstallerInterface;
+use Streams\Model\FieldModel;
+use Streams\Traits\InstallableEventsTrait;
+
+class FieldSchemaInstaller implements InstallerInterface
+{
+    use InstallableEventsTrait;
+
+    /**
+     * The field schema object
+     *
+     * @var FieldSchema
+     */
+    public $schema;
+
+    /**
+     * @var \Streams\Addon\AddonAbstract|null
+     */
+    public $addon;
+
+    public function __construct(FieldSchema $schema, AddonAbstract $addon = null)
+    {
+        $this->schema = $schema;
+        $this->addon  = $addon;
+    }
+
+    /**
+     * Install
+     *
+     * @return mixed
+     */
+    public function install()
+    {
+        $this->schema->onBeforeInstall();
+
+        foreach($this->schema->fields() as $slug => $fieldData) {
+
+            if ($this->addon) {
+
+                $addonLang = $this->addon->addonType . '.' . $this->addon->slug . '::' . $this->schema->slug;
+
+                $fieldData['name'] = isset($fieldData['name']) ? $fieldData['name'] : $addonLang . '.name';
+
+                $fieldData['instructions'] = isset($fieldData['instructions']) ? $fieldData['instructions'] : $addonLang . '.instructions';
+            }
+
+            FieldModel::create($fieldData);
+        }
+
+        $this->schema->onAfterInstall();
+
+        return true;
+    }
+
+    /**
+     * Uninstall
+     *
+     * @return mixed
+     */
+    public function uninstall()
+    {
+        $this->schema->onBeforeUninstall();
+
+        \StreamSchemaUtility::destroyNamespace($this->schema->namespace);
+
+        $this->schema->onAfterUninstall();
+
+        return true;
+    }
+}

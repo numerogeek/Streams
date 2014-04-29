@@ -3,11 +3,25 @@
 abstract class AddonAbstract
 {
     /**
-     * The type slug of the addon.
+     * The addon type.
      *
      * @var string
      */
     public $addonType = null;
+
+    /**
+     * The addon slug
+     *
+     * @var string
+     */
+    public $slug;
+
+    /**
+     * Array of classes that describe installable schemas
+     *
+     * @var array
+     */
+    public $schemas = array();
 
     /**
      * The installer logic for the addon.

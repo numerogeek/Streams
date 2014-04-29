@@ -1,5 +1,6 @@
 <?php namespace Streams\Schema;
 
+use Streams\Addon\FieldTypeAbstract;
 use Streams\Model\FieldAssignmentModel;
 
 class StreamSchemaColumnCreator
@@ -43,7 +44,7 @@ class StreamSchemaColumnCreator
 
         \Schema::table(
             $this->getTable(),
-            function ($table) use ($type, $field) {
+            function ($table) {
 
                 $columnTypeMethod = camel_case($this->fieldType->columnType);
 
@@ -52,10 +53,12 @@ class StreamSchemaColumnCreator
                 // -------------------------------------
                 $constraint = 255;
 
-                $maxLength = $this->fieldAssigment->getSetting('max_length');
+                $maxLength = $this->fieldAssignment->getSetting('max_length');
 
                 // First we check and see if a constraint has been added
-                if (isset($this->fieldType->columnConstraint) and $type->columnConstraint) {
+                if ($this->fieldType instanceof FieldTypeAbstract and
+                    isset($this->fieldType->columnConstraint) and $this->fieldType->columnConstraint
+                ) {
                     $constraint = $type->columnConstraint;
 
                     // Otherwise, we'll check for a max_length field
@@ -74,7 +77,7 @@ class StreamSchemaColumnCreator
                 // -------------------------------------
                 // Default
                 // -------------------------------------
-                $defaultValue = $this->fieldAssigment->getSetting('default_value');
+                $defaultValue = $this->fieldAssignment->getSetting('default_value');
 
                 if ($defaultValue and !in_array(
                         $columnTypeMethod,

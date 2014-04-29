@@ -19,9 +19,9 @@ class InstallerSchema
                 $table->increments('id');
                 $table->string('namespace', 60);
                 $table->string('slug', 60);
-                $table->string('name', 60);
                 $table->string('prefix', 60)->nullable();
-                $table->string('about', 255)->nullable();
+                $table->string('name', 60);
+                $table->string('description', 255)->nullable();
                 $table->text('view_options');
                 $table->string('title_column', 255)->nullable();
                 $table->enum('sort_by', array('title', 'custom'))->default('title');
@@ -36,9 +36,9 @@ class InstallerSchema
 
         \Schema::create('streams_fields', function($table) {
                 $table->increments('id');
-                $table->string('name', 60);
-                $table->string('slug', 60);
                 $table->string('namespace', 60)->nullable();
+                $table->string('slug', 60);
+                $table->string('name', 60);
                 $table->string('type', 50);
                 $table->text('settings')->nullable();
                 $table->dateTime('created_at');
@@ -56,10 +56,10 @@ class InstallerSchema
                 $table->integer('sort_order');
                 $table->integer('stream_id');
                 $table->integer('field_id');
+                $table->string('name', 60)->nullable();
+                $table->text('instructions')->nullable();
                 $table->boolean('is_required')->default(0);
                 $table->boolean('is_unique')->default(0);
-                $table->text('instructions')->nullable();
-                $table->string('field_name', 60)->nullable();
             }
         );
     }
