@@ -1,6 +1,8 @@
 <?php namespace Streams\Schema;
 
 use Streams\Model\FieldAssignmentModel;
+use Streams\Model\FieldModel;
+use Streams\Model\StreamModel;
 
 class StreamSchemaColumnCreator
 {
@@ -13,29 +15,17 @@ class StreamSchemaColumnCreator
     protected $fieldAssignment;
 
     /**
-     * Create a new instance with basic field information.
-     *
-     * @param FieldAssignmentModel $fieldAssignment
-     */
-    public function __construct(FieldAssignmentModel $fieldAssignment)
-    {
-        $this->fieldAssignment = $fieldAssignment;
-        $this->fieldType       = $fieldAssignment->getType();
-        $this->stream          = $fieldAssignment->stream;
-    }
-
-    /**
      * Get table.
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(StreamModel $stream)
     {
-        if (!$this->stream->prefix and $this->stream->prefix !== false) {
-            $this->stream->prefix = $this->stream->namespace . '_';
+        if (!$stream->prefix and $stream->prefix !== false) {
+            $stream->prefix = $stream->namespace . '_';
         }
 
-        return $this->stream->prefix . $this->stream->slug;
+        return $stream->prefix . $stream->slug;
     }
 
     /**
@@ -43,25 +33,31 @@ class StreamSchemaColumnCreator
      *
      * @return boolean
      */
-    public function createColumn()
+    public function createColumn(FieldModel $assignment)
     {
         // Check if the table exists
-        if (!\Schema::hasTable($this->getTable())) {
+        if (!\Schema::hasTable($this->getTable($assignment->stream))) {
             return false;
         }
 
+        $fieldType = $assignment->getType();
+
         // Check if the column does not exist already to avoid "duplicate column" errors
-        if (\Schema::hasColumn($this->getTable(), $this->fieldType->getColumnName())) {
+        if (\Schema::hasColumn(
+            $this->getTable($assignment->stream),
+            $fieldType->getColumnName($assignment)
+        )
+        ) {
             return false;
         }
 
         \Schema::table(
-            $this->getTable(),
-            function ($table) {
+            $this->getTable($assignment->stream),
+            function ($table) use ($assignment, $fieldType) {
 
-                $columnTypeMethod = camel_case($this->fieldType->columnType);
+                $columnTypeMethod = camel_case($fieldType->columnType);
 
-                $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
+                $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment));
 
                 $column->nullable();
             }

@@ -62,13 +62,13 @@ class StreamSchemaInstaller implements InstallerInterface
             }
         }
 
+        $column = new StreamSchemaColumnCreator();
+
         if ($stream = StreamModel::create($streamData)) {
             foreach ($this->schema->assignments() as $slug => $assignmentData) {
                 if ($field = FieldModel::findBySlugAndNamespace($slug, $streamData['namespace'])) {
                     if ($assignment = $stream->assignField($field, $assignmentData)) {
-                        if ($column = new StreamSchemaColumnCreator($assignment)) {
-                            $column->createColumn();
-                        }
+                        $column->createColumn($assignment);
                     }
                 }
             }

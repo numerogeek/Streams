@@ -49,22 +49,10 @@ abstract class FieldTypeAbstract extends AddonAbstract
      */
     public $field;
 
-    /**
-     * Set the field model.
-     *
-     * @param FieldModel $field
-     * @return $this
-     */
-    public function setField(FieldModel $field)
-    {
-        $this->field = $field;
 
-        return $this;
-    }
-
-    public function getColumnName()
+    public function getColumnName($field)
     {
-        return $this->field->slug;
+        return $field->slug;
     }
 
 }

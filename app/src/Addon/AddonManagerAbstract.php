@@ -284,4 +284,26 @@ abstract class AddonManagerAbstract
             }
         }
     }
+
+    /**
+     * Uninstall schemas.
+     *
+     * @param $slug
+     */
+    public function uninstallSchemas($slug)
+    {
+        $schemas = $this->getSchemas($slug);
+
+        foreach ($schemas as $fieldSchema) {
+            if ($fieldSchema instanceof FieldSchema) {
+                $fieldSchema->getInstaller()->uninstall();
+            }
+        }
+
+        foreach ($schemas as $streamSchema) {
+            if ($streamSchema instanceof StreamSchema) {
+                $streamSchema->getInstaller()->uninstall();
+            }
+        }
+    }
 }
