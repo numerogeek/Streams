@@ -22,9 +22,7 @@ class ModulesController extends AdminController
      */
     public function index()
     {
-        $modules = \FieldType::getAll();
-
-        $table = new TableHtml($modules);
+        $table = 'Index';
 
         return \View::make('module.addons::admin/modules/index', compact('table'));
     }
@@ -39,6 +37,6 @@ class ModulesController extends AdminController
     {
         \Module::install($slug);
 
-        \Redirect::to('/');
+        return \Redirect::to('admin/addons/modules');
     }
 }
