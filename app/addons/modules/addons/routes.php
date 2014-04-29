@@ -10,3 +10,6 @@ Route::get(
 
 // List all modules
 Route::get('admin/addons/modules', 'Addon\Module\Addons\Controller\Admin\ModulesController@index');
+
+// Install a module
+Route::get('admin/addons/modules/install/{slug}', 'Addon\Module\Addons\Controller\Admin\ModulesController@install');
