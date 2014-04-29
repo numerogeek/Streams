@@ -35,16 +35,14 @@ class ModulesController extends AdminController
      */
     public function install($slug)
     {
-        if ($module = \Module::get($slug)) {
-            \Module::installSchemas($slug);
-
-            if ($module->install()) {
-                // Cool
-            } else {
-                // Not cool
-            }
-        } else {
+        if (!$module = \Module::get($slug)) {
             // Not found
+        }
+
+        if ($module and $module->install() and \Module::installSchemas($slug)) {
+            // Great
+        } else {
+            // Something went wrong - check logs
         }
 
         return \Redirect::to('admin/addons/modules');
@@ -58,6 +56,16 @@ class ModulesController extends AdminController
      */
     public function uninstall($slug)
     {
+        if (!$module = \Module::get($slug)) {
+            // Not found
+        }
+
+        if ($module and $module->install() and \Module::uninstallSchemas($slug)) {
+            // Great
+        } else {
+            // Something went wrong - check logs
+        }
+
         return \Redirect::to('admin/addons/modules');
     }
 }
