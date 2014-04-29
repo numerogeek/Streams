@@ -13,6 +13,11 @@ class StreamSchemaColumnCreator
      */
     protected $fieldAssignment;
 
+    /**
+     * Create a new instance with basic field information.
+     *
+     * @param FieldAssignmentModel $fieldAssignment
+     */
     public function __construct(FieldAssignmentModel $fieldAssignment)
     {
         $this->fieldAssignment = $fieldAssignment;
@@ -20,6 +25,11 @@ class StreamSchemaColumnCreator
         $this->stream          = $fieldAssignment->stream;
     }
 
+    /**
+     * Get table.
+     *
+     * @return string
+     */
     public function getTable()
     {
         return $this->stream->prefix . $this->stream->slug;
@@ -48,35 +58,11 @@ class StreamSchemaColumnCreator
 
                 $columnTypeMethod = camel_case($this->fieldType->columnType);
 
-                // -------------------------------------
-                // Constraint
-                // -------------------------------------
-                $constraint = 255;
+                $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
 
-                $maxLength = $this->fieldAssignment->getSetting('max_length');
-
-                // First we check and see if a constraint has been added
-                if ($this->fieldType instanceof FieldTypeAbstract and
-                    isset($this->fieldType->columnConstraint) and $this->fieldType->columnConstraint
-                ) {
-                    $constraint = $type->columnConstraint;
-
-                    // Otherwise, we'll check for a max_length field
-                } elseif (is_numeric($maxLength)
-                ) {
-                    $constraint = $maxLength;
-                }
-
-                // Only the string method cares about a constraint
-                if ($columnTypeMethod === 'string') {
-                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName(), $constraint);
-                } else {
-                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
-                }
-
-                // -------------------------------------
-                // Default
-                // -------------------------------------
+                /**
+                 * Default Value
+                 */
                 $defaultValue = $this->fieldAssignment->getSetting('default_value');
 
                 if ($defaultValue and !in_array(
@@ -87,9 +73,9 @@ class StreamSchemaColumnCreator
                     $column->default($defaultValue);
                 }
 
-                // -------------------------------------
-                // Default to allow null
-                // -------------------------------------
+                /**
+                 * Allow null by default
+                 */
 
                 $column->nullable();
             }
