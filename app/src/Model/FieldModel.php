@@ -808,4 +808,18 @@ class FieldModel extends EloquentModel
         return $settings;
     }
 
+    /**
+     * Get a setting value.
+     *
+     * @param      $setting
+     * @param null $default
+     * @return null
+     */
+    public function getSetting($setting, $default = null) {
+        if (isset($this->settings[$setting])) {
+            return $this->settings[$setting];
+        } else {
+            return $default;
+        }
+    }
 }
