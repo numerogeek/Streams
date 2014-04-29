@@ -28,4 +28,10 @@ class ModulesController extends AdminController
 
         return \View::make('module.addons::admin/modules/index', compact('table'));
     }
+
+    public function install($moduleSlug)
+    {
+
+        return true;
+    }
 }

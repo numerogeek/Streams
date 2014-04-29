@@ -20,9 +20,9 @@ class InstallerSchema
                 $table->string('namespace', 60);
                 $table->string('slug', 60);
                 $table->string('prefix', 60)->nullable();
-                $table->string('name', 60);
+                $table->string('name', 60)->nullable();
                 $table->string('description', 255)->nullable();
-                $table->text('view_options');
+                $table->text('view_options')->nullable();
                 $table->string('title_column', 255)->nullable();
                 $table->enum('sort_by', array('title', 'custom'))->default('title');
                 $table->text('permissions')->nullable();

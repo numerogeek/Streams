@@ -2,6 +2,8 @@
 
 use Composer\Autoload\ClassLoader;
 use Illuminate\Support\Str;
+use Streams\Schema\FieldSchema;
+use Streams\Schema\StreamSchema;
 
 abstract class AddonManagerAbstract
 {
@@ -63,6 +65,12 @@ abstract class AddonManagerAbstract
                 $path . '/controllers'
             );
 
+            // Register controllers directory
+            $this->loader->addPsr4(
+                $this->getNamespace($type, $slug) . '\\Schema\\',
+                $path . '/schemas'
+            );
+
             // Register paths added above
             $this->loader->register();
 
@@ -79,7 +87,7 @@ abstract class AddonManagerAbstract
             $loaderNamespace = $info['type'] . '.' . $info['slug'];
 
             // Add config namespace
-            \Config::addNamespace($loaderNamespace,  $info['path'] . '/config');
+            \Config::addNamespace($loaderNamespace, $info['path'] . '/config');
 
             // Add views namespace
             \View::addNamespace($loaderNamespace, $info['path'] . '/views');
@@ -208,5 +216,53 @@ abstract class AddonManagerAbstract
     public function getApplicationAddonPaths()
     {
         return array();
+    }
+
+    public function getSchemaClasses($slug)
+    {
+        $addon = $this->get($slug);
+
+        $classes = array();
+
+        if (is_dir("{$addon->path}/schemas")) {
+            foreach (glob("{$addon->path}/schemas/*Schema.php") as $filename) {
+                $classes[] = 'Addon\\Module\\' . Str::studly($slug) . '\\Schema\\' .
+                    str_replace(
+                        '.php',
+                        '',
+                        basename($filename)
+                    );
+            };
+        }
+
+        return $classes;
+    }
+
+    public function getSchemas($slug)
+    {
+        $addon = $this->get($slug);
+
+        $schemas = array();
+
+        foreach ($this->getSchemaClasses($slug) as $schemaClass) {
+            $schemas[] = new $schemaClass($addon);
+        }
+
+        return $schemas;
+    }
+
+    public function installSchemas($slug)
+    {
+        foreach ($this->getSchemas($slug) as $schema) {
+            if ($schema instanceof FieldSchema) {
+                with($schema->getInstaller())->install();
+            }
+        }
+
+        foreach ($this->getSchemas($slug) as $schema) {
+            if ($schema instanceof StreamSchema) {
+                with($schema->getInstaller())->install();
+            }
+        }
     }
 }
