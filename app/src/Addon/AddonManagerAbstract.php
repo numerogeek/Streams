@@ -218,14 +218,20 @@ abstract class AddonManagerAbstract
         return array();
     }
 
+    /**
+     * Return the schema classes in a given module.
+     *
+     * @param $slug
+     * @return array
+     */
     public function getSchemaClasses($slug)
     {
         $addon = $this->get($slug);
 
         $classes = array();
 
-        if (is_dir("{$addon->path}/schemas")) {
-            foreach (glob("{$addon->path}/schemas/*Schema.php") as $filename) {
+        if (is_dir("{$addon->path}/src/Schemas")) {
+            foreach (glob("{$addon->path}/src/Schemas/*Schema.php") as $filename) {
                 $classes[] = 'Addon\\Module\\' . Str::studly($slug) . '\\Schema\\' .
                     str_replace(
                         '.php',
@@ -238,6 +244,12 @@ abstract class AddonManagerAbstract
         return $classes;
     }
 
+    /**
+     * Get schemas.
+     *
+     * @param $slug
+     * @return array
+     */
     public function getSchemas($slug)
     {
         $addon = $this->get($slug);
@@ -251,6 +263,11 @@ abstract class AddonManagerAbstract
         return $schemas;
     }
 
+    /**
+     * Install schemas.
+     *
+     * @param $slug
+     */
     public function installSchemas($slug)
     {
         $schemas = $this->getSchemas($slug);
