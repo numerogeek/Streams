@@ -66,9 +66,9 @@ class StreamSchemaColumnCreator
 
                 // Only the string method cares about a constraint
                 if ($columnTypeMethod === 'string' and $constraint) {
-                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName(), $constraint);
+                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment), $constraint);
                 } else {
-                    $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
+                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment));
                 }
 
                 $column->default($defaultValue)->nullable();
@@ -89,7 +89,6 @@ class StreamSchemaColumnCreator
         $constraint = 255;
 
         $maxLength = $assignment->getSetting('max_length');
-
         $fieldType = $assignment->getType();
 
         // First we check and see if a constraint has been added
