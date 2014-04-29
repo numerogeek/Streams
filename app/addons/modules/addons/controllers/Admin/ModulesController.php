@@ -28,15 +28,36 @@ class ModulesController extends AdminController
     }
 
     /**
-     * Install a module
+     * Install a module.
      *
      * @param $slug
      * @return bool
      */
     public function install($slug)
     {
-        \Module::install($slug);
+        if ($module = \Module::get($slug)) {
+            \Module::installSchemas($slug);
 
+            if ($module->install()) {
+                // Cool
+            } else {
+                // Not cool
+            }
+        } else {
+            // Not found
+        }
+
+        return \Redirect::to('admin/addons/modules');
+    }
+
+    /**
+     * Uninstall a module.
+     *
+     * @param $slug
+     * @return bool
+     */
+    public function uninstall($slug)
+    {
         return \Redirect::to('admin/addons/modules');
     }
 }
