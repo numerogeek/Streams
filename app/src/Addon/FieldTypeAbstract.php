@@ -5,6 +5,37 @@ use Streams\Model\FieldModel;
 abstract class FieldTypeAbstract extends AddonAbstract
 {
     /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'string';
+
+    /**
+     * Column constraint
+     *
+     * @var string
+     */
+    public $columnConstraint = null;
+
+    /**
+     * Field type version
+     *
+     * @var string
+     */
+    public $version = '1.0.0';
+
+    /**
+     * Field type author information.
+     *
+     * @var array
+     */
+    public $author = array(
+        'name' => 'AI Web Systems, Inc.',
+        'url'  => 'http://aiwebsystems.com/',
+    );
+
+    /**
      * The type slug of the addon.
      *
      * @var string
@@ -12,24 +43,18 @@ abstract class FieldTypeAbstract extends AddonAbstract
     public $addonType = 'field_type';
 
     /**
-     * Column constraint (for the string column type)
+     * The field model.
      *
-     * @var string
-     */
-    public $columnConstraint = null;
-
-    /**
-     * Column type
-     *
-     * @var string
-     */
-    public $columnType = 'text';
-
-    /**
      * @var \Streams\Model\FieldModel
      */
     public $field;
 
+    /**
+     * Set the field model.
+     *
+     * @param FieldModel $field
+     * @return $this
+     */
     public function setField(FieldModel $field)
     {
         $this->field = $field;
