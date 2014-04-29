@@ -378,7 +378,7 @@ class FieldAssignmentModel extends FieldModel
      */
     public function stream()
     {
-        return $this->belongsTo('Pyro\Module\Streams\Stream\StreamModel', 'stream_id');
+        return $this->belongsTo('Streams\Model\StreamModel', 'stream_id');
     }
 
     /**
@@ -388,7 +388,7 @@ class FieldAssignmentModel extends FieldModel
      */
     public function field()
     {
-        return $this->belongsTo('Pyro\Module\Streams\Field\FieldModel');
+        return $this->belongsTo('Streams\Model\FieldModel');
     }
 
     /**

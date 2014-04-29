@@ -51,6 +51,8 @@ class StreamSchemaInstaller implements InstallerInterface
 
             $addonLang = $this->addon->addonType . '.' . $this->addon->slug . '::' . $this->schema->slug;
 
+            $streamData['namespace'] = $this->schema->name ?: $this->addon->slug;
+
             if (!$this->schema->name) {
                 $streamData['name'] = $addonLang . '.name';
             }
@@ -60,9 +62,10 @@ class StreamSchemaInstaller implements InstallerInterface
             }
         }
 
-        if ($stream = StreamModel::create($streamData) and $stream instanceof StreamModel) {
+        if ($stream = StreamModel::create($streamData)) {
+
             foreach ($this->schema->assignments() as $slug => $assignmentData) {
-                if ($field = FieldModel::findBySlugAndNamespace($slug, $this->schema->namespace)) {
+                if ($field = FieldModel::findBySlugAndNamespace($slug, $streamData['namespace'])) {
                     $stream->assignField($field, $assignmentData);
                 }
             }

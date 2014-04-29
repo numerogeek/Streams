@@ -39,6 +39,6 @@ class FieldSchema extends SchemaTypeAbstract
      *
      * @var string
      */
-    protected $installerClass = 'Streams\Schema\StreamSchemaInstaller';
+    protected $installerClass = 'Streams\Schema\FieldSchemaInstaller';
 
 }

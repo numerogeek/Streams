@@ -72,11 +72,6 @@ class StreamModel extends EloquentModel
             throw new EmptyStreamSlugException;
         }
 
-        // Check if it doesn't exist
-        if (static::findBySlugAndNamespace($attributes['slug'], $attributes['namespace'])) {
-            return false;
-        }
-
         // -------------------------------------
         // Create Stream
         // -------------------------------------
@@ -88,11 +83,18 @@ class StreamModel extends EloquentModel
         );
         $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : null;
 
+        // Check if it doesn't exist
+        if (!$stream = static::findBySlugAndNamespace($attributes['slug'], $attributes['namespace'])) {
+            $stream = parent::create($attributes);
+        }
+
+        $table = $attributes['prefix'] . $attributes['slug'];
+
         // See if table exists. You never know if it sneaked past validation
-        if (!\Schema::hasTable($attributes['prefix'] . $attributes['slug'])) {
+        if (!\Schema::hasTable($table)) {
             // Create the table for our new stream
             \Schema::create(
-                $attributes['prefix'] . $attributes['slug'],
+                $table,
                 function ($table) {
                     $table->increments('id');
                     $table->integer('sort_order')->nullable();
@@ -104,7 +106,7 @@ class StreamModel extends EloquentModel
         }
 
         // Create the stream in the data_streams table
-        return parent::create($attributes);
+        return $stream;
     }
 
     /**
@@ -115,12 +117,8 @@ class StreamModel extends EloquentModel
      * @param  string $namespace
      * @return object
      */
-    public static function findBySlugAndNamespace($namespace, $slug)
+    public static function findBySlugAndNamespace($slug, $namespace)
     {
-        if (!$namespace) {
-            @list($namespace, $slug) = explode('.', $slug);
-        }
-
         $stream = static::with('assignments.field')
             ->where('namespace', $namespace)
             ->where('slug', $slug)
@@ -218,9 +216,9 @@ class StreamModel extends EloquentModel
      * @param  array $columns
      * @return \Streams\Model\StreamModel|Collection|static
      */
-    public static function findBySlugAndNamespaceOrFail($namespace, $slug)
+    public static function findBySlugAndNamespaceOrFail($slug, $namespace)
     {
-        if (!is_null($model = static::findBySlugAndNamespace($namespace, $slug))) {
+        if (!is_null($model = static::findBySlugAndNamespace($slug, $namespace))) {
             return $model;
         }
 
@@ -245,9 +243,9 @@ class StreamModel extends EloquentModel
      * @param  string $namespace
      * @return mixed
      */
-    public static function getIdFromSlugAndNamespace($namespace, $slug)
+    public static function getIdFromSlugAndNamespace($slug, $namespace)
     {
-        if ($stream = static::findBySlugAndNamespace($namespace, $slug)) {
+        if ($stream = static::findBySlugAndNamespace($slug, $namespace)) {
             return $stream->id;
         }
 
@@ -489,7 +487,7 @@ class StreamModel extends EloquentModel
         // Load the field type
         // -------------------------------------
 
-        if (!$fieldType = $field->getType()) {
+/*        if (!$fieldType = $field->getType()) {
             return false;
         }
 
@@ -505,7 +503,7 @@ class StreamModel extends EloquentModel
 
         if ($this->fieldType->columnType !== false and $createColumn === true) {
             with(new StreamSchemaColumnCreator($field))->createColumn();
-        }
+        }*/
 
         // -------------------------------------
         // Check for title column
@@ -513,7 +511,7 @@ class StreamModel extends EloquentModel
         // See if this should be made the title column
         // -------------------------------------
 
-        if (isset($data['title_column']) and ($data['title_column'] == 'yes' or $data['title_column'] === true)) {
+        if (isset($data['title_column']) and $data['title_column'] === true) {
             $update_data['title_column'] = $field->slug;
 
             $this->update($update_data);
@@ -529,17 +527,11 @@ class StreamModel extends EloquentModel
         if (isset($data['instructions'])) {
             $fieldAssignment->instructions = $data['instructions'];
         } else {
-            $fieldAssignment->instructions = "{$this->namespace}.field.{$field->slug}.instructions";
+            $fieldAssignment->instructions = "{$this->namespace}::fields.{$field->slug}.instructions";
         }
 
         // First one! Make it 1
         $fieldAssignment->sort_order = FieldAssignmentModel::getIncrementalSortNumber($this->getKey());
-
-        // Is Required
-        $fieldAssignment->is_required = isset($data['is_required']) ? $data['is_required'] : false;
-
-        // Is unique
-        $fieldAssignment->is_unique = isset($data['is_unique']) ? $data['is_unique'] : false;
 
         // Return the field assignment or false
         return $fieldAssignment->save();

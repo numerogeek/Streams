@@ -79,6 +79,19 @@ class FieldModel extends EloquentModel
         return $success;
     }
 
+    public static function create(array $attributes = array())
+    {
+        if (!$attributes['slug'] and $attributes['namespace']) {
+            return false;
+        }
+
+        if (!$field = static::findBySlugAndNamespace($attributes['slug'], $attributes['namespace'])) {
+            $field = parent::create($attributes);
+        }
+
+        return $field;
+    }
+
     /**
      * Add field
      *
@@ -526,7 +539,7 @@ class FieldModel extends EloquentModel
         $attributes = $this->getAttributes();
 
         // Load the type to see if there are other params
-        if ($fieldType = $this->getType()) {
+/*        if ($fieldType = $this->getType()) {
             $fieldType->setPreSaveParameters($attributes);
 
             foreach ($fieldType->getCustomParameters() as $setting) {
@@ -538,7 +551,7 @@ class FieldModel extends EloquentModel
                     $attributes['settings'][$setting] = $fieldType->{Str::studly('param_' . $setting . '_pre_save')}($value);
                 }
             }
-        }
+        }*/
 
         return parent::save($options);
     }
@@ -557,7 +570,7 @@ class FieldModel extends EloquentModel
             return false;
         }
 
-        if (!$entry) {
+/*        if (!$entry) {
             $entry = new EntryModel;
         }
 
@@ -565,7 +578,7 @@ class FieldModel extends EloquentModel
             $fieldType->setField($this);
             $fieldType->setEntry($entry);
             $fieldType->setStream($entry->getStream());
-        }
+        }*/
 
         return $fieldType;
     }

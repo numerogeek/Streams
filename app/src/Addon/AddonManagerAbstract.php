@@ -253,15 +253,17 @@ abstract class AddonManagerAbstract
 
     public function installSchemas($slug)
     {
-        foreach ($this->getSchemas($slug) as $schema) {
-            if ($schema instanceof FieldSchema) {
-                with($schema->getInstaller())->install();
+        $schemas = $this->getSchemas($slug);
+
+        foreach ($schemas as $fieldSchema) {
+            if ($fieldSchema instanceof FieldSchema) {
+                $fieldSchema->getInstaller()->install();
             }
         }
 
-        foreach ($this->getSchemas($slug) as $schema) {
-            if ($schema instanceof StreamSchema) {
-                with($schema->getInstaller())->install();
+        foreach ($schemas as $streamSchema) {
+            if ($streamSchema instanceof StreamSchema) {
+                $streamSchema->getInstaller()->install();
             }
         }
     }

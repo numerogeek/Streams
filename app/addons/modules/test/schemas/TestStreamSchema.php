@@ -20,6 +20,8 @@ class TestStreamSchema extends StreamSchema
     {
         return array(
             'title' => array(),
+            'foo' => array(),
+            'bar' => array(),
         );
     }
 }

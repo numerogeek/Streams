@@ -13,7 +13,19 @@ class TestFieldSchema extends FieldSchema
     {
         return array(
             'title' => array(
-                'field_type' => 'text',
+                'type' => 'text',
+                'settings' => array(
+                    'default_value' => 'Hello there.',
+                ),
+            ),
+            'foo' => array(
+                'type' => 'choice',
+                'settings' => array(
+                    'default_value' => 'Hello there.',
+                ),
+            ),
+            'bar' => array(
+                'type' => 'textarea',
                 'settings' => array(
                     'default_value' => 'Hello there.',
                 ),

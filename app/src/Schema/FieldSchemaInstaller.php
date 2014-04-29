@@ -40,11 +40,13 @@ class FieldSchemaInstaller implements InstallerInterface
 
             if ($this->addon) {
 
-                $addonLang = $this->addon->addonType . '.' . $this->addon->slug . '::' . $this->schema->slug;
+                $fieldData['slug'] = $slug;
+
+                $fieldData['namespace'] = $this->schema->namespace ?: $this->addon->slug;
+
+                $addonLang = $this->addon->addonType.'.'.$fieldData['namespace'] . '::fields.' . $slug;
 
                 $fieldData['name'] = isset($fieldData['name']) ? $fieldData['name'] : $addonLang . '.name';
-
-                $fieldData['instructions'] = isset($fieldData['instructions']) ? $fieldData['instructions'] : $addonLang . '.instructions';
             }
 
             FieldModel::create($fieldData);

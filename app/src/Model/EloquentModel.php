@@ -38,12 +38,12 @@ abstract class EloquentModel extends Model implements ArrayableInterface
      *
      * @var string
      */
-    protected $collectionClass = 'Pyro\Model\EloquentCollection';
+    protected $collectionClass = 'Streams\Collection\EloquentCollection';
 
     /**
      * Presenter class
      */
-    protected $presenterClass = 'Pyro\Support\Presenter';
+    protected $presenterClass = 'Streams\Presenter\Presenter';
 
     /**
      * Order by column
