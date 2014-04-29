@@ -1,7 +1,6 @@
 <?php namespace Addon\Module\Addons\Controller\Admin;
 
 use Streams\Controller\AdminController;
-use Streams\Html\TableHtml;
 
 class ModulesController extends AdminController
 {
