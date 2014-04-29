@@ -1,8 +1,9 @@
 <?php namespace Streams\Html;
 
-use Streams\Support\Fluent;
+use HtmlObject\Element;
+use Illuminate\Support\Fluent;
 
-class TableBodyHtml extends Fluent
+class TableFooterHtml extends Fluent
 {
     /**
      * Construct our class without bothering the parent.
@@ -12,17 +13,17 @@ class TableBodyHtml extends Fluent
         parent::boot();
 
         $this
-            ->onTableBodyCreate(
+            ->onTableFooterCreate(
                 function () {
                     return Element::create('thead');
                 }
             )
-            ->onTableBodyRowCreate(
+            ->onTableFooterRowCreate(
                 function () {
                     return Element::create('tr');
                 }
             )
-            ->onTableBodyCellCreate(
+            ->onTableFooterCellCreate(
                 function () {
                     return Element::create('th');
                 }
@@ -30,12 +31,12 @@ class TableBodyHtml extends Fluent
     }
 
     /**
-     * On table body create callback.
+     * On table footer create callback.
      *
      * @param Closure $callback
      * @return $this
      */
-    public function onTableBodyCreate(Closure $callback = null)
+    public function onTableFooterCreate(Closure $callback = null)
     {
         $this->addCallback(__FUNCTION__, $callback);
 
@@ -43,12 +44,12 @@ class TableBodyHtml extends Fluent
     }
 
     /**
-     * On table body row create callback.
+     * On table footer row create callback.
      *
      * @param Closure $callback
      * @return $this
      */
-    public function onTableBodyRowCreate(Closure $callback = null)
+    public function onTableFooterRowCreate(Closure $callback = null)
     {
         $this->addCallback(__FUNCTION__, $callback);
 
@@ -56,12 +57,12 @@ class TableBodyHtml extends Fluent
     }
 
     /**
-     * On table body cell create callback.
+     * On table footer cell create callback.
      *
      * @param Closure $callback
      * @return $this
      */
-    public function onTableBodyCellCreate(Closure $callback = null)
+    public function onTableFooterCellCreate(Closure $callback = null)
     {
         $this->addCallback(__FUNCTION__, $callback);
 

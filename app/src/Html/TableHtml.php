@@ -1,120 +1,84 @@
 <?php namespace Streams\Html;
 
-use HtmlObject\Table;
+use HtmlObject\Element;
+use Streams\Support\Fluent;
 
-class TableHtml extends Table
+class TableHtml extends Fluent
 {
     /**
-     * The table header class to use.
+     * The table header HTML class to utilize.
      *
      * @var string
      */
-    protected $tableHeaderClass = 'Streams\Html\TableHeaderHtml';
+    protected $tableHeaderHtmlClass = 'Streams\Html\TableHeaderHtml';
 
     /**
-     * The table body class to use.
+     * The table body HTML class to utilize.
      *
      * @var string
      */
-    protected $tableBodyClass = 'Streams\Html\TableBodyHtml';
+    protected $tableBodyHtmlClass = 'Streams\Html\TableBodyHtml';
 
     /**
-     * The table footer class to use.
+     * The table footer HTML class to utilize.
      *
      * @var string
      */
-    protected $tableFooterClass = 'Streams\Html\TableFooterHtml';
+    protected $tableFooterHtmlClass = 'Streams\Html\TableFooterHtml';
 
     /**
-     * Create a new TableHtml instance.
+     * Construct our class without bothering the parent.
      */
-    public function __construct($collection)
+    public function boot()
     {
-        $this->setAttribute('border', '1');
+        parent::boot();
 
-        $this->setHeaders($collection);
-        $this->setRows($collection);
+        $this->thead = new $this->tableHeaderHtmlClass();
+        $this->tbody = new $this->tableBodyHtmlClass();
+        $this->tfoot = new $this->tableFooterHtmlClass();
+
+        $this
+            ->onTableCreate(
+                function () {
+                    return Element::create('table');
+                }
+            );
     }
 
     /**
-     * Set the tables headers.
+     * Make a table the cool way.
      *
-     * @return $this|Table
+     * @param $models
+     * @return $this
      */
-    public function setHeaders($items)
+    public function make($models)
     {
-        if (!$items) {
-            return $this;
-        }
+        // onTableCreate
+        $table = $this->fireOnTableCreate();
 
-        $headerClass = new $this->tableHeaderClass();
+        // onTableHeaderCreate
+        $thead = $this->thead->onTableHeaderCreate();
 
-        $headers = $this->getHeaders($items);
-        $thead   = $headerClass->fireOnCreateTableHeaderRow(Element::create('tr'), $items);
+        // onTableHeaderRowCreate
+        // onTableHeaderCellCreate
+        // onTableBodyCreate
+        // onTableBodyRowCreate
+        // onTableBodyCellCreate
+        // onTableFooterCreate
+        // onTableFooterRowCreate
+        // onTableFooterCellCreate
+    }
 
-        foreach ($headers as $header) {
-            $headerClass->fireOnCreateTableHeaderCell($thead, $header);
-        }
-
-        $this->nest(
-            array(
-                'thead' => Element::create('thead')->nest(
-                        array(
-                            'tr' => $thead,
-                        )
-                    ),
-            )
-        );
+    /**
+     * On table create callback.
+     *
+     * @param Closure $callback
+     * @return $this
+     */
+    public function onTableCreate(Closure $callback = null)
+    {
+        $this->addCallback(__FUNCTION__, $callback);
 
         return $this;
-    }
-
-    /**
-     * Set the table's rows
-     *
-     * @param array $rows
-     * @return self
-     */
-    public function setRows($items)
-    {
-        if (!$items) {
-            return $this;
-        }
-
-        $bodyClass = new $this->tableBodyClass();
-
-        $tbody = $bodyClass->fireOnCreateTableBody(Element::create('tbody'), $items);
-
-        foreach ($items as $item) {
-            $tr = $bodyClass->fireOnCreateTableRow(Element::create('tr'), $item);
-
-            foreach ($this->getHeaders($items) as $header) {
-                $tr->setChild($bodyClass->fireOnCreateTableCell(Element::create('td'), $header));
-            }
-
-            $tbody->setChild($tr);
-        }
-
-        $this->nest(
-            array(
-                'tbody' => $tbody,
-            )
-        );
-
-        return $this;
-    }
-
-    /**
-     * Get the headers for the table's header row.
-     *
-     * @return array|null
-     */
-    protected function getHeaders($items)
-    {
-        if ($items) {
-            return array_keys((array)$items->first());
-        }
-
-        return null;
     }
 }

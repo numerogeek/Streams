@@ -1,36 +1,42 @@
 <?php namespace Streams\Html;
 
+use HtmlObject\Element;
 use Streams\Support\Fluent;
 
 class TableHeaderHtml extends Fluent
 {
     /**
-     * Set up our default callback logic.
+     * Construct our class without bothering the parent.
      */
     public function boot()
     {
         parent::boot();
 
         $this
-            ->onCreateTableHeaderRow(
-                function ($tr, $items) {
-                    return $tr;
+            ->onTableHeaderCreate(
+                function () {
+                    return Element::create('thead');
                 }
             )
-            ->onCreateTableHeaderCell(
-                function ($th, $header) {
-                    return $th->nest('th', $header);
+            ->onTableHeaderRowCreate(
+                function () {
+                    return Element::create('tr');
+                }
+            )
+            ->onTableHeaderCellCreate(
+                function () {
+                    return Element::create('th');
                 }
             );
     }
 
     /**
-     * Add a callback that fires when a table header is being added.
+     * On table header create callback.
      *
-     * @param  Closure $callback
-     * @return \Streams\Html\TableHeaderHtml
+     * @param Closure $callback
+     * @return $this
      */
-    public function onCreateTableHeader(\Closure $callback = null)
+    public function onTableHeaderCreate(Closure $callback = null)
     {
         $this->addCallback(__FUNCTION__, $callback);
 
@@ -38,12 +44,25 @@ class TableHeaderHtml extends Fluent
     }
 
     /**
-     * Add a callback that fires when a table header cell is being added.
+     * On table header row create callback.
      *
-     * @param  Closure $callback
-     * @return \Streams\Html\TableHeaderHtml
+     * @param Closure $callback
+     * @return $this
      */
-    public function onCreateTableHeaderCell(\Closure $callback = null)
+    public function onTableHeaderRowCreate(Closure $callback = null)
+    {
+        $this->addCallback(__FUNCTION__, $callback);
+
+        return $this;
+    }
+
+    /**
+     * On table header cell create callback.
+     *
+     * @param Closure $callback
+     * @return $this
+     */
+    public function onTableHeaderCellCreate(Closure $callback = null)
     {
         $this->addCallback(__FUNCTION__, $callback);
 
