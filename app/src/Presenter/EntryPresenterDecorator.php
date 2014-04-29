@@ -1,8 +1,6 @@
-<?php namespace Pyro\Module\Streams\Entry;
+<?php namespace Streams\Presenter;
 
-use Pyro\Support\PresenterDecorator;
-
-class EntryPresenterDecorator extends PresenterDecorator
+class EntryPresenterDecorator extends BasePresenterDecorator
 {
     protected $entryViewOptions;
 

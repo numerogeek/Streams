@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Pyro\Module\Streams\Entry\EntryModelGenerator;
+use Streams\Entry\EntryModelGenerator;
 use Streams\Collection\FieldAssignmentCollection;
 use Streams\Collection\StreamCollection;
 use Streams\Exception\EmptyFieldNameException;
@@ -322,7 +322,7 @@ class StreamModel extends EloquentModel
      *
      * @param  mixed $id
      * @param  array $columns
-     * @return \Pyro\Module\Streams\StreamModel|Collection|static
+     * @return \Streams\Model\StreamModel|Collection|static
      */
     public static function findOrFail($id, $columns = array('*'))
     {
@@ -344,7 +344,7 @@ class StreamModel extends EloquentModel
      * Get stream model object from stream data array
      *
      * @param  array $streamData
-     * @return Pyro\Module\Streams\StreamModel
+     * @return Streams\Model\StreamModel
      */
     public static function object($streamData)
     {

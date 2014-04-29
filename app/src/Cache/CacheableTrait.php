@@ -35,7 +35,7 @@ trait CacheableTrait
     /**
      * Flush cache collection
      *
-     * @return Pyro\Model\Eloquent
+     * @return \Streams\Model\EloquentModel
      */
     public function flushCacheCollection()
     {

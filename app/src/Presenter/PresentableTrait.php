@@ -19,7 +19,7 @@ trait PresentableTrait
     /**
      * Get presenter
      *
-     * @Return Pyro\Support\Presenter|Pyro\Model\Eloquent
+     * @Return Streams\Presenter\BasePresenter|Streams\Model\Eloquent
      */
     public function getPresenter()
     {

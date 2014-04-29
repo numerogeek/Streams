@@ -98,7 +98,7 @@ class FieldCollection extends EloquentCollection
     /**
      * Get an array of field types
      *
-     * @param  Pyro\Module\Streams\Entry\EntryModel $entry An optional entry to instantiate the field types
+     * @param  Streams\Entry\EntryModel $entry An optional entry to instantiate the field types
      * @return array The array of field types
      */
     public function getTypes($entry = null)

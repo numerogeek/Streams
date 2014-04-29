@@ -147,7 +147,7 @@ class FieldAssignmentModel extends FieldModel
      *
      * @param  mixed $id
      * @param  array $columns
-     * @return \Pyro\Module\Streams\FieldAssignmentModel|Collection|static
+     * @return \Streams\FieldAssignmentModel|Collection|static
      */
     public static function findOrFail($id, $columns = array('*'))
     {

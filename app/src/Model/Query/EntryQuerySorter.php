@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Entry;
+<?php namespace Streams\Model\Query;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;

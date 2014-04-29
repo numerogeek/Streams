@@ -488,7 +488,7 @@ class FieldModel extends EloquentModel
      *
      * @param  mixed $id
      * @param  array $columns
-     * @return \Pyro\Module\Streams\static|Collection|static
+     * @return \Streams\static|Collection|static
      */
     public static function findOrFail($id, $columns = array('*'))
     {
@@ -758,7 +758,7 @@ class FieldModel extends EloquentModel
      */
     public function assignments()
     {
-        return $this->hasMany('Pyro\Module\Streams\Field\FieldAssignmentModel', 'field_id');
+        return $this->hasMany('Streams\Model\FieldAssignmentModel', 'field_id');
     }
 
     /**

@@ -1,11 +1,11 @@
-<?php namespace Pyro\Module\Streams\Entry;
+<?php namespace Streams\Presenter;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Pyro\Module\Users\Model\User;
-use Pyro\Support\Presenter;
+use Users\Model\User;
+use Streams\Presenter\BasePresenter;
 
-class EntryPresenter extends Presenter
+class EntryPresenter extends BasePresenter
 {
     /**
      * Entry view options

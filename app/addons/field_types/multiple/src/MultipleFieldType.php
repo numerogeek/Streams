@@ -62,7 +62,7 @@ class MultipleFieldType extends FieldTypeAbstract
     /**
      * Relation
      *
-     * @return null|\Pyro\Module\Streams\FieldType\Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return null|\Streams\FieldType\Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function relation()
     {

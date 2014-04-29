@@ -72,7 +72,7 @@ abstract class EloquentModel extends Model implements ArrayableInterface
      * Update
      *
      * @param array $attributes
-     * @return \Pyro\Model\Eloquent|boolean
+     * @return \Streams\Model\Eloquent|boolean
      */
     public function update(array $attributes = array())
     {
@@ -166,7 +166,7 @@ abstract class EloquentModel extends Model implements ArrayableInterface
     /**
      * Get relation
      *
-     * @return \Pyro\Model\Eloquent|\Pyro\Model\EloquentCollection|null
+     * @return \Streams\Model\Eloquent|\Streams\Model\EloquentCollection|null
      */
     public function getRelation($attribute)
     {

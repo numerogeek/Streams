@@ -1,12 +1,12 @@
-<?php namespace Pyro\Module\Streams\Ui;
+<?php namespace Streams\Ui;
 
 // The CP driver is broken down into more logical classes
 
-use Pyro\Module\Streams\Exception\FieldAssignmentModelNotFoundException;
-use Pyro\Module\Streams\Field\FieldAssignmentModel;
-use Pyro\Module\Streams\Field\FieldModel;
-use Pyro\Module\Streams\FieldType\FieldTypeManager;
-use Pyro\Module\Streams\Stream\StreamModel;
+use Streams\Exception\FieldAssignmentModelNotFoundException;
+use Streams\Field\FieldAssignmentModel;
+use Streams\Field\FieldModel;
+use Streams\FieldType\FieldTypeManager;
+use Streams\Stream\StreamModel;
 
 class FieldUi extends UiAbstract
 {

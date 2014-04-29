@@ -1,9 +1,9 @@
-<?php namespace Pyro\Module\Streams\Ui;
+<?php namespace Streams\Ui;
 
 use Closure;
 use Illuminate\Support\Str;
-use Pyro\Model\Eloquent;
-use Pyro\Module\Streams\Stream\StreamModel;
+use Streams\Model\Eloquent;
+use Streams\Stream\StreamModel;
 use Pyro\Support\Fluent;
 
 abstract class UiAbstract extends Fluent
@@ -13,7 +13,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param Eloquent $model
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function model(Eloquent $model)
     {
@@ -27,7 +27,7 @@ abstract class UiAbstract extends Fluent
     /**
      * Get the model
      *
-     * @return Pyro\Model\Eloquent;
+     * @return Streams\Model\Eloquent;
      */
     public function getModel()
     {
@@ -37,7 +37,7 @@ abstract class UiAbstract extends Fluent
     /**
      * Messages
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function messages(array $messages = array())
     {
@@ -80,7 +80,7 @@ abstract class UiAbstract extends Fluent
     /**
      * Get the object after triggering all the modifiers
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function getUi()
     {
@@ -112,7 +112,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  string $title
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function title($title = null)
     {
@@ -129,7 +129,7 @@ abstract class UiAbstract extends Fluent
      * @param  string $viewWrapper
      * @param  array  $data
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function viewWrapper($viewWrapper = null, array $attributes = array())
     {
@@ -145,7 +145,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  function $callback
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function onForm(Closure $callback = null)
     {
@@ -159,7 +159,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  function $callback
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function onTable(Closure $callback = null)
     {
@@ -173,7 +173,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  function $callback
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function onQuery(Closure $callback = null)
     {
@@ -187,7 +187,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  function $callback
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function onSaved(Closure $callback)
     {
@@ -201,7 +201,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  function $callback
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function onSaving(Closure $callback)
     {
@@ -216,7 +216,7 @@ abstract class UiAbstract extends Fluent
      * @param  integer $pagination
      * @param  string  $paginationUri
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function pagination($limit = null, $paginationUri = null)
     {
@@ -250,7 +250,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param string|array $redirect
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function redirects($redirects = null)
     {
@@ -274,7 +274,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param string $redirect
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function redirectSave($redirect)
     {
@@ -294,7 +294,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param array $uris
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     public function uris(array $uris = array())
     {
@@ -467,7 +467,7 @@ abstract class UiAbstract extends Fluent
      *
      * @param  integer $totalRecords The total records
      *
-     * @return Pyro\Module\Streams\AbstractUi
+     * @return Streams\AbstractUi
      */
     protected function paginationTotalRecords($paginationTotalRecords = null)
     {

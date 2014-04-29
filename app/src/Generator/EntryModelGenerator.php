@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Entry;
+<?php namespace Streams\Entry;
 
 use Illuminate\Support\Str;
 use Streams\Model\StreamModel;

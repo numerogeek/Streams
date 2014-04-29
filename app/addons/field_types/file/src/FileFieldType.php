@@ -44,7 +44,7 @@ class FileFieldType extends FieldTypeAbstract
      */
     public function relation()
     {
-        return $this->belongsTo($this->getParameter('relation_class', 'Pyro\Module\Files\Model\File'));
+        return $this->belongsTo($this->getParameter('relation_class', 'Files\Model\File'));
     }
 
     /**

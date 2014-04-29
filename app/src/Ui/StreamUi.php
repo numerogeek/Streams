@@ -1,4 +1,4 @@
-<?php namespace Pyro\Module\Streams\Ui;
+<?php namespace Streams\Ui;
 
 // The CP driver is broken down into more logical classes
 

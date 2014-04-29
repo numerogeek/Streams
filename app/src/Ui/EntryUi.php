@@ -1,11 +1,12 @@
-<?php namespace Pyro\Module\Streams\Ui;
+<?php namespace Streams\Ui;
 
-use Pyro\Module\Streams\Entry\EntryModel;
-use Pyro\Module\Streams\Entry\EntryQueryBuilder;
-use Pyro\Module\Streams\Entry\EntryQueryFilter;
-use Pyro\Module\Streams\Entry\EntryViewOptions;
-use Pyro\Module\Streams\Field\FieldCollection;
-use Pyro\Module\Streams\Field\FieldGroupCollection;
+use Streams\Ui\UiAbstract;
+use Streams\Model\EntryModel;
+use Streams\Model\Query\EntryQueryBuilder;
+use Streams\Model\Query\EntryQueryFilter;
+use Streams\Model\EntryViewOptions;
+use Streams\Collection\FieldCollection;
+use Streams\Collection\FieldGroupCollection;
 
 class EntryUi extends UiAbstract
 {
@@ -21,7 +22,7 @@ class EntryUi extends UiAbstract
      *
      * @param      $stream_slug
      * @param null $stream_namespace
-     * @return \Pyro\Module\Streams\Ui\UiAbstract
+     * @return \Streams\Ui\UiAbstract
      */
     public function table($stream_slug, $stream_namespace = null)
     {
@@ -46,7 +47,7 @@ class EntryUi extends UiAbstract
      * @param      $streamSlugOrClassOrModel
      * @param null $streamNamespaceOrId
      * @param null $id
-     * @return \Pyro\Module\Streams\Ui\UiAbstract
+     * @return \Streams\Ui\UiAbstract
      */
     public function form($streamSlugOrClassOrModel, $streamNamespaceOrId = null, $id = null)
     {

@@ -54,7 +54,7 @@ class Fluent extends \Illuminate\Support\Fluent
 	 * Add attributes
 	 * 
 	 * @param attributes - array
-	 * @return Pyro\Support\Fluent
+	 * @return \Streams\Support\Fluent
 	 */ 
     public function mergeAttributes(array $attributes = array())
     {

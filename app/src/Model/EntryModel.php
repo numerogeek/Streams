@@ -72,12 +72,12 @@ class EntryModel extends EloquentModel
      *
      * @var string
      */
-    protected $collectionClass = 'Pyro\Module\Streams\Entry\EntryCollection';
+    protected $collectionClass = 'Streams\Collection\EntryCollection';
 
     /**
      * Presenter class
      */
-    protected $presenterClass = 'Pyro\Module\Streams\Entry\EntryPresenter';
+    protected $presenterClass = 'Streams\Model\EntryPresenter';
 
     /**
      * Return eager fields.
@@ -131,7 +131,7 @@ class EntryModel extends EloquentModel
      *
      * @param  mixed $id
      * @param  array $columns
-     * @return \Pyro\Module\Streams\Entry\EntryModel|Collection|static
+     * @return \Streams\Entry\EntryModel|Collection|static
      */
     public static function findOrFail($id, $columns = array('*'))
     {
@@ -217,7 +217,7 @@ class EntryModel extends EloquentModel
      * @param  string $class
      * @return boolean
      */
-    public static function isSubclassOfEntryModel($subclass, $class = 'Pyro\Module\Streams\Entry\EntryModel')
+    public static function isSubclassOfEntryModel($subclass, $class = 'Streams\Model\EntryModel')
     {
         if (!is_string($class) or !class_exists($subclass)) {
             return false;
@@ -251,7 +251,7 @@ class EntryModel extends EloquentModel
     /**
      * Get the stream object with assignments and field relations
      *
-     * @return Pyro\Module\Streams\Entry\StreamModel
+     * @return Streams\Entry\StreamModel
      */
     public static function getStream()
     {
@@ -668,7 +668,7 @@ class EntryModel extends EloquentModel
         $entry_class = get_called_class();
 
         // Try to figure out if the module from an extended entry model
-        if ($entry_class != 'Pyro\Module\Streams\Entry\EntryModel') {
+        if ($entry_class != 'Streams\Model\EntryModel') {
             $folders = explode($entry_class, '\\');
 
             $module = isset($folders[2]) ? strtolower($folders[2]) : null;

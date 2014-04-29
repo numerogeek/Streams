@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Pyro\Model\EloquentReflection;
-use Pyro\Module\Streams\Stream\StreamModel;
+use Streams\Model\EloquentReflection;
+use Streams\Model\StreamModel;
 
 class EntryQueryFilter
 {
