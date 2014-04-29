@@ -538,7 +538,7 @@ class StreamModel extends EloquentModel
         $fieldAssignment->sort_order = FieldAssignmentModel::getIncrementalSortNumber($this->getKey());
 
         // Return the field assignment or false
-        return $fieldAssignment->save();
+        return $fieldAssignment->save() ? $fieldAssignment : false;
     }
 
 
