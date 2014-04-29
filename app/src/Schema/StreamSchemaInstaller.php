@@ -63,7 +63,6 @@ class StreamSchemaInstaller implements InstallerInterface
         }
 
         if ($stream = StreamModel::create($streamData)) {
-
             foreach ($this->schema->assignments() as $slug => $assignmentData) {
                 if ($field = FieldModel::findBySlugAndNamespace($slug, $streamData['namespace'])) {
                     $stream->assignField($field, $assignmentData);
