@@ -78,6 +78,16 @@ class StreamSchema extends SchemaTypeAbstract
     public $isHidden = false;
 
     /**
+     * Create a new StreamSchema instance.
+     */
+    public function __construct()
+    {
+        if (!$this->prefix and $this->prefix !== false) {
+            $this->prefix = $this->namespace . '_';
+        }
+    }
+
+    /**
      * Array of field assignments keyed by field slug
      * The fields must be in the same namespace as the stream
      * Example
