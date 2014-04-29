@@ -1,6 +1,5 @@
 <?php namespace Streams\Schema;
 
-use Streams\Addon\FieldTypeAbstract;
 use Streams\Model\FieldAssignmentModel;
 
 class StreamSchemaColumnCreator
@@ -63,23 +62,6 @@ class StreamSchemaColumnCreator
                 $columnTypeMethod = camel_case($this->fieldType->columnType);
 
                 $column = $table->{$columnTypeMethod}($this->fieldType->getColumnName());
-
-                /**
-                 * Default Value
-                 */
-                $defaultValue = $this->fieldAssignment->getSetting('default_value');
-
-                if ($defaultValue and !in_array(
-                        $columnTypeMethod,
-                        array('text', 'longText')
-                    )
-                ) {
-                    $column->default($defaultValue);
-                }
-
-                /**
-                 * Allow null by default
-                 */
 
                 $column->nullable();
             }
