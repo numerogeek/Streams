@@ -1,4 +1,4 @@
-<?php namespace Addon\FieldType\Text;
+<?php namespace Addon\FieldType\Boolean;
 
 use Streams\Addon\FieldTypeAbstract;
 
