@@ -95,7 +95,7 @@ return array(
 		|
 		*/
 
-		'model' => 'Cartalyst\Sentry\Groups\Eloquent\Group',
+		'model' => 'Addon\Module\Users\Model\GroupModel',
 
 	),
 
@@ -186,7 +186,7 @@ return array(
 		|
 		*/
 
-		'model' => 'Cartalyst\Sentry\Throttling\Eloquent\Throttle',
+		'model' => 'Addon\Module\Users\Model\ThrottleModel',
 
 		/*
 		|--------------------------------------------------------------------------
