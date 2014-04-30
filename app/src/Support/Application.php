@@ -43,6 +43,7 @@ class Application
 
         $this->appRef = $app->reference;
 
+        \Schema::getConnection()->getSchemaGrammar()->setTablePrefix($this->getTablePrefix());
         \Schema::getConnection()->setTablePrefix($this->getTablePrefix());
 
         return ($app);
@@ -50,6 +51,7 @@ class Application
 
     /**
      * Return the app reference
+     *
      * @return string
      */
     public function getTablePrefix()
