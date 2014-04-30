@@ -1,6 +1,7 @@
 <?php namespace Addon\FieldType\Relationship;
 
 use Streams\Addon\FieldTypeAbstract;
+use Streams\Model\FieldModel;
 use Streams\Model\StreamModel;
 
 /**
@@ -217,9 +218,9 @@ class RelationshipFieldType extends FieldTypeAbstract
      *
      * @return string
      */
-    public function getColumnName()
+    public function getColumnName(FieldModel $field)
     {
-        return parent::getColumnName() . '_id';
+        return parent::getColumnName($field) . '_id';
     }
 
     /**
