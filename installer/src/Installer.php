@@ -58,7 +58,7 @@ class Installer
     {
         $this->removeInstaller();
 
-        return \View::make('installer::complete');
+        return \Redirect::to('/');
     }
 
     /**
