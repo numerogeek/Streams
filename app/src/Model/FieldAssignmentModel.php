@@ -6,6 +6,13 @@ use Streams\Exception\FieldAssignmentModelNotFoundException;
 class FieldAssignmentModel extends FieldModel
 {
     /**
+     * Collection class
+     *
+     * @var string
+     */
+    protected $collectionClass = 'Streams\Collection\FieldAssignmentCollection';
+
+    /**
      * Define the table name
      *
      * @var string
@@ -27,75 +34,6 @@ class FieldAssignmentModel extends FieldModel
     protected $guarded = array();
 
     /**
-     * Collection class
-     *
-     * @var string
-     */
-    protected $collectionClass = 'Streams\Collection\FieldAssignmentCollection';
-
-    /**
-     * Find by field id and stream id
-     *
-     * @param  integer $field_id
-     * @param  integer $stream_id
-     * @return object
-     */
-    public static function findByFieldIdAndStreamId($field_id = null, $stream_id = null, $fresh = false)
-    {
-        return static::where('field_id', $field_id)
-            ->where('stream_id', $stream_id)
-            ->take(1)
-            ->first();
-    }
-
-    /**
-     * Find many by stream ID
-     *
-     * @param  integer $stream_id
-     * @param  integer $limit
-     * @param  integer $offset
-     * @param  string  $order
-     * @return array
-     */
-    public static function findManyByStreamId($stream_id, $limit = null, $offset = 0, $order = 'asc')
-    {
-        return static::with('field')
-            ->where('stream_id', $stream_id)
-            ->take($limit)
-            ->skip($offset)
-            ->orderBy('sort_order', $order)
-            ->get();
-    }
-
-    /**
-     * Count assignments
-     *
-     * @return int
-     */
-    public static function countByFieldId($field_id = null)
-    {
-        if (!$field_id) {
-            return 0;
-        }
-
-        return static::where('field_id', $stream_id)->count('field_id');
-    }
-
-    /**
-     * Count assignments for a stream
-     *
-     * @return  int
-     */
-    public static function countByStreamId($stream_id = null)
-    {
-        if (!$stream_id) {
-            return 0;
-        }
-
-        return static::where('stream_id', $stream_id)->count('stream_id');
-    }
-
-    /**
      * Cleanup stale assignments for fields and streams that don't exists
      *
      * @return boolean
@@ -109,18 +47,6 @@ class FieldAssignmentModel extends FieldModel
         }
 
         return static::whereNotIn('field_id', $field_ids)->delete();
-    }
-
-    /**
-     * Update sort order
-     *
-     * @param  integer $id         The assignment id
-     * @param  integer $sort_order The sort order
-     * @return boolean
-     */
-    public static function updateSortOrder($id, $sort_order = 0)
-    {
-        return static::where('id', $id)->update(array('sort_order' => $sort_order));
     }
 
     /**
@@ -142,88 +68,19 @@ class FieldAssignmentModel extends FieldModel
     }
 
     /**
-     * Find a model by its primary key or throw an exception.
-     *
-     * @param  mixed $id
-     * @param  array $columns
-     * @return \Streams\FieldAssignmentModel|Collection|static
+     * Find an assignment by field_id and stream_id.
+     * 
+     * @param null $fieldId
+     * @param null $streamId
+     * @param bool $fresh
+     * @return mixed
      */
-    public static function findOrFail($id, $columns = array('*'))
+    public static function findByFieldIdAndStreamId($fieldId = null, $streamId = null, $fresh = false)
     {
-        if (!is_null($model = static::find($id, $columns))) {
-            return $model;
-        }
-
-        throw new FieldAssignmentModelNotFoundException;
-    }
-
-    /**
-     * Field garbage cleanup
-     *
-     * @param   obj - the assignment
-     * @return  void
-     */
-    public function delete()
-    {
-        $attributes = $this->getAttributes();
-
-        $schema = ci()->pdb->getSchemaBuilder();
-
-        // @todo - remove this once the hasColumn bug is fixed in Illuminate\Database
-        $prefix = ci()->pdb->getQueryGrammar()->getTablePrefix();
-
-        $stream = $this->getAttribute('stream');
-
-        if ($field = $this->getAttribute('field')) {
-
-            // Do we have a destruct function
-            if ($type = $field->getType()) {
-
-                // @todo - also pass the schema builder
-                $type->setStream($stream);
-                $type->fieldAssignmentDestruct();
-
-                // Drop the column if it exists
-                if (!$type->alt_process) {
-                    $schema->table(
-                        $this->stream_prefix . $this->stream_slug,
-                        function ($table) use ($type, $schema) {
-                            if ($schema->hasColumn($table->getTable(), $type->getColumnName())) {
-                                $table->dropColumn($type->getColumnName());
-                            }
-                        }
-                    );
-                }
-
-                $type->fieldAssignmentDestruct($schema);
-            }
-
-            // Update that stream's view options
-            $stream->removeViewOption($field->slug);
-        }
-
-        // Find everything above it, and take each one
-        // down a peg.
-        if ($this->sort_order == '' or !is_numeric($this->sort_order)) {
-            $this->sort_order = 0;
-        }
-
-        $other_assignments = static::where('stream_id', '=', $stream->id)
-            ->where($this->getKeyName(), '!=', $this->getKey())
-            ->where('sort_order', '>', $this->sort_order)
-            ->get(array($this->getKeyName(), 'sort_order'));
-
-        if (!$other_assignments->isEmpty()) {
-            foreach ($other_assignments as $assignment) {
-                $assignment->sort_order = $assignment->sort_order - 1;
-                $assignment->save();
-            }
-        }
-
-        // Make sure that garbage is collected even it the stream is not present anymore
-        FieldModel::deleteByNamespace($stream->stream_namespace);
-
-        return parent::delete();
+        return static::where('field_id', $fieldId)
+            ->where('stream_id', $streamId)
+            ->take(1)
+            ->first();
     }
 
     /**
@@ -236,115 +93,16 @@ class FieldAssignmentModel extends FieldModel
     {
         $success = parent::save($options);
 
-        // Save the stream so that the EntryModel gets recompiled
+        // Save the stream so it re-compiles.
         $this->stream->save();
 
         return $success;
     }
 
     /**
-     * Edit Assignment
+     * Return the stream relationship.
      *
-     * @param   int
-     * @param   obj
-     * @param   obj
-     * @param   [string - instructions]
-     * return   bool
-     */
-    public function update(array $attributes = array())
-    {
-        // -------------------------------------
-        // Title Column
-        // -------------------------------------
-
-        // Scenario A: The title column is the field slug, and we
-        // have it unchecked.
-        if ($this->stream->title_column == $this->field->slug and
-            (!isset($attributes['title_column']) or $attributes['title_column'] == 'no' or !$attributes['title_column'])
-        ) {
-            // In this case, they don't want this to
-            // be the title column anymore, so we wipe it out
-            StreamModel::updateTitleColumnByStreamIds($this->stream->id, $this->field->slug);
-        } elseif (isset($attributes['title_column']) and
-            ($attributes['title_column'] == 'yes' or $attributes['title_column'] === true) and
-            $this->stream->title_column != $this->field->slug
-        ) {
-            if ($attributes['title_column'] == 'yes') {
-                $attributes['title_column'] = $this->field->slug;
-            }
-
-            // Scenario B: They have checked the title column
-            // and this field it not the current field.
-            StreamModel::updateTitleColumnByStreamIds($this->stream->id, $this->field->slug, $attributes['title_column']);
-        }
-
-        return parent::update($attributes);
-    }
-
-    /**
-     * Get the field name attr
-     *
-     * @param  string $name
-     * @return string
-     */
-    public function getNameAttribute($name)
-    {
-        // This guarantees that the language will be loaded
-        if ($this->field instanceof FieldModel) {
-            $name = trans("{$this->namespace}::fields.{$this->slug}");
-        }
-
-        return $name;
-    }
-
-    /**
-     * Get field slug attribute from the field relation
-     *
-     * @param  string $slug
-     * @return string
-     */
-    public function getSlugAttribute($slug)
-    {
-        return $this->field->slug;
-    }
-
-    /**
-     * Get field namespace attribute
-     *
-     * @param  string $namespace
-     * @return string
-     */
-    public function getNamespaceAttribute($namespace)
-    {
-        return $this->field->namespace;
-    }
-
-    /**
-     * Get field type attribute
-     *
-     * @param  string $namespace
-     * @return string
-     */
-    public function getTypeAttribute($type)
-    {
-        return $this->field->type;
-    }
-
-    /**
-     * Get field data attribute
-     *
-     * @param  string $namespace
-     * @return array
-     */
-    public function getSettingsAttribute($settings)
-    {
-        return $this->field->settings;
-    }
-
-    /**
-     * Stream
-     *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function stream()
     {
@@ -352,9 +110,9 @@ class FieldAssignmentModel extends FieldModel
     }
 
     /**
-     * Field
+     * Return the field relationship.
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function field()
     {
