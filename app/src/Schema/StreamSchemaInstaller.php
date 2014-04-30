@@ -22,6 +22,14 @@ class StreamSchemaInstaller implements InstallerInterface
 
     public function __construct(StreamSchema $schema, AddonAbstract $addon = null)
     {
+        // Default namespace
+        $schema->namespace = $schema->namespace ? : $addon->slug;
+
+        // Default prefix
+        if (!$schema->prefix and $schema->prefix !== false) {
+            $schema->prefix = $schema->namespace . '_';
+        }
+
         $this->schema = $schema;
         $this->addon  = $addon;
     }
@@ -38,6 +46,7 @@ class StreamSchemaInstaller implements InstallerInterface
         $streamData = array(
             'namespace'    => $this->schema->namespace,
             'slug'         => $this->schema->slug,
+            'prefix'       => $this->schema->prefix,
             'name'         => $this->schema->name,
             'description'  => $this->schema->description,
             'view_options' => $this->schema->viewOptions,
@@ -51,7 +60,7 @@ class StreamSchemaInstaller implements InstallerInterface
 
             $addonLang = $this->addon->addonType . '.' . $this->addon->slug . '::' . $this->schema->slug;
 
-            $streamData['namespace'] = $this->schema->name ?: $this->addon->slug;
+            $streamData['namespace'] = $this->schema->namespace;
 
             if (!$this->schema->name) {
                 $streamData['name'] = $addonLang . '.name';

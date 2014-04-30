@@ -23,6 +23,9 @@ class FieldSchemaInstaller implements InstallerInterface
 
     public function __construct(FieldSchema $schema, AddonAbstract $addon = null)
     {
+        // Default namespace
+        $schema->namespace = $schema->namespace ? : $addon->slug;
+
         $this->schema = $schema;
         $this->addon  = $addon;
     }
@@ -36,15 +39,15 @@ class FieldSchemaInstaller implements InstallerInterface
     {
         $this->schema->onBeforeInstall();
 
-        foreach($this->schema->fields() as $slug => $fieldData) {
+        foreach ($this->schema->fields() as $slug => $fieldData) {
 
             if ($this->addon) {
 
                 $fieldData['slug'] = $slug;
 
-                $fieldData['namespace'] = $this->schema->namespace ?: $this->addon->slug;
+                $fieldData['namespace'] = $this->schema->namespace;
 
-                $addonLang = $this->addon->addonType.'.'.$fieldData['namespace'] . '::fields.' . $slug;
+                $addonLang = $this->addon->addonType . '.' . $fieldData['namespace'] . '::fields.' . $slug;
 
                 $fieldData['name'] = isset($fieldData['name']) ? $fieldData['name'] : $addonLang . '.name';
 

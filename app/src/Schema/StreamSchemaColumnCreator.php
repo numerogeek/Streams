@@ -22,10 +22,6 @@ class StreamSchemaColumnCreator
      */
     public function getTable(StreamModel $stream)
     {
-        if (!$stream->prefix and $stream->prefix !== false) {
-            $stream->prefix = $stream->namespace . '_';
-        }
-
         return $stream->prefix . $stream->slug;
     }
 

@@ -23,6 +23,11 @@ abstract class AddonAbstract
      */
     public $schemas = array();
 
+    public function getName()
+    {
+        return \Lang::trans($this->addonType . '.' . $this->slug . '::addon.name');
+    }
+
     /**
      * The installer logic for the addon.
      *

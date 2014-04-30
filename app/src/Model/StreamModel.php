@@ -446,12 +446,6 @@ class StreamModel extends EloquentModel
      */
     public function delete()
     {
-        foreach ($this->assignments as $field) {
-            if ($type = $field->getType()) {
-                $type->setStream($this)->namespaceDestruct();
-            }
-        }
-
         try {
             \Schema::dropIfExists($this->prefix . $this->slug);
         } catch (Exception $e) {

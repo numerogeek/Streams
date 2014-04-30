@@ -284,6 +284,25 @@ abstract class AddonManagerAbstract
     }
 
     /**
+     * Uninstall a module.
+     *
+     * @param $slug
+     * @return bool
+     */
+    public function uninstall($slug)
+    {
+        $module = $this->get($slug);
+
+        if ($this->uninstallSchemas($slug)) {
+            if ($module->uninstall()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Install schemas.
      *
      * @param $slug
