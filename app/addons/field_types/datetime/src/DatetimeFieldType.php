@@ -1,4 +1,4 @@
-<?php namespace Addon\FieldType\Text;
+<?php namespace Addon\FieldType\Datetime;
 
 use Streams\Addon\FieldTypeAbstract;
 
