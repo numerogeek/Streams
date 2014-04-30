@@ -265,6 +265,19 @@ abstract class AddonManagerAbstract
     }
 
     /**
+     * Install a module.
+     *
+     * @param $slug
+     * @return bool
+     */
+    public function install($slug)
+    {
+        $module = $this->get($slug);
+
+        return ($module->install() and $this->installSchemas($slug));
+    }
+
+    /**
      * Install schemas.
      *
      * @param $slug

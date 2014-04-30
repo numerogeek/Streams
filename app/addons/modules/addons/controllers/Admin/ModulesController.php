@@ -38,7 +38,7 @@ class ModulesController extends AdminController
             // Not found
         }
 
-        if ($module and $module->install() and $module->installSchemas()) {
+        if ($module and \Module::install($slug)) {
             // Great
         } else {
             // Something went wrong - check logs

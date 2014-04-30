@@ -8,15 +8,4 @@ class ModuleManager extends AddonManagerAbstract
      * @var string
      */
     protected $folder = 'modules';
-
-    public function install($slug)
-    {
-        if ($module = $this->get($slug)) {
-
-
-
-        }
-
-        return true;
-    }
 }
