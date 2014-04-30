@@ -12,13 +12,6 @@ class BooleanFieldType extends FieldTypeAbstract
     public $columnType = 'boolean';
 
     /**
-     * Column constraint
-     *
-     * @var string
-     */
-    public $columnConstraint = 1;
-
-    /**
      * Field type version
      *
      * @var string
