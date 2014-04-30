@@ -7,13 +7,6 @@ use Streams\Model\Query\EntryQueryBuilder;
 class EntryModel extends EloquentModel
 {
     /**
-     * The name of the "created at" column.
-     *
-     * @var string
-     */
-    const CREATED_BY = 'created_by';
-
-    /**
      * Allow timestamp fields to be populated automatically
      *
      * @var string
