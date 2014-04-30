@@ -66,6 +66,27 @@ class UsersFieldSchema extends FieldSchema
                     'relation' => 'Addon\Module\Users\Model\GroupEntryModel',
                 ),
             ),
+            'ip_address'          => array(
+                'type' => 'text',
+            ),
+            'attempts'            => array(
+                'type' => 'integer',
+            ),
+            'suspended'           => array(
+                'type' => 'boolean',
+            ),
+            'banned'              => array(
+                'type' => 'boolean',
+            ),
+            'last_attempt_at'     => array(
+                'type' => 'datetime',
+            ),
+            'suspended_at'        => array(
+                'type' => 'datetime',
+            ),
+            'banned_at'           => array(
+                'type' => 'datetime',
+            ),
         );
     }
 }
