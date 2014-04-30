@@ -21,7 +21,7 @@ class ApplicationServiceProvider extends ServiceProvider
                     header('Location: installer');exit;
                 }
             }
-        } else {
+        } elseif (\Request::segment(1) !== 'installer') {
             \Application::locate();
         }
     }
