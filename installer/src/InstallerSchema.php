@@ -48,10 +48,10 @@ class InstallerSchema
         $connection->setTablePrefix($tablePrefix = \Application::getTablePrefix());
 
         // Create streams table
-        \Schema::dropIfExists($tablePrefix . 'streams_streams');
+        \Schema::dropIfExists( 'streams_streams');
 
         \Schema::create(
-            $tablePrefix . 'streams_streams',
+             'streams_streams',
             function ($table) {
                 $table->increments('id');
                 $table->string('namespace', 60);
@@ -69,10 +69,10 @@ class InstallerSchema
         );
 
         // Create fields table
-        \Schema::dropIfExists($tablePrefix . 'streams_fields');
+        \Schema::dropIfExists( 'streams_fields');
 
         \Schema::create(
-            $tablePrefix . 'streams_fields',
+             'streams_fields',
             function ($table) {
                 $table->increments('id');
                 $table->string('namespace', 60)->nullable();
@@ -85,10 +85,10 @@ class InstallerSchema
         );
 
         // Create assignments table
-        \Schema::dropIfExists($tablePrefix . 'streams_fields_assignments');
+        \Schema::dropIfExists( 'streams_fields_assignments');
 
         \Schema::create(
-            $tablePrefix . 'streams_fields_assignments',
+             'streams_fields_assignments',
             function ($table) {
                 $table->increments('id');
                 $table->integer('sort_order');
