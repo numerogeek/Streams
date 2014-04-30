@@ -19,7 +19,7 @@ class TestFieldSchema extends FieldSchema
                 ),
             ),
             'foo'   => array(
-                'type'     => 'choice',
+                'type'     => 'select',
                 'settings' => array(
                     'default_value' => 'Hello there.',
                 ),
