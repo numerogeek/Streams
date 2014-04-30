@@ -284,6 +284,8 @@ abstract class AddonManagerAbstract
                 $streamSchema->getInstaller()->install();
             }
         }
+
+        return true;
     }
 
     /**
