@@ -43,13 +43,10 @@ abstract class FieldTypeAbstract extends AddonAbstract
     public $addonType = 'field_type';
 
     /**
-     * The field model.
-     *
-     * @var \Streams\Model\FieldModel
+     * Get column name
+     * @param FieldModel $field
+     * @return mixed
      */
-    public $field;
-
-
     public function getColumnName(FieldModel $field)
     {
         return $field->slug;
