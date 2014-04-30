@@ -37,7 +37,7 @@ class StreamSchemaColumnCreator
             return false;
         }
 
-        $fieldType = $assignment->getType();
+        $fieldType = $assignment->field->getType();
 
         // Check if the column does not exist already to avoid "duplicate column" errors
         if (\Schema::hasColumn(
@@ -60,9 +60,9 @@ class StreamSchemaColumnCreator
 
                 // Only the string method cares about a constraint
                 if ($columnTypeMethod === 'string' and $constraint) {
-                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment), $constraint);
+                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment->field), $constraint);
                 } else {
-                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment));
+                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment->field));
                 }
 
                 // Save a default value in the table schema
@@ -86,8 +86,8 @@ class StreamSchemaColumnCreator
     {
         $constraint = 255;
 
-        $maxLength = $assignment->getSetting('max_length');
-        $fieldType = $assignment->getType();
+        $maxLength = $assignment->field->getSetting('max_length');
+        $fieldType = $assignment->field->getType();
 
         // First we check and see if a constraint has been added
         if ($fieldType instanceof FieldTypeAbstract and
