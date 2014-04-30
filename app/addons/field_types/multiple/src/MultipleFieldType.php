@@ -242,9 +242,9 @@ class MultipleFieldType extends FieldTypeAbstract
      *
      * @return string
      */
-    public function getColumnName()
+    public function getColumnName($field)
     {
-        return parent::getColumnName() . '_id';
+        return parent::getColumnName($field) . '_id';
     }
 
     /**
