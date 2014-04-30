@@ -10,11 +10,46 @@ class InstallerSchema
 {
     public function install()
     {
-        // Create streams table
-        \Schema::dropIfExists('streams_streams');
+        // Get the connection
+        $connection = \Schema::getConnection();
+
+        // Create apps table
+        \Schema::dropIfExists('apps');
 
         \Schema::create(
-            'streams_streams',
+            'apps',
+            function ($table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('reference');
+                $table->string('domain');
+                $table->boolean('is_enabled')->default(0);
+            }
+        );
+
+        /*******************************************
+         * REMOVE AFTER INSTALLED IS FINISHED!
+         *******************************************/
+        DB::table('apps')->insert(
+            array(
+                'name'       => 'Develop',
+                'reference'  => 'develop',
+                'domain'     => 'streams',
+                'is_enabled' => true,
+            )
+        );
+        /*******************************************
+         * EOF: REMOVE AFTER INSTALLED IS FINISHED!
+         *******************************************/
+
+        // Change / get the table prefix
+        $connection->setTablePrefix($tablePrefix = \Application::getTablePrefix());
+
+        // Create streams table
+        \Schema::dropIfExists($tablePrefix . 'streams_streams');
+
+        \Schema::create(
+            $tablePrefix . 'streams_streams',
             function ($table) {
                 $table->increments('id');
                 $table->string('namespace', 60);
@@ -32,9 +67,11 @@ class InstallerSchema
         );
 
         // Create fields table
-        \Schema::dropIfExists('streams_fields');
+        \Schema::dropIfExists($tablePrefix . 'streams_fields');
 
-        \Schema::create('streams_fields', function($table) {
+        \Schema::create(
+            $tablePrefix . 'streams_fields',
+            function ($table) {
                 $table->increments('id');
                 $table->string('namespace', 60)->nullable();
                 $table->string('slug', 60);
@@ -42,13 +79,14 @@ class InstallerSchema
                 $table->string('type', 50);
                 $table->text('settings')->nullable();
                 $table->boolean('is_locked')->default(0);
-            });
+            }
+        );
 
         // Create assignments table
-        \Schema::dropIfExists('streams_fields_assignments');
+        \Schema::dropIfExists($tablePrefix . 'streams_fields_assignments');
 
         \Schema::create(
-            'streams_fields_assignments',
+            $tablePrefix . 'streams_fields_assignments',
             function ($table) {
                 $table->increments('id');
                 $table->integer('sort_order');
