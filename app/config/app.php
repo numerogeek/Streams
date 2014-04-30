@@ -118,6 +118,7 @@ return array(
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
         'Streams\Provider\StreamsServiceProvider',
         'Streams\Provider\AddonServiceProvider',
+        'Streams\Provider\ApplicationServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
@@ -190,6 +191,7 @@ return array(
         'Tag'                 => 'Streams\Facade\TagFacade',
         'Theme'               => 'Streams\Facade\ThemeFacade',
         'StreamSchemaUtility' => 'Streams\Facade\StreamSchemaUtilityFacade',
+        'Application'         => 'Streams\Facade\ApplicationFacade',
     ),
 
 );
