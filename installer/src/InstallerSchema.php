@@ -1,5 +1,7 @@
 <?php namespace StreamsInstaller;
 
+use Illuminate\Support\Facades\DB;
+
 /**
  * Class InstallerSchema
  * Create all the main tables.
