@@ -274,7 +274,13 @@ abstract class AddonManagerAbstract
     {
         $module = $this->get($slug);
 
-        return ($module->install() and $this->installSchemas($slug));
+        if ($this->installSchemas($slug)) {
+            if ($module->install()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
