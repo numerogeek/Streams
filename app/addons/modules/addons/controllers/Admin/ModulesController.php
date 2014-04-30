@@ -21,9 +21,9 @@ class ModulesController extends AdminController
      */
     public function index()
     {
-        $table = 'Index';
+        $modules = \Module::getAll();
 
-        return \View::make('module.addons::admin/modules/index', compact('table'));
+        return \View::make('module.addons::admin/modules/index', compact('modules'));
     }
 
     /**
@@ -59,7 +59,7 @@ class ModulesController extends AdminController
             // Not found
         }
 
-        if ($module and $module->uninstall() and $module->uninstallSchemas()) {
+        if ($module and \Module::uninstall($slug)) {
             // Great
         } else {
             // Something went wrong - check logs
