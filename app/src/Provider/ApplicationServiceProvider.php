@@ -15,9 +15,11 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         $this->registerApplication();
 
-        if (!\Application::isInstalled()) {
-            if (\Request::segment(1) !== 'installer') {
-                header('Location: installer');exit;
+        if (\Config::get('debug')) {
+            if (!\Application::isInstalled()) {
+                if (\Request::segment(1) !== 'installer') {
+                    header('Location: installer');exit;
+                }
             }
         } else {
             \Application::locate();
