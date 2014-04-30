@@ -25,6 +25,13 @@ class FieldModel extends EloquentModel
     protected $guarded = array();
 
     /**
+     * Enable or disable timestamps
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * FieldAssignmentCollection
      *
      * @var string

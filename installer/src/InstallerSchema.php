@@ -41,8 +41,6 @@ class InstallerSchema
                 $table->string('name', 60);
                 $table->string('type', 50);
                 $table->text('settings')->nullable();
-                $table->dateTime('created_at');
-                $table->dateTime('updated_at')->nullable();
                 $table->boolean('is_locked')->default(0);
             });
 
