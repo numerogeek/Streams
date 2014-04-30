@@ -114,8 +114,9 @@ abstract class AddonManagerAbstract
                     // Add lang namespace
                     \Lang::addNamespace($loaderNamespace, $info['path'] . '/lang');
 
-                    $addon->path = $info['path'];
-                    $addon->slug = $info['slug'];
+                    $addon->path   = $info['path'];
+                    $addon->slug   = $info['slug'];
+                    $addon->isCore = (substr($info['path'], 0, 4) === 'src/');
 
                     return $addon;
                 }

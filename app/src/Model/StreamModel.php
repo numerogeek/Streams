@@ -81,7 +81,7 @@ class StreamModel extends EloquentModel
             'id',
             'created_at'
         );
-        $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : null;
+        $attributes['prefix']       = isset($attributes['prefix']) ? $attributes['prefix'] : null;
 
         // Check if it doesn't exist
         if (!$stream = static::findBySlugAndNamespace($attributes['slug'], $attributes['namespace'])) {
@@ -150,7 +150,7 @@ class StreamModel extends EloquentModel
      * last_updated        Unix timestamp of when the stream was last updated
      *
      * @access    public
-     * @param    mixed  $stream           object, int or string stream
+     * @param    mixed  $stream    object, int or string stream
      * @param    string $namespace namespace if first param is string
      * @return    object
      */
@@ -483,7 +483,12 @@ class StreamModel extends EloquentModel
             $field = FieldModel::findOrFail($field);
         }
 
-        if (!$fieldAssignment = FieldAssignmentModel::findByFieldIdAndStreamId($field->getKey(), $this->getKey(), true)) {
+        if (!$fieldAssignment = FieldAssignmentModel::findByFieldIdAndStreamId(
+            $field->getKey(),
+            $this->getKey(),
+            true
+        )
+        ) {
             $fieldAssignment = new FieldAssignmentModel;
         }
 
@@ -491,23 +496,23 @@ class StreamModel extends EloquentModel
         // Load the field type
         // -------------------------------------
 
-/*        if (!$fieldType = $field->getType()) {
-            return false;
-        }
+        /*        if (!$fieldType = $field->getType()) {
+                    return false;
+                }
 
-        // Do we have a pre-add function?
-        if (method_exists($fieldType, 'fieldAssignmentConstruct')) {
-            $fieldType->setStream($this);
-            $fieldType->fieldAssignmentConstruct();
-        }
+                // Do we have a pre-add function?
+                if (method_exists($fieldType, 'fieldAssignmentConstruct')) {
+                    $fieldType->setStream($this);
+                    $fieldType->fieldAssignmentConstruct();
+                }
 
-        // -------------------------------------
-        // Create database column
-        // -------------------------------------
+                // -------------------------------------
+                // Create database column
+                // -------------------------------------
 
-        if ($this->fieldType->columnType !== false and $createColumn === true) {
-            with(new StreamSchemaColumnCreator($field))->createColumn();
-        }*/
+                if ($this->fieldType->columnType !== false and $createColumn === true) {
+                    with(new StreamSchemaColumnCreator($field))->createColumn();
+                }*/
 
         // -------------------------------------
         // Check for title column
@@ -528,6 +533,9 @@ class StreamModel extends EloquentModel
         $fieldAssignment->stream_id = $this->getKey();
         $fieldAssignment->field_id  = $field->getKey();
 
+        $fieldAssignment->is_required = isset($data['is_required']) ? $data['is_required'] : false;
+        $fieldAssignment->is_unique   = isset($data['is_unique']) ? $data['is_unique'] : false;
+
         if (isset($data['instructions'])) {
             $fieldAssignment->instructions = $data['instructions'];
         } else {
@@ -542,7 +550,6 @@ class StreamModel extends EloquentModel
     }
 
 
-
     /**
      * Update Stream
      *
@@ -553,7 +560,7 @@ class StreamModel extends EloquentModel
     public function update(array $attributes = array())
     {
         $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : $this->prefix;
-        $attributes['slug'] = isset($attributes['slug']) ? $attributes['slug'] : $this->slug;
+        $attributes['slug']   = isset($attributes['slug']) ? $attributes['slug'] : $this->slug;
 
         $from = $this->prefix . $this->slug;
         $to   = $attributes['prefix'] . $attributes['slug'];

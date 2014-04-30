@@ -582,7 +582,7 @@ class FieldModel extends EloquentModel
      */
     public function getSetting($key, $defaultValue = null)
     {
-        return isset($this->settings[$key]) ? $this->settings[$key] : $defaultValue;
+        return isset($this->settings->{$key}) ? $this->settings->{$key} : $defaultValue;
     }
 
     /**

@@ -62,9 +62,6 @@ class StreamSchemaColumnCreator
                 // Get the column constraint if any
                 $constraint = $this->getColumnConstraint($assignment);
 
-                // Save a default value in the table schema
-                $defaultValue = $assignment->getSetting('default_value');
-
                 // Only the string method cares about a constraint
                 if ($columnTypeMethod === 'string' and $constraint) {
                     $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment), $constraint);
@@ -72,7 +69,11 @@ class StreamSchemaColumnCreator
                     $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment));
                 }
 
-                $column->default($defaultValue)->nullable();
+                // Save a default value in the table schema
+                $column->default($assignment->getSetting('default_value'));
+
+                // Mirror requirements on the table
+                $column->nullable(!$assignment->is_required);
             }
         );
 

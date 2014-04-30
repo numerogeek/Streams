@@ -342,17 +342,6 @@ class FieldAssignmentModel extends FieldModel
     }
 
     /**
-     * Get is_locked attribute
-     *
-     * @param  string $namespace
-     * @return boolean
-     */
-    public function getIsLockedAttribute($isLocked)
-    {
-        return $this->field->is_locked;
-    }
-
-    /**
      * Stream
      *
      * @return object
@@ -370,47 +359,5 @@ class FieldAssignmentModel extends FieldModel
     public function field()
     {
         return $this->belongsTo('Streams\Model\FieldModel');
-    }
-
-    /**
-     * Get is_required attr
-     *
-     * @param  string $isRequired
-     * @return boolean
-     */
-    public function getIsRequiredAttribute($isRequired = false)
-    {
-        return $isRequired === 'yes';
-    }
-
-    /**
-     * Set is_required attr
-     *
-     * @param boolean $isRequired
-     */
-    public function setIsRequiredAttribute($isRequired = false)
-    {
-        $this->attributes['is_required'] = $isRequired ? 'yes' : 'no';
-    }
-
-    /**
-     * Get is_unique attr
-     *
-     * @param  string $isUnique
-     * @return boolean
-     */
-    public function getIsUniqueAttribute($isUnique = false)
-    {
-        return $isUnique === 'yes';
-    }
-
-    /**
-     * Set is_unique attr
-     *
-     * @param boolean $isUnique
-     */
-    public function setIsUniqueAttribute($isUnique = false)
-    {
-        $this->attributes['is_unique'] = $isUnique ? 'yes' : 'no';
     }
 }
