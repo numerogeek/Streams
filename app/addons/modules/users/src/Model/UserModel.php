@@ -10,4 +10,14 @@ class UserModel extends User
      * @var string
      */
     public $table = 'users_users';
+
+    /**
+     * Is the user active?
+     *
+     * @return bool
+     */
+    public function isActivated()
+    {
+        return (bool)$this->is_activated;
+    }
 }
