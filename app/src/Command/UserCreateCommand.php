@@ -27,8 +27,13 @@ class  UserCreateCommand extends BaseCommand
      */
     public function fire()
     {
+        $domain   = $this->ask('Which domain would you like to use? ');
         $email    = $this->ask('Which email would you like to use? ');
         $password = $this->ask('Which password? ');
+
+        if (!\Application::locate($domain)) {
+            $this->error('Application could not be located.');
+        }
 
         try {
             // Create the user
@@ -36,19 +41,19 @@ class  UserCreateCommand extends BaseCommand
                 array(
                     'email'     => $email,
                     'password'  => $password,
-                    'activated' => true,
+                    'is_activated' => true,
                 )
             );
 
             $this->info('User created!');
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
-            $this->info('Login field is required.');
+            $this->error('Login field is required.');
         } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
-            $this->info('Password field is required.');
+            $this->error('Password field is required.');
         } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
-            $this->info('User with this login already exists.');
+            $this->error('User with this login already exists.');
         } catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
-            $this->info('Group was not found.');
+            $this->error('Group was not found.');
         }
     }
 
