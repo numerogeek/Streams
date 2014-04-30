@@ -120,7 +120,7 @@ return array(
 		|
 		*/
 
-		'model' => 'Streams\Model\UserModel',
+		'model' => 'Addon\Module\Users\Model\UserModel',
 
 		/*
 		|--------------------------------------------------------------------------
