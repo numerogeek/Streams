@@ -13,6 +13,6 @@ class ApplicationModel extends Model
      */
     public function findByDomain($domain)
     {
-        return DB::tabble('apps')->whereDomain($domain)->first();
+        return DB::table('apps')->whereDomain($domain)->first();
     }
 }
