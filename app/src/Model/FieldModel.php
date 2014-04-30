@@ -146,8 +146,8 @@ class FieldModel extends EloquentModel
         }
 
         // Set is_locked
-        $isLocked = (isset($is_locked) and $is_locked === true) ? 'yes' : 'no';
-
+        $isLocked = isset($is_locked) ? $is_locked : true;
+        
         // Set extra
         if (!isset($extra) or !is_array($extra)) {
             $extra = array();

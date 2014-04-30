@@ -47,6 +47,8 @@ class FieldSchemaInstaller implements InstallerInterface
                 $addonLang = $this->addon->addonType.'.'.$fieldData['namespace'] . '::fields.' . $slug;
 
                 $fieldData['name'] = isset($fieldData['name']) ? $fieldData['name'] : $addonLang . '.name';
+
+                $fieldData['is_locked'] = isset($fieldData['is_locked']) ? $fieldData['is_locked'] : true;
             }
 
             FieldModel::create($fieldData);
