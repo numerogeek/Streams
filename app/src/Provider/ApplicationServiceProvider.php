@@ -17,7 +17,7 @@ class ApplicationServiceProvider extends ServiceProvider
 
         if (!\Application::isInstalled()) {
             if (\Request::segment(1) !== 'installer') {
-                \Redirect::to('installer');
+                header('Location: installer');exit;
             }
         } else {
             \Application::locate();
