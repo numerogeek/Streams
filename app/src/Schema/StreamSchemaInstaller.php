@@ -26,7 +26,7 @@ class StreamSchemaInstaller implements InstallerInterface
         $schema->namespace = $schema->namespace ? : $addon->slug;
 
         // Default prefix
-        if (!$schema->prefix and $schema->prefix !== false) {
+        if ($schema->prefix === null and $schema->prefix !== false) {
             $schema->prefix = $schema->namespace . '_';
         }
 

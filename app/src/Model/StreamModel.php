@@ -88,10 +88,6 @@ class StreamModel extends EloquentModel
             $stream = parent::create($attributes);
         }
 
-        if (!$attributes['prefix'] and $attributes['prefix'] !== false) {
-            $attributes['prefix'] = $attributes['namespace'] . '_';
-        }
-
         $table = $attributes['prefix'] . $attributes['slug'];
 
         // See if table exists. You never know if it sneaked past validation
