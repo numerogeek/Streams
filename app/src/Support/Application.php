@@ -35,18 +35,24 @@ class Application
      *
      * @return bool
      */
-    public function locate()
+    public function locate($domain = null)
     {
-        $domain = trim(str_replace(array('http://', 'https://'), '', Request::root()), '/');
+        if (!$domain) {
+            $domain = Request::root();
+        }
 
-        $app = $this->apps->findByDomain($domain);
+        $domain = trim(str_replace(array('http://', 'https://'), '', $domain), '/');
 
-        $this->appRef = $app->reference;
+        if ($app = $this->apps->findByDomain($domain)) {
+            $this->appRef = $app->reference;
 
-        \Schema::getConnection()->getSchemaGrammar()->setTablePrefix($this->getTablePrefix());
-        \Schema::getConnection()->setTablePrefix($this->getTablePrefix());
+            \Schema::getConnection()->getSchemaGrammar()->setTablePrefix($this->getTablePrefix());
+            \Schema::getConnection()->setTablePrefix($this->getTablePrefix());
 
-        return ($app);
+            return true;
+        }
+
+        return false;
     }
 
     /**
