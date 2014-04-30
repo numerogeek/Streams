@@ -7,7 +7,8 @@
         "laravel/framework": "4.1.*",
         "barryvdh/laravel-debugbar": "1.*",
         "cartalyst/sentry": "2.1.*",
-        "nesbot/Carbon": "1.*"
+        "nesbot/Carbon": "1.*",
+        "cebe/markdown": "*"
     },
     "require-dev" : {
         "barryvdh/laravel-ide-helper": "1.*",
