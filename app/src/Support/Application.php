@@ -37,22 +37,27 @@ class Application
      */
     public function locate($domain = null)
     {
-        if (!$domain) {
-            $domain = Request::root();
+        if (!$this->appRef) {
+            if (!$domain) {
+                $domain = Request::root();
+            }
+
+            $domain = trim(str_replace(array('http://', 'https://'), '', $domain), '/');
+
+            if ($app = $this->apps->findByDomain($domain)) {
+                $this->appRef = $app->reference;
+
+                \Schema::getConnection()->getSchemaGrammar()->setTablePrefix($this->getTablePrefix());
+                \Schema::getConnection()->setTablePrefix($this->getTablePrefix());
+
+                return true;
+            }
+
+            return false;
         }
 
-        $domain = trim(str_replace(array('http://', 'https://'), '', $domain), '/');
-
-        if ($app = $this->apps->findByDomain($domain)) {
-            $this->appRef = $app->reference;
-
-            \Schema::getConnection()->getSchemaGrammar()->setTablePrefix($this->getTablePrefix());
-            \Schema::getConnection()->setTablePrefix($this->getTablePrefix());
-
-            return true;
-        }
-
-        return false;
+        // We've been located yo
+        return true;
     }
 
     /**
