@@ -1,18 +1,19 @@
 <?php namespace Streams\Model;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Streams\Entry\EntryModelGenerator;
-use Streams\Collection\FieldAssignmentCollection;
-use Streams\Collection\StreamCollection;
 use Streams\Exception\EmptyStreamNamespaceException;
 use Streams\Exception\EmptyStreamSlugException;
 use Streams\Exception\Exception;
-use Streams\Exception\InvalidStreamModelException;
-use Streams\Exception\StreamModelNotFoundException;
 
 class StreamModel extends EloquentModel
 {
+    /**
+     * The collection class to use.
+     *
+     * @var string
+     */
+    protected $collectionClass = 'Streams\Collection\StreamCollection';
+
     /**
      * Cache streams as we fetch them.
      *
