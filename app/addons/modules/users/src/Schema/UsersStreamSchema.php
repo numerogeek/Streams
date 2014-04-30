@@ -32,4 +32,24 @@ class UsersStreamSchema extends StreamSchema
             'last_name'           => array(),
         );
     }
+
+    /*******************************************
+     * REMOVE AFTER INSTALLED IS FINISHED!
+     *******************************************/
+    public function onAfterInstall()
+    {
+        // Create a user
+        \Sentry::createUser(
+            array(
+                'email'     => 'test@domain.com',
+                'password'  => 'password',
+                'is_activated' => true,
+            )
+        );
+
+        return true;
+    }
+    /*******************************************
+     * EOF: REMOVE AFTER INSTALLED IS FINISHED!
+     *******************************************/
 }
