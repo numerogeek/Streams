@@ -109,7 +109,6 @@ abstract class AddonManagerAbstract
 
                     $addon->path   = $info['path'];
                     $addon->slug   = $info['slug'];
-                    $addon->isCore = (substr($info['path'], 0, 4) === 'src/');
 
                     return $addon;
                 }

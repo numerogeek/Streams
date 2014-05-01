@@ -36,13 +36,6 @@ abstract class FieldTypeAbstract extends AddonAbstract
     );
 
     /**
-     * The type slug of the addon.
-     *
-     * @var string
-     */
-    public $addonType = 'field_type';
-
-    /**
      * Get column name
      * @param FieldModel $field
      * @return mixed
@@ -51,5 +44,4 @@ abstract class FieldTypeAbstract extends AddonAbstract
     {
         return $field->slug;
     }
-
 }

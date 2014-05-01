@@ -3,9 +3,19 @@
 abstract class ThemeAbstract extends AddonAbstract
 {
     /**
-     * The type slug of the addon.
+     * By default this is not an admin theme.
      *
-     * @var string
+     * @var bool
      */
-    public $addonType = 'theme';
+    protected $isAdmin = false;
+
+    /**
+     * Return whether this theme is admin or not.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return (bool)$this->isAdmin;
+    }
 }
