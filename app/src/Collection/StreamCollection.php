@@ -73,17 +73,4 @@ class StreamCollection extends EloquentCollection
         return $options;
     }
 
-    /**
-     * Delete all our streams in the collection.
-     * 
-     * @return bool
-     */
-    public function delete()
-    {
-        foreach ($this->items as $stream) {
-            $stream->delete();
-        }
-
-        return true;
-    }
 }
