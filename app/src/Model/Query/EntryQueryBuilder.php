@@ -148,6 +148,7 @@ class EntryQueryBuilder extends EloquentQueryBuilder
      */
     protected function filterQuery()
     {
+        return $this;
         $filter = new EntryQueryFilter($this);
 
         $filter->make();
