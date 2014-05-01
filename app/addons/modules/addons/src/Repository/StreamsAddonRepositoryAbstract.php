@@ -18,7 +18,11 @@ abstract class StreamsAddonRepositoryAbstract implements AddonRepositoryInterfac
         // Sync TO the database
         foreach ($existingAddons as $addon) {
             if (!$databaseAddons->findBySlug($addon->slug)) {
-                // Insert here
+                $this->addons->insert(
+                    array(
+                        'slug' => $addon->slug,
+                    )
+                );
             }
         }
     }

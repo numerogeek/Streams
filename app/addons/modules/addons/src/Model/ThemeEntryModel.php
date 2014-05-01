@@ -1,8 +1,8 @@
 <?php namespace Addon\Module\Addons\Model;
 
-use Streams\Model\AddonsModulesEntryModel;
+use Streams\Model\AddonsThemesEntryModel;
 
-class ThemeEntryModel extends AddonsModulesEntryModel
+class ThemeEntryModel extends AddonsThemesEntryModel
 {
     /**
      * Collection class
