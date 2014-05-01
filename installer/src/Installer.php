@@ -46,8 +46,8 @@ class Installer
 
         // Install our core modules
         foreach (\Module::getAll() as $module) {
-            if (\Module::install($module->slug)) {
-                return;
+            if (!\Module::install($module->slug)) {
+                return false;
             }
         }
 
@@ -61,7 +61,9 @@ class Installer
      */
     public function complete()
     {
-        $this->removeInstaller();
+        if (!\Config::get('debug')) {
+            $this->removeInstaller();
+        }
 
         return \Redirect::to('/');
     }
