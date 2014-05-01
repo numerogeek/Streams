@@ -34,11 +34,7 @@ class ModulesController extends AdminController
      */
     public function install($slug)
     {
-        if (!$module = \Module::get($slug)) {
-            // Not found
-        }
-
-        if ($module and \Module::install($slug)) {
+        if (\Module::install($slug)) {
             // Great
         } else {
             // Something went wrong - check logs
@@ -55,11 +51,7 @@ class ModulesController extends AdminController
      */
     public function uninstall($slug)
     {
-        if (!$module = \Module::get($slug)) {
-            // Not found
-        }
-
-        if ($module and \Module::uninstall($slug)) {
+        if (\Module::uninstall($slug)) {
             // Great
         } else {
             // Something went wrong - check logs

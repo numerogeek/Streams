@@ -34,11 +34,7 @@ class ThemesController extends AdminController
      */
     public function install($slug)
     {
-        if (!$theme = \Theme::get($slug)) {
-            // Not found
-        }
-
-        if ($theme and \Theme::install($slug)) {
+        if (\Theme::install($slug)) {
             // Great
         } else {
             // Something went wrong - check logs
@@ -55,11 +51,7 @@ class ThemesController extends AdminController
      */
     public function uninstall($slug)
     {
-        if (!$theme = \Theme::get($slug)) {
-            // Not found
-        }
-
-        if ($theme and \Theme::uninstall($slug)) {
+        if (\Theme::uninstall($slug)) {
             // Great
         } else {
             // Something went wrong - check logs
