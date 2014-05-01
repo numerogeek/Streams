@@ -22,7 +22,7 @@ class TemplateServiceProvider extends ServiceProvider
      */
     protected function registerTemplate()
     {
-        $engine = new Engine(base_path('test'));
+        $engine = new Engine(base_path('app/views'));
 
         $this->app->singleton(
             'streams.template',
