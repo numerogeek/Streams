@@ -41,8 +41,8 @@ class Installer
 
         // Install our core modules
         foreach (\Module::getAll() as $module) {
-            if (!$module->install() or !$module->installSchemas()) {
-                return false;
+            if (\Module::install($module->slug)) {
+                return;
             }
         }
 
