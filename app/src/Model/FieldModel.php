@@ -65,6 +65,17 @@ class FieldModel extends EloquentModel
     }
 
     /**
+     * Find fields by namespace
+     *
+     * @param $namespace
+     * @return mixed
+     */
+    public function findByNamespace($namespace)
+    {
+        return $this->where('namespace', $namespace)->sortBy('slug')->get();
+    }
+
+    /**
      * Delete fields by namespace
      *
      * @param  string $namespace
