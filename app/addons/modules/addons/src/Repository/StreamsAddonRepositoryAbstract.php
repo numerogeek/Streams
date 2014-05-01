@@ -3,7 +3,7 @@
 use Addon\Module\Addons\Contract\AddonRepositoryInterface;
 use Streams\Collection\ModuleCollection;
 
-abstract class StreamsRepositoryAbstract implements AddonRepositoryInterface
+abstract class StreamsAddonRepositoryAbstract implements AddonRepositoryInterface
 {
     /**
      * Sync addons with their records in the database.
@@ -18,11 +18,7 @@ abstract class StreamsRepositoryAbstract implements AddonRepositoryInterface
         // Sync TO the database
         foreach ($existingAddons as $addon) {
             if (!$databaseAddons->findBySlug($addon->slug)) {
-                $this->addons->insert(
-                    array(
-                        'slug' => $addon->slug,
-                    )
-                );
+                // Insert here
             }
         }
     }

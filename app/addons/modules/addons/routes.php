@@ -8,8 +8,9 @@ Route::get(
     }
 );
 
-// List all modules
+// List all addons
 Route::get('admin/addons/modules', 'Addon\Module\Addons\Controller\Admin\ModulesController@index');
+Route::get('admin/addons/themes', 'Addon\Module\Addons\Controller\Admin\ThemesController@index');
 
 // Install an addon
 Route::get(

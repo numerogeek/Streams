@@ -4,7 +4,7 @@ use Addon\Module\Addons\Contract\ModuleRepositoryInterface;
 use Addon\Module\Addons\Model\ModuleEntryModel;
 use Composer\Autoload\ClassLoader;
 
-class StreamsModuleRepository extends StreamsRepositoryAbstract implements ModuleRepositoryInterface
+class StreamsModuleRepository extends StreamsAddonRepositoryAbstract implements ModuleRepositoryInterface
 {
     /**
      * Create a new StreamsModuleRepository instance.

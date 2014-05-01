@@ -1,7 +1,7 @@
 <?php namespace Addon\Module\Addons\Controller\Admin;
 
-use Addon\Module\Addons\Contract\ModuleRepositoryInterface;
 use Streams\Controller\AdminController;
+use Addon\Module\Addons\Contract\ModuleRepositoryInterface;
 
 class ModulesController extends AdminController
 {
@@ -26,7 +26,7 @@ class ModulesController extends AdminController
     {
         $modules = \Module::getAll();
 
-        $this->modules->sync($modules);
+        $this->modules->sync();
 
         return \View::make('module.addons::admin/modules/index', compact('modules'));
     }
