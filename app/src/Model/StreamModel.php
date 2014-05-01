@@ -1,5 +1,6 @@
 <?php namespace Streams\Model;
 
+use Streams\Collection\FieldAssignmentCollection;
 use Streams\Entry\EntryModelGenerator;
 use Streams\Exception\EmptyStreamNamespaceException;
 use Streams\Exception\EmptyStreamSlugException;
@@ -272,6 +273,56 @@ class StreamModel extends EloquentModel
     public function setPermissionsAttribute($permissions)
     {
         $this->attributes['permissions'] = json_encode($permissions);
+    }
+
+    /**
+     * Get stream model object from stream data array
+     *
+     * @param  array $streamData
+     * @return Pyro\Module\Streams\StreamModel
+     */
+    public static function object($streamData)
+    {
+        $assignments = array();
+
+        if (isset($streamData['stream_namespace'], $streamData['stream_slug'])) {
+            if (isset(static::$runtimeCache[$streamData['stream_namespace'] . '.' . $streamData['stream_slug']])) {
+                return static::$runtimeCache[$streamData['stream_namespace'] . '.' . $streamData['stream_slug']];
+            }
+        }
+
+        if (is_array($streamData) and !empty($streamData['assignments'])) {
+
+            foreach ($streamData['assignments'] as $assignment) {
+
+                if (!empty($assignment['field'])) {
+                    $fieldModel = new FieldModel($assignment['field']);
+                    unset($assignment['field']);
+                }
+
+                $assignmentModel = new FieldAssignmentModel($assignment);
+
+                $assignmentModel->setRawAttributes($assignment);
+
+                $assignmentModel->setRelation('field', $fieldModel);
+
+                $assignments[] = $assignmentModel;
+            }
+
+            unset($streamData['assignments']);
+        }
+
+        $streamModel = new static;
+
+        $streamModel->setRawAttributes($streamData);
+
+        $assignmentsCollection = new FieldAssignmentCollection($assignments);
+
+        $streamModel->setRelation('assignments', $assignmentsCollection);
+
+        $streamModel->assignments = $assignmentsCollection;
+
+        return static::$runtimeCache[$streamModel->stream_namespace . '.' . $streamModel->stream_slug] = $streamModel;
     }
 
     /**
