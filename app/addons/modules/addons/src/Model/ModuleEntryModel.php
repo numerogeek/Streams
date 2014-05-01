@@ -1,13 +1,13 @@
-<?php namespace ADdon\Module\Addons\Model;
+<?php namespace Addon\Module\Addons\Model;
 
-use Addon\Module\Addons\Repository\ModuleRepository;
-use Streams\Collection\ModuleCollection;
 use Streams\Model\AddonsModulesEntryModel;
 
-class ModuleEntryModel extends AddonsModulesEntryModel implements ModuleRepository
+class ModuleEntryModel extends AddonsModulesEntryModel
 {
-    public function sync(ModuleCollection $modules)
-    {
-        //echo $modelModules = $this->all();
-    }
+    /**
+     * Collection class
+     *
+     * @var string
+     */
+    public $collectionClass = 'Addon\Module\Addons\Collection\ModuleEntryCollection';
 }

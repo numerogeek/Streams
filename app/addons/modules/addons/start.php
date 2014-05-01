@@ -1,6 +1,6 @@
 <?php
 
 App::bind(
-    'Addon\Module\Addons\Repository\ModuleRepository',
-    'Addon\Module\Addons\Model\ModuleEntryModel'
+    'Addon\Module\Addons\Contract\ModuleRepositoryInterface',
+    'Addon\Module\Addons\Repository\StreamsModuleRepository'
 );

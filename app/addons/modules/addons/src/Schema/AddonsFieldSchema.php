@@ -17,9 +17,15 @@ class AddonsFieldSchema extends FieldSchema
             ),
             'is_installed' => array(
                 'type' => 'boolean',
+                'settings' => array(
+                    'defualt_value' => 0,
+                ),
             ),
             'is_enabled' => array(
                 'type' => 'boolean',
+                'settings' => array(
+                    'defualt_value' => 0,
+                ),
             ),
         );
     }
