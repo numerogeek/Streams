@@ -7,7 +7,7 @@ abstract class AddonAbstract
      *
      * @var string
      */
-    public $addonType = null;
+    public $type = null;
 
     /**
      * The addon slug
@@ -23,7 +23,7 @@ abstract class AddonAbstract
      */
     public function getName()
     {
-        return \Lang::trans($this->addonType . '.' . $this->slug . '::addon.name');
+        return \Lang::trans($this->type . '.' . $this->slug . '::addon.name');
     }
 
     /**
