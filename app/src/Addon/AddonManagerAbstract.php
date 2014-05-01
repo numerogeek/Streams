@@ -59,18 +59,6 @@ abstract class AddonManagerAbstract
                 $path . '/src'
             );
 
-            // Register controllers directory
-            $this->loader->addPsr4(
-                $this->getNamespace($type, $slug) . '\\Controller\\',
-                $path . '/controllers'
-            );
-
-            // Register controllers directory
-            $this->loader->addPsr4(
-                $this->getNamespace($type, $slug) . '\\Schema\\',
-                $path . '/schemas'
-            );
-
             // Register paths added above
             $this->loader->register();
 
@@ -91,6 +79,11 @@ abstract class AddonManagerAbstract
 
             // Add views namespace
             \View::addNamespace($loaderNamespace, $info['path'] . '/views');
+
+            // Add views to template
+            if (is_dir($info['path'] . '/views')) {
+                \TemplateEngine::addFolder($loaderNamespace, $info['path'] . '/views');
+            }
 
             // Load events file
             if (is_file($info['path'] . '/events.php')) {
