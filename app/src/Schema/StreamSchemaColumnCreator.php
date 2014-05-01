@@ -48,7 +48,7 @@ class StreamSchemaColumnCreator
                 }
 
                 // Save a default value in the table schema
-                $column->default($assignment->getSetting('default_value'));
+                $column->default($assignment->field->getSetting('default_value'));
 
                 // Mirror requirements on the table
                 $column->nullable(!$assignment->is_required);
