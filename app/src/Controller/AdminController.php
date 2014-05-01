@@ -21,12 +21,6 @@ class AdminController extends BaseController
      */
     public function index()
     {
-        $template = \App::make('streams.template');
-        $template->layout('template');
-
-        $template->title = 'POPP';
-
-
         echo \Template::render('app');
     }
 
