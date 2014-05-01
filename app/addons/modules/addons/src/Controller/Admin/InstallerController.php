@@ -21,7 +21,7 @@ class InstallerController extends AdminController
             // Something went wrong - check logs
         }
 
-        return \Redirect::back(200);
+        return \Redirect::back();
     }
 
     /**
@@ -41,6 +41,6 @@ class InstallerController extends AdminController
             // Something went wrong - check logs
         }
 
-        return \Redirect::back(200);
+        return \Redirect::back();
     }
 }
