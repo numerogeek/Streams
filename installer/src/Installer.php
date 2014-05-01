@@ -35,6 +35,11 @@ class Installer
      */
     public function install()
     {
+        // Add our streams folder
+        if (!is_dir(base_path('app/models/streams'))) {
+            mkdir(base_path('app/models/streams'), 0777);
+        }
+
         // Install our streams_ tables
         $installerSchema = new \StreamsInstaller\InstallerSchema;
         $installerSchema->install();
