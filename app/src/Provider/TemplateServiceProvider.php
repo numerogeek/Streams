@@ -6,7 +6,6 @@ use League\Plates\Template;
 
 class TemplateServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *
@@ -38,5 +37,4 @@ class TemplateServiceProvider extends ServiceProvider
             }
         );
     }
-
 }

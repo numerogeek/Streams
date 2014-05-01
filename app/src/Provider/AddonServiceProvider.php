@@ -12,7 +12,6 @@ use Streams\Addon\ThemeManager;
 
 class AddonServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider
      */
@@ -117,5 +116,4 @@ class AddonServiceProvider extends ServiceProvider
 
         $this->app['streams.themes']->register();
     }
-
 }

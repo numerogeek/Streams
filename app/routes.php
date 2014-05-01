@@ -30,7 +30,7 @@ Route::get(
     }
 );
 
-// Default admin route
+// Default module is the dashboard
 Route::get(
     'admin',
     function () {

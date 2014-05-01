@@ -5,7 +5,6 @@ use Streams\Support\Application;
 
 class ApplicationServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *

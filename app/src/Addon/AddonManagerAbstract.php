@@ -99,7 +99,6 @@ abstract class AddonManagerAbstract
             \App::singleton(
                 'streams.' . $info['type'] . '.' . $info['slug'],
                 function () use ($info, $loaderNamespace) {
-
                     $addonClass = $this->getClass($info['slug']);
 
                     $addon = new $addonClass;
@@ -163,6 +162,7 @@ abstract class AddonManagerAbstract
     public function getClass($slug)
     {
         $info = $this->registeredAddons[$slug];
+
         return $info['namespace'] . '\\' . Str::studly($info['slug']) . Str::studly($info['type']);
     }
 

@@ -2,7 +2,8 @@
 
 use Streams\Translation\Translator;
 
-class TranslationServiceProvider extends \Illuminate\Translation\TranslationServiceProvider {
+class TranslationServiceProvider extends \Illuminate\Translation\TranslationServiceProvider
+{
 
     /**
      * Register the service provider.
@@ -29,5 +30,4 @@ class TranslationServiceProvider extends \Illuminate\Translation\TranslationServ
                 return $trans;
             });
     }
-
 }
