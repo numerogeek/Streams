@@ -1,7 +1,7 @@
 <?php namespace Addon\Module\Addons\Repository;
 
 use Addon\Module\Addons\Contract\ThemeRepositoryInterface;
-use Addon\Module\Addons\Model\ModuleEntryModel;
+use Addon\Module\Addons\Model\ThemeEntryModel;
 use Composer\Autoload\ClassLoader;
 
 class StreamsThemeRepository extends StreamsAddonRepositoryAbstract implements ThemeRepositoryInterface
