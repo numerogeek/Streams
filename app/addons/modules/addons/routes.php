@@ -11,6 +11,13 @@ Route::get(
 // List all modules
 Route::get('admin/addons/modules', 'Addon\Module\Addons\Controller\Admin\ModulesController@index');
 
-// Install a module
-Route::get('admin/addons/modules/install/{slug}', 'Addon\Module\Addons\Controller\Admin\ModulesController@install');
-Route::get('admin/addons/modules/uninstall/{slug}', 'Addon\Module\Addons\Controller\Admin\ModulesController@uninstall');
+// Install an addon
+Route::get(
+    'admin/addons/installer/install/{type}/{slug}',
+    'Addon\Module\Addons\Controller\Admin\InstallerController@install'
+);
+
+Route::get(
+    'admin/addons/installer/uninstall/{type}/{slug}',
+    'Addon\Module\Addons\Controller\Admin\InstallerController@uninstall'
+);

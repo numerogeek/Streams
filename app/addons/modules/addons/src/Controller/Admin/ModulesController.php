@@ -1,6 +1,7 @@
 <?php namespace Addon\Module\Addons\Controller\Admin;
 
 use Streams\Controller\AdminController;
+use Addon\Module\Addons\Repository\ModuleRepository;
 
 class ModulesController extends AdminController
 {
@@ -9,9 +10,11 @@ class ModulesController extends AdminController
      *
      * @param \Streams\Addon\ModuleManager $modules
      */
-    public function __construct()
+    public function __construct(ModuleRepository $modules)
     {
         parent::__construct();
+
+        $this->modules = $modules;
     }
 
     /**
@@ -23,40 +26,8 @@ class ModulesController extends AdminController
     {
         $modules = \Module::getAll();
 
+        $this->modules->sync($modules);
+
         return \View::make('module.addons::admin/modules/index', compact('modules'));
-    }
-
-    /**
-     * Install a module.
-     *
-     * @param $slug
-     * @return bool
-     */
-    public function install($slug)
-    {
-        if (\Module::install($slug)) {
-            // Great
-        } else {
-            // Something went wrong - check logs
-        }
-
-        return \Redirect::to('admin/addons/modules');
-    }
-
-    /**
-     * Uninstall a module.
-     *
-     * @param $slug
-     * @return bool
-     */
-    public function uninstall($slug)
-    {
-        if (\Module::uninstall($slug)) {
-            // Great
-        } else {
-            // Something went wrong - check logs
-        }
-
-        return \Redirect::to('admin/addons/modules');
     }
 }
