@@ -14,7 +14,7 @@ class EntryModelGenerator extends Generator
      */
     public function getAppRefPath($path = null)
     {
-        return 'models/streams/' . studly_case(\Application::getAppRef());
+        return 'models/streams/' . \Application::getAppRef();
     }
 
     /**
