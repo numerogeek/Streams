@@ -51,7 +51,7 @@ class FieldSchemaInstaller implements InstallerInterface
 
                 $fieldData['namespace'] = $this->schema->namespace;
 
-                $addonLang = $this->addon->addonType . '.' . $fieldData['namespace'] . '::fields.' . $slug;
+                $addonLang = $this->addon->type . '.' . $fieldData['namespace'] . '::fields.' . $slug;
 
                 $fieldData['name'] = isset($fieldData['name']) ? $fieldData['name'] : $addonLang . '.name';
 

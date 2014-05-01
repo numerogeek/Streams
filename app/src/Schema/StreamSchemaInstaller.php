@@ -58,7 +58,7 @@ class StreamSchemaInstaller implements InstallerInterface
 
         if ($this->addon) {
 
-            $addonLang = $this->addon->addonType . '.' . $this->addon->slug . '::' . $this->schema->slug;
+            $addonLang = $this->addon->type . '.' . $this->addon->slug . '::' . $this->schema->slug;
 
             $streamData['namespace'] = $this->schema->namespace;
 
