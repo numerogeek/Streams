@@ -20,13 +20,12 @@ class StreamSchemaUtility
         // Some field destructs use stream data from the cache,
         // so let's make sure that the slug cache has run.
 
-        $streams = StreamModel::findManyByNamespace($namespace);
-
-        $streams->delete();
+        foreach(StreamModel::findManyByNamespace($namespace) as $stream) {
+            $stream->delete();
+        }
 
         // Make sure that garbage is collected even it the stream is not present anymore
-        FieldModel::where('namespace', '=', $namespace)->delete();
-
+        FieldModel::deleteByNamespace($namespace);
         FieldAssignmentModel::cleanup();
         FieldModel::cleanup();
 

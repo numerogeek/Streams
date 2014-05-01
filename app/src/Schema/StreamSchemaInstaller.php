@@ -95,11 +95,15 @@ class StreamSchemaInstaller implements InstallerInterface
      */
     public function uninstall()
     {
-        $this->schema->onBeforeUninstall();
+        if (!$this->addon->isCore()) {
 
-        \StreamSchemaUtility::destroyNamespace($this->schema->namespace);
+            $this->schema->onBeforeUninstall();
 
-        $this->schema->onAfterUninstall();
+            \StreamSchemaUtility::destroyNamespace($this->schema->namespace);
+
+            $this->schema->onAfterUninstall();
+
+        }
 
         return true;
     }

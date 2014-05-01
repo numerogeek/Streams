@@ -38,14 +38,18 @@ class UsersStreamSchema extends StreamSchema
      *******************************************/
     public function onAfterInstall()
     {
-        // Create a user
-        \Sentry::createUser(
-            array(
-                'email'     => 'test@domain.com',
-                'password'  => 'password',
-                'is_activated' => true,
-            )
+        $credentials = array(
+            'email'        => 'test@domain.com',
+            'password'     => 'password',
+            'is_activated' => true,
         );
+
+        try {
+            \Sentry::findUserByCredentials($credentials);
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            // Create a user
+            \Sentry::createUser($credentials);
+        }
 
         return true;
     }

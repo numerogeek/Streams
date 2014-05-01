@@ -2,6 +2,7 @@
 
 use Streams\Addon\AddonAbstract;
 use Streams\Contract\InstallerInterface;
+use Streams\Model\FieldAssignmentModel;
 use Streams\Model\FieldModel;
 use Streams\Traits\InstallableEventsTrait;
 
@@ -23,6 +24,9 @@ class FieldSchemaInstaller implements InstallerInterface
 
     public function __construct(FieldSchema $schema, AddonAbstract $addon = null)
     {
+        $this->fields = new FieldModel;
+        $this->assignments = new FieldAssignmentModel;
+
         // Default namespace
         $schema->namespace = $schema->namespace ? : $addon->slug;
 
@@ -54,7 +58,7 @@ class FieldSchemaInstaller implements InstallerInterface
                 $fieldData['is_locked'] = isset($fieldData['is_locked']) ? $fieldData['is_locked'] : true;
             }
 
-            FieldModel::create($fieldData);
+            $this->fields->create($fieldData);
         }
 
         $this->schema->onAfterInstall();
@@ -70,8 +74,10 @@ class FieldSchemaInstaller implements InstallerInterface
     public function uninstall()
     {
         $this->schema->onBeforeUninstall();
-
-        \StreamSchemaUtility::destroyNamespace($this->schema->namespace);
+        
+        $this->fields->deleteByNamespace($this->schema->namespace);
+        $this->assignments->cleanup();
+        $this->fields->cleanup();
 
         $this->schema->onAfterUninstall();
 

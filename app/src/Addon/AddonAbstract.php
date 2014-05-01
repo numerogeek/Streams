@@ -17,15 +17,23 @@ abstract class AddonAbstract
     public $slug;
 
     /**
-     * Array of classes that describe installable schemas
+     * Get the traslated addon name
      *
-     * @var array
+     * @return string
      */
-    public $schemas = array();
-
     public function getName()
     {
         return \Lang::trans($this->addonType . '.' . $this->slug . '::addon.name');
+    }
+
+    /**
+     * Is this a core addon?
+     *
+     * @var bool
+     */
+    public function isCore()
+    {
+        return (strpos($this->path, base_path('app/')) !== false);
     }
 
     /**
@@ -48,19 +56,4 @@ abstract class AddonAbstract
         return true;
     }
 
-    /**
-     * Install module schemas.
-     */
-    public function installSchemas()
-    {
-        return \Module::installSchemas($this->slug);
-    }
-
-    /**
-     * Uninstall module schemas.
-     */
-    public function uninstallSchemas()
-    {
-        return \Module::uninstallSchemas($this->slug);
-    }
 }

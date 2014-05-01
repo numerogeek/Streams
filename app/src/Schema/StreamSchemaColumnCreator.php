@@ -3,27 +3,9 @@
 use Streams\Addon\FieldTypeAbstract;
 use Streams\Model\FieldAssignmentModel;
 use Streams\Model\FieldModel;
-use Streams\Model\StreamModel;
 
 class StreamSchemaColumnCreator
 {
-
-    /**
-     * Field assignment model
-     *
-     * @var \Streams\Model\FieldAssignmentModel
-     */
-    protected $fieldAssignment;
-
-    /**
-     * Get table.
-     *
-     * @return string
-     */
-    public function getTable(StreamModel $stream)
-    {
-        return $stream->prefix . $stream->slug;
-    }
 
     /**
      * Create the column
@@ -32,27 +14,27 @@ class StreamSchemaColumnCreator
      */
     public function createColumn(FieldModel $assignment)
     {
+        $entryTable = $assignment->stream->getEntryTable();
+
         // Check if the table exists
-        if (!\Schema::hasTable($this->getTable($assignment->stream))) {
+        if (!\Schema::hasTable($entryTable)) {
             return false;
         }
 
         $fieldType = $assignment->field->getType();
 
+        $columnName = $fieldType->getColumnName($assignment->field);
+
         // Check if the column does not exist already to avoid "duplicate column" errors
-        if (\Schema::hasColumn(
-            $this->getTable($assignment->stream),
-            $fieldType->getColumnName($assignment)
-        )
-        ) {
+        if (\Schema::hasColumn($entryTable, $columnName)) {
             return false;
         }
 
         \Schema::table(
-            $this->getTable($assignment->stream),
-            function ($table) use ($assignment, $fieldType) {
+            $assignment->stream->getEntryTable(),
+            function ($entryTable) use ($assignment, $fieldType, $columnName) {
 
-                // This is the Eloquent method we'll be using
+                // This is the Schema Blueprint method we'll be using
                 $columnTypeMethod = camel_case($fieldType->columnType);
 
                 // Get the column constraint if any
@@ -60,9 +42,9 @@ class StreamSchemaColumnCreator
 
                 // Only the string method cares about a constraint
                 if ($columnTypeMethod === 'string' and $constraint) {
-                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment->field), $constraint);
+                    $column = $entryTable->{$columnTypeMethod}($columnName, $constraint);
                 } else {
-                    $column = $table->{$columnTypeMethod}($fieldType->getColumnName($assignment->field));
+                    $column = $entryTable->{$columnTypeMethod}($columnName);
                 }
 
                 // Save a default value in the table schema
@@ -94,7 +76,6 @@ class StreamSchemaColumnCreator
             isset($fieldType->columnConstraint) and $fieldType->columnConstraint
         ) {
             $constraint = $fieldType->columnConstraint;
-
             // Otherwise, we'll check for a max_length field
         } elseif (is_numeric($maxLength)
         ) {
