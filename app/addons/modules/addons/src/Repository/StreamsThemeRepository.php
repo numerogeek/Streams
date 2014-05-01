@@ -12,6 +12,6 @@ class StreamsThemeRepository extends StreamsAddonRepositoryAbstract implements T
     public function __construct()
     {
         $this->manager = \App::make('streams.themes');
-        $this->addons  = new ModuleEntryModel();
+        $this->addons  = new ThemeEntryModel();
     }
 }
