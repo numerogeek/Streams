@@ -5,19 +5,19 @@
     "license": "MIT",
     "require": {
         "artdarek/oauth-4-laravel": "dev-master",
-        "kriswallsmith/assetic": "1.1.*@dev",
         "barryvdh/laravel-debugbar": "1.*",
-        "league/plates": "dev-master",
-        "laravel/framework": "4.1.*",
         "cartalyst/sentry": "2.1.*",
+        "cebe/markdown": "*",
+        "kriswallsmith/assetic": "1.1.*@dev",
+        "laravel/framework": "4.1.*",
         "league/flysystem": "0.4.*",
-        "nesbot/Carbon": "1.*",
-        "cebe/markdown": "*"
+        "league/plates": "dev-master",
+        "nesbot/Carbon": "1.*"
     },
     "require-dev" : {
         "barryvdh/laravel-ide-helper": "1.*",
-        "phpunit/phpunit": "4.*",
-        "phing/phing": "2.*"
+        "phing/phing": "2.*",
+        "phpunit/phpunit": "4.*"
     },
     "autoload": {
         "classmap": [
