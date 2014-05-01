@@ -2,7 +2,6 @@
 
 use Illuminate\Support\ServiceProvider;
 use League\Plates\Engine;
-use League\Plates\Template;
 
 class TemplateServiceProvider extends ServiceProvider
 {
