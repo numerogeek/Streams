@@ -80,6 +80,11 @@ abstract class AddonManagerAbstract
             // Add views namespace
             \View::addNamespace($loaderNamespace, $info['path'] . '/views');
 
+            // Load start file
+            if (is_file($info['path'] . '/start.php')) {
+                require_once $info['path'] . '/start.php';
+            }
+
             // Add views to template
             if (is_dir($info['path'] . '/views')) {
                 \TemplateEngine::addFolder($loaderNamespace, $info['path'] . '/views');
