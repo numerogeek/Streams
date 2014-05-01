@@ -59,6 +59,14 @@ abstract class AddonManagerAbstract
                 $path . '/src'
             );
 
+            // Register streams generated models
+            if (\Application::isInstalled()) {
+                $this->loader->addPsr4(
+                    'Streams\Model\\',
+                    'app/addons/models/streams/' . \Application::getAppRef() . '/' . '/src'
+                );
+            }
+
             // Register paths added above
             $this->loader->register();
 
