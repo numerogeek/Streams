@@ -1,4 +1,4 @@
-<?php namespace Addon\Module\Test;
+<?php namespace Addon\Theme\Streams;
 
 use Streams\Addon\ThemeAbstract;
 
