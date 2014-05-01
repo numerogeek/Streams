@@ -7,3 +7,5 @@
 /bootstrap/compiled.php
 
 /_ide_helper.php
+
+/app/models/streams/*

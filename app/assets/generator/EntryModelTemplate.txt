@@ -1,0 +1,19 @@
+<?php namespace Streams\Model;
+
+class {className} extends EntryModel
+{
+    /**
+	 * The table
+	 * @type string
+	 */
+    protected $table = {table};
+
+    /**
+     * The compiled stream data as an array
+     */
+    protected static $streamData = {stream};
+
+    protected static $relationFieldsData = {relationFields};
+
+    {relations}
+}

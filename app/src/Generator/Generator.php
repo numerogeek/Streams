@@ -34,13 +34,6 @@ abstract class Generator {
         $this->file = new File;
     }
 
-    public function setTemplateFilename($templateFilename)
-    {
-    	$this->templateFilename = $templateFilename;
-
-    	return $this;
-    }
-
     /**
      * Compile template and generate
      *
@@ -50,9 +43,9 @@ abstract class Generator {
      */
     public function make($path, $data, $update = false)
     {
-        $this->name = basename($path, '.php');
         $this->path = $this->getPath($path);
-        $template = $this->getTemplate($this->name, $data);
+
+        $template = $this->getTemplate($data);
 
         if (! $this->file->exists($this->path) or $update)
         {
@@ -83,5 +76,5 @@ abstract class Generator {
      * @param  $name Name of file
      * @return string
      */
-    abstract protected function getTemplate($name, $data);
+    abstract protected function getTemplate($data);
 }

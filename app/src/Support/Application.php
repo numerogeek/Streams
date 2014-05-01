@@ -61,6 +61,16 @@ class Application
     }
 
     /**
+     * Get the current app ref
+     *
+     * @return null
+     */
+    public function getAppRef()
+    {
+        return $this->appRef;
+    }
+
+    /**
      * Return the app reference
      *
      * @return string
