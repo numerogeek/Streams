@@ -22,7 +22,7 @@ class TemplateServiceProvider extends ServiceProvider
      */
     protected function registerTemplate()
     {
-        $engine = new Engine('/');
+        $engine = new Engine(base_path('test'));
 
         $this->app->bind(
             'streams.template',
