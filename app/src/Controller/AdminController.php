@@ -2,7 +2,14 @@
 
 class AdminController extends BaseController
 {
-    protected $ignore = array('login');
+    /**
+     * Ignore admin/{module} as defined here.
+     *
+     * @var array
+     */
+    protected $ignore = array(
+        'login',
+    );
 
     /**
      * Create a new AdminController instance
@@ -21,12 +28,6 @@ class AdminController extends BaseController
      */
     public function index()
     {
-        $template = \App::make('streams.template');
-        $template->layout('template');
-
-        $template->title = 'POPP';
-
-
         echo \Template::render('app');
     }
 
