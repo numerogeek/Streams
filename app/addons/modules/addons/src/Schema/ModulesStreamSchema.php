@@ -19,9 +19,15 @@ class ModulesStreamSchema extends StreamSchema
     public function assignments()
     {
         return array(
-            'slug' => array(),
-            'is_installed' => array(),
-            'is_enabled' => array(),
+            'slug' => array(
+                'is_required' => true
+            ),
+            'is_installed' => array(
+                'is_required' => true
+            ),
+            'is_enabled' => array(
+                'is_required' => true
+            ),
         );
     }
 }
