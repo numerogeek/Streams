@@ -1,17 +1,27 @@
 <?php
 
-
-
-// Public Routes
+/**
+ * Public Routes
+ */
 Route::get('/', 'Streams\Controller\PublicController@hello');
+
+
+/**
+ * Installer Routes
+ */
 Route::get('installer/{step?}', 'Streams\Controller\InstallerController@run');
 
-Route::get('test', 'TestController@index');
 
-Route::when('admin*', 'authenticate');
+/**
+ * Admin Routes
+ */
+Route::when('admin*', 'authenticate');  // Authenticate anything admin
 
-// Admin Routes
-Route::get('admin', 'Streams\Controller\AdminController@index');
+// Login routes
+Route::get('admin/login', 'Streams\Controller\AdminController@login');
+Route::post('admin/login', 'Streams\Controller\AdminController@attemptLogin');
+
+// Logout logic
 Route::get(
     'admin/logout',
     function () {
@@ -20,5 +30,10 @@ Route::get(
     }
 );
 
-Route::get('admin/login', 'Streams\Controller\AdminController@login');
-Route::post('admin/login', 'Streams\Controller\AdminController@attemptLogin');
+// Default admin route
+Route::get(
+    'admin',
+    function () {
+        return Redirect::to('admin/dashboard');
+    }
+);

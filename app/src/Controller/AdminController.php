@@ -24,14 +24,6 @@ class AdminController extends BaseController
     }
 
     /**
-     * Display the admin landing page.
-     */
-    public function index()
-    {
-        echo \Template::render('app');
-    }
-
-    /**
      * Display the admin login page.
      */
     public function login()
@@ -56,7 +48,7 @@ class AdminController extends BaseController
 
             \Event::fire('user.login', array($user));
 
-            return \Redirect::to('admin');
+            return \Redirect::to('admin/dashboard');
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             return \Redirect::to('admin/login')->with('message', 'Login field is required.');
         } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
