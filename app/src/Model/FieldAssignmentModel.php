@@ -144,8 +144,8 @@ class FieldAssignmentModel extends FieldModel
      *
      * @return mixed
      */
-    public function getSettingsAttribute()
+    public function getSettingsAttribute($settings)
     {
-        return $this->field->slug;
+        return $this->field->settings;
     }
 }
