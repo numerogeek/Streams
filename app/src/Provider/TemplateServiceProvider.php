@@ -27,7 +27,14 @@ class TemplateServiceProvider extends ServiceProvider
         $this->app->singleton(
             'streams.template',
             function () use ($engine) {
-                return new Template($engine);
+                return $engine->makeTemplate();
+            }
+        );
+
+        $this->app->singleton(
+            'streams.template.engine',
+            function () use ($engine) {
+                return $engine;
             }
         );
     }

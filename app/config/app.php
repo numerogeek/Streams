@@ -116,10 +116,10 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        'Streams\Provider\TemplateServiceProvider',
         'Streams\Provider\StreamsServiceProvider',
         'Streams\Provider\AddonServiceProvider',
         'Streams\Provider\ApplicationServiceProvider',
-        'Streams\Provider\TemplateServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
@@ -194,6 +194,7 @@ return array(
         'StreamSchemaUtility' => 'Streams\Facade\StreamSchemaUtilityFacade',
         'Application'         => 'Streams\Facade\ApplicationFacade',
         'Template'            => 'Streams\Facade\TemplateFacade',
+        'TemplateEngine'      => 'Streams\Facade\TemplateEngineFacade',
     ),
 
 );
