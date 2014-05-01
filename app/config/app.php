@@ -116,10 +116,10 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        'Streams\Provider\ApplicationServiceProvider',
         'Streams\Provider\TemplateServiceProvider',
         'Streams\Provider\StreamsServiceProvider',
         'Streams\Provider\AddonServiceProvider',
-        'Streams\Provider\ApplicationServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
