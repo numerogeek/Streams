@@ -2,7 +2,14 @@
 
 class AdminController extends BaseController
 {
-    protected $ignore = array('login');
+    /**
+     * Ignore admin/{module} as defined here.
+     *
+     * @var array
+     */
+    protected $ignore = array(
+        'login',
+    );
 
     /**
      * Create a new AdminController instance
