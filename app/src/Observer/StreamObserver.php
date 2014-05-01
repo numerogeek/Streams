@@ -1,6 +1,6 @@
 <?php namespace Streams\Observer;
 
-use Streams\Entry\EntryModelGenerator;
+use Streams\Generator\EntryModelGenerator;
 use Streams\Model\FieldAssignmentModel;
 use Streams\Model\FieldModel;
 use Streams\Model\StreamModel;
@@ -23,7 +23,7 @@ class StreamObserver
      */
     public function saved(StreamModel $model)
     {
-        //$this->generator->compile($model);
+        $this->generator->compileEntryModel($model);
     }
 
     /**

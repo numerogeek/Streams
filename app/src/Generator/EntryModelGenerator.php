@@ -1,125 +1,62 @@
-<?php namespace Streams\Entry;
+<?php namespace Streams\Generator;
 
 use Illuminate\Support\Str;
 use Streams\Model\StreamModel;
-use Streams\Generator\Generator;
 
 class EntryModelGenerator extends Generator
 {
-    protected $templateFilename = 'EntryModel.txt';
-
     protected $relationFields;
-
-    /**
-     * Get path
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function getPath($path)
-    {
-        if (!is_dir($this->siteRefPath())) {
-            mkdir($this->siteRefPath(), 0777);
-        }
-
-        $pyro = 'Pyro';
-
-        if (!is_dir($this->siteRefPath($pyro))) {
-            mkdir($this->siteRefPath($pyro), 0777);
-        }
-
-        $module = $pyro . DIRECTORY_SEPARATOR . 'Module';
-
-        if (!is_dir($this->siteRefPath($module))) {
-            mkdir($this->siteRefPath($module), 0777);
-        }
-
-        $streams = $module . DIRECTORY_SEPARATOR . 'Streams';
-
-        if (!is_dir($this->siteRefPath($streams))) {
-            mkdir($this->siteRefPath($streams), 0777);
-        }
-
-        $model = $streams . DIRECTORY_SEPARATOR . 'Model' . DIRECTORY_SEPARATOR;
-
-        if (!is_dir($this->siteRefPath($model))) {
-            mkdir($this->siteRefPath($model), 0777);
-        }
-
-        return $this->siteRefPath($model . $path);
-    }
 
     /**
      * Site ref path
      *
      * @return string
      */
-    public function siteRefPath($path = null)
+    public function getAppRefPath($path = null)
     {
-        if ($path) {
-            $path = DIRECTORY_SEPARATOR . $path;
-        }
-
-        return $this->modelPath(Str::studly(SITE_REF).'Site'.$path);
-    }
-
-    protected function getBasePath($path = null)
-    {
-        if ($path) {
-            $path = DIRECTORY_SEPARATOR . $path;
-        }
-
-        if (class_exists('MY_Controller')) {
-            $realpath = app_path('system/cms/modules/streams_core');
-        } else {
-            $realpath = realpath('../system/cms/modules/streams_core');
-        }
-
-        return $realpath . $path;
-    }
-
-    /**
-     * Model path
-     *
-     * @return string
-     */
-    public function modelPath($path = null)
-    {
-        if ($path) {
-            $path = DIRECTORY_SEPARATOR . $path;
-        }
-
-        return $this->getBasePath('models' . $path);
+        return 'models/streams/' . studly_case(\Application::getAppRef());
     }
 
     /**
      * Compile
      *
      * @param StreamModel $stream
-     *
      * @return bool
      */
-    public function compile(StreamModel $stream)
+    public function compileEntryModel(StreamModel $stream)
     {
-        if ($stream and !empty($stream->stream_slug) and !empty($stream->stream_namespace)) {
-            $className = Str::studly($stream->stream_namespace) . Str::studly($stream->stream_slug);
+        $stream->load('assignments.field');
 
-            $generator = new EntryModelGenerator;
+        if (!empty($stream->slug) and !empty($stream->namespace)) {
 
-            $stream->load('assignments.field');
+            $appRefPath = $this->getAppRefPath();
 
-            $generator->make(
-                $className . 'EntryModel.php',
+            $namespace = Str::studly($stream->namespace);
+
+            // Create the app ref folder
+            if (!is_dir(app_path("{$appRefPath}"))) {
+                mkdir(app_path("{$appRefPath}"), 0777);
+            }
+
+            // Create the namespace folder
+            if (!is_dir(app_path("{$appRefPath}/{$namespace}"))) {
+                mkdir(app_path("{$appRefPath}/{$namespace}"), 0777);
+            }
+
+            $className = Str::studly($stream->namespace . '_' . $stream->slug) . 'EntryModel';
+
+            $this->make(
+                app_path("{$appRefPath}/{$namespace}/{$className}.php"),
                 array(
-                    'namespace'      => StreamModel::getEntryModelNamespace(),
-                    'table'          => "'" . $stream->stream_prefix . $stream->stream_slug . "'",
-                    'stream'         => $this->compileStreamData($stream),
-                    'relations'      => $this->compileRelations($stream),
-                    'relationFields' => $this->compileRelationFieldsData($stream),
+                    '{className}'      => $className,
+                    '{table}'          => "'" . $stream->prefix . $stream->slug . "'",
+                    '{stream}'         => $this->compileStreamData($stream),
+                    '{relations}'      => $this->compileRelations($stream),
+                    '{relationFields}' => $this->compileRelationFieldsData($stream),
                 ),
-                true
+                $update = true
             );
+
 
             return true;
         }
@@ -131,7 +68,6 @@ class EntryModelGenerator extends Generator
      * Compile Stream data
      *
      * @param StreamModel $stream
-     *
      * @return string
      */
     protected function compileStreamData(StreamModel $stream)
@@ -141,16 +77,10 @@ class EntryModelGenerator extends Generator
 
         foreach ($stream->getAttributes() as $key => $value) {
 
-            if ($key == 'view_options') {
+            $value = $this->adjustValue($value, in_array($key, array('stream_name', 'about')));
 
-                $string .= $this->compileUnserializable($key, $value, 8, false);
+            $string .= "\n{$this->s(8)}'{$key}' => {$value},";
 
-            } else {
-
-                $value = $this->adjustValue($value, in_array($key, array('stream_name', 'about')));
-
-                $string .= "\n{$this->s(8)}'{$key}' => {$value},";
-            }
         }
 
         // Assignments array
@@ -173,17 +103,10 @@ class EntryModelGenerator extends Generator
 
             foreach ($assignment->field->getAttributes() as $key => $value) {
 
-                if ($key == 'field_data') {
-
-                    $string .= $this->compileUnserializable($key, $value, 20);
-
-                } else {
-
                     $value = $this->adjustValue($value, in_array($key, array('field_name')));
 
                     $string .= "\n{$this->s(20)}'{$key}' => {$value},";
 
-                }
             }
 
             // End field attributes array
@@ -203,66 +126,9 @@ class EntryModelGenerator extends Generator
     }
 
     /**
-     * Compile un
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param int    $numberSpaces
-     * @param bool   $useKeys
-     *
-     * @return string
-     */
-    protected function compileUnserializable($key, $value, $numberSpaces = 4, $useKeys = true)
-    {
-        $string = '';
-
-        if (is_string($value)) {
-            $value = unserialize($value);
-        }
-
-        $spaces = $this->s($numberSpaces);
-
-        if (is_array($value) and !empty($value)) {
-
-            $string .= "\n{$spaces}'{$key}' => array(";
-
-            foreach ($value as $k => $v) {
-
-                if (!is_array($v)) {
-
-                    $v = $this->adjustValue($v, true);
-
-                    $addFourSpaces = $spaces . $this->s(4);
-
-                    if ($useKeys) {
-
-                        $string .= "\n{$addFourSpaces}'{$k}' => {$v},";
-
-                    } else {
-
-                        $string .= "\n{$addFourSpaces}{$v},";
-
-                    }
-                }
-
-            }
-
-            $string .= "\n{$spaces}),";
-
-        } else {
-
-            $string .= "\n{$spaces}'{$key}' => null,";
-
-        }
-
-        return $string;
-    }
-
-    /**
      * Add a number of spaces
      *
      * @param int
-     *
      * @return string
      */
     protected function s($n)
@@ -274,7 +140,6 @@ class EntryModelGenerator extends Generator
      * Adjust the value to be compiled as a string
      *
      * @param  mixed $value
-     *
      * @return mixed
      */
     protected function adjustValue($value, $escape = false)
@@ -325,7 +190,7 @@ class EntryModelGenerator extends Generator
 
             $relationString .= "\n{$this->s(8)}return \$this->{$relationMethod}(";
 
-            foreach($relationArray['arguments'] as &$argument) {
+            foreach ($relationArray['arguments'] as &$argument) {
                 $argument = $this->adjustValue($argument);
             }
 
@@ -347,7 +212,6 @@ class EntryModelGenerator extends Generator
      * Get relation fields
      *
      * @param StreamModel $stream
-     *
      * @return mixed
      */
     protected function getRelationFields(StreamModel $stream)
@@ -359,7 +223,6 @@ class EntryModelGenerator extends Generator
      * Compile relation fields data
      *
      * @param StreamModel $stream
-     *
      * @return string
      */
     protected function compileRelationFieldsData(StreamModel $stream)
@@ -387,17 +250,15 @@ class EntryModelGenerator extends Generator
      *
      * @param  string $template Path to template
      * @param  string $className
-     *
      * @return string Compiled template
      */
-    protected function getTemplate($className, $model = array())
+    protected function getTemplate($data = array())
     {
-        $this->template = file_get_contents(
-            realpath($this->getBasePath('src/Pyro/Module/Streams/templates/' . $this->templateFilename))
-        );
+        return str_replace(array_keys($data), $data, file_get_contents($this->getTemplatePath()));
+    }
 
-        $model['className'] = $className;
-
-        return '<?php ' . $this->parser->parse($this->template, $model, null);
+    public function getTemplatePath()
+    {
+        return app_path('assets/generator/EntryModelTemplate.txt');
     }
 }

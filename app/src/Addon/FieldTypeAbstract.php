@@ -44,4 +44,16 @@ abstract class FieldTypeAbstract extends AddonAbstract
     {
         return $field->slug;
     }
+
+    public function __call($method, $arguments)
+    {
+        $fieldTypeHandler = new FieldTypeHandler($this);
+
+        if (in_array($method, $fieldTypeHandler->getValidRelationMethods())) {
+            return $fieldTypeHandler->{$method}($arguments);
+        }
+
+        return null;
+    }
+
 }
