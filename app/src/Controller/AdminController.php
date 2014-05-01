@@ -21,6 +21,8 @@ class AdminController extends BaseController
      */
     public function index()
     {
+        \Template::layout('template');
+
         echo \Template::render('app');
     }
 

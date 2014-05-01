@@ -24,7 +24,7 @@ class TemplateServiceProvider extends ServiceProvider
     {
         $engine = new Engine(base_path('test'));
 
-        $this->app->bind(
+        $this->app->singleton(
             'streams.template',
             function () use ($engine) {
                 return new Template($engine);
