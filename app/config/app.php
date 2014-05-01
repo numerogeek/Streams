@@ -118,8 +118,8 @@ return array(
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
         'Streams\Provider\TemplateServiceProvider',
         'Streams\Provider\StreamsServiceProvider',
-        'Streams\Provider\AddonServiceProvider',
         'Streams\Provider\ApplicationServiceProvider',
+        'Streams\Provider\AddonServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
