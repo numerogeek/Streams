@@ -21,8 +21,7 @@ class AdminController extends BaseController
      */
     public function index()
     {
-        // @todo - This should redirect to admin/dashboard
-        return \View::make('app');
+        echo \Template::render('app');
     }
 
     /**

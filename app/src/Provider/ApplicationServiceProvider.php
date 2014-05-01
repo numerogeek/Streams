@@ -31,7 +31,7 @@ class ApplicationServiceProvider extends ServiceProvider
      */
     protected function registerApplication()
     {
-        $this->app->bind(
+        $this->app->singleton(
             'streams.application',
             function () {
                 return new Application;
