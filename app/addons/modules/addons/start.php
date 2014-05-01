@@ -2,5 +2,5 @@
 
 App::bind(
     'Addon\Module\Addons\Repository\ModuleRepository',
-    'Addon\Module\Addons\Model\StreamsModuleRepository'
+    'Addon\Module\Addons\Model\ModuleEntryModel'
 );
