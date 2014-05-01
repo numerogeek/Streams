@@ -4,6 +4,7 @@ use Streams\Entry\EntryModelGenerator;
 use Streams\Exception\EmptyStreamNamespaceException;
 use Streams\Exception\EmptyStreamSlugException;
 use Streams\Exception\Exception;
+use Streams\Observer\StreamObserver;
 
 class StreamModel extends EloquentModel
 {
@@ -48,6 +49,21 @@ class StreamModel extends EloquentModel
      * @var array
      */
     protected $guarded = array('id');
+
+    /**
+     * Model boot
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        parent::observe(new StreamObserver);
+    }
+
+    public function getEntryTable()
+    {
+        return $this->prefix.$this->slug;
+    }
 
     /**
      * Create a new stream.
@@ -137,27 +153,6 @@ class StreamModel extends EloquentModel
     }
 
     /**
-     * Delete
-     *
-     * @return boolean
-     */
-    public function delete()
-    {
-        try {
-            \Schema::dropIfExists($this->getTableName());
-        } catch (Exception $e) {
-            // @todo - log error
-        }
-
-        if ($success = parent::delete()) {
-            FieldAssignmentModel::cleanup();
-            FieldModel::cleanup();
-        }
-
-        return $success;
-    }
-
-    /**
      * Assign a field to this stream.
      *
      * @param  string $field
@@ -219,7 +214,7 @@ class StreamModel extends EloquentModel
         $attributes['prefix'] = isset($attributes['prefix']) ? $attributes['prefix'] : null;
         $attributes['slug']   = isset($attributes['slug']) ? $attributes['slug'] : $this->slug;
 
-        $from = $this->getTableName();
+        $from = $this->getEntryTable();
         $to   = $attributes['prefix'] . $attributes['slug'];
 
         try {
@@ -231,29 +226,6 @@ class StreamModel extends EloquentModel
         }
 
         return parent::update($attributes);
-    }
-
-    /**
-     * Save the stream.
-     *
-     * @param array $options
-     * @return bool
-     */
-    public function save(array $options = array())
-    {
-        //$this->compileEntryModel();
-        return parent::save($options);
-    }
-
-    /**
-     * Compile entry model.
-     *
-     * @return bool
-     */
-    public function compileEntryModel()
-    {
-        $generator = new EntryModelGenerator;
-        return $generator->compile($this);
     }
 
     /**
@@ -300,16 +272,6 @@ class StreamModel extends EloquentModel
     public function setPermissionsAttribute($permissions)
     {
         $this->attributes['permissions'] = json_encode($permissions);
-    }
-
-    /**
-     * Get table name
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return $this->prefix . $this->slug;
     }
 
     /**
