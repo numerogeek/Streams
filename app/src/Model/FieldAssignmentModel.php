@@ -118,4 +118,34 @@ class FieldAssignmentModel extends FieldModel
     {
         return $this->belongsTo('Streams\Model\FieldModel');
     }
+
+    /**
+     * Get type attribute
+     *
+     * @return mixed
+     */
+    public function getTypeAttribute()
+    {
+        return $this->field->type;
+    }
+
+    /**
+     * Get slug attribute
+     *
+     * @return mixed
+     */
+    public function getSlugAttribute()
+    {
+        return $this->field->slug;
+    }
+
+    /**
+     * Get settings attribute
+     *
+     * @return mixed
+     */
+    public function getSettingsAttribute()
+    {
+        return $this->field->slug;
+    }
 }
