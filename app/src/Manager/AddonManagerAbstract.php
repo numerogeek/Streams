@@ -366,7 +366,8 @@ abstract class AddonManagerAbstract
 
         foreach ($data as $addonData) {
             if ($addon = $this->get($addonData->slug)) {
-                $addon->isInstalled = $addonData->is_installed;
+                $addon->setIsInstalled($addonData->is_installed);
+                $addon->setIsEnabled($addonData->is_enabled);
             }
         }
     }
