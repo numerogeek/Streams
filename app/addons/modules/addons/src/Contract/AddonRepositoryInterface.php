@@ -3,4 +3,5 @@
 interface AddonRepositoryInterface
 {
     public function sync();
+    public function all();
 }

@@ -26,4 +26,14 @@ abstract class StreamsAddonRepositoryAbstract implements AddonRepositoryInterfac
             }
         }
     }
+
+    /**
+     * Return all the addons.
+     *
+     * @return mixed
+     */
+    public function all()
+    {
+        return $this->addons->all();
+    }
 }
