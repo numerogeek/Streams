@@ -22,10 +22,12 @@ class ApplicationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerEntryModels();
-        $this->setupAddonManagers();
-        $this->setupAssetPaths();
-        $this->setupTemplate();
+        if (\Application::isInstalled()) {
+            $this->registerEntryModels();
+            $this->setupAddonManagers();
+            $this->setupAssetPaths();
+            $this->setupTemplate();
+        }
     }
 
     /**
