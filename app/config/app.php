@@ -116,6 +116,7 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        'Stolz\Assets\ManagerServiceProvider',
         'Streams\Provider\TemplateServiceProvider',
         'Streams\Provider\StreamsServiceProvider',
         'Streams\Provider\AddonServiceProvider',

@@ -8,11 +8,11 @@
         "barryvdh/laravel-debugbar": "1.*",
         "cartalyst/sentry": "2.1.*",
         "cebe/markdown": "*",
-        "kriswallsmith/assetic": "1.1.*@dev",
         "laravel/framework": "4.1.*",
         "league/flysystem": "0.4.*",
         "league/plates": "dev-master",
-        "nesbot/Carbon": "1.*"
+        "nesbot/Carbon": "1.*",
+        "stolz/assets": "dev-master"
     },
     "require-dev" : {
         "barryvdh/laravel-ide-helper": "1.*",
