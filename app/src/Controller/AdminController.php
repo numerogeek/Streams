@@ -48,7 +48,7 @@ class AdminController extends BaseController
 
             \Event::fire('user.login', array($user));
 
-            return \Redirect::to('admin/dashboard');
+            return \Redirect::intended('admin/dashboard');
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             return \Redirect::to('admin/login')->with('message', 'Login field is required.');
         } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
