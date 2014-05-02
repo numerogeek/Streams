@@ -29,6 +29,13 @@ abstract class AddonManagerAbstract
     protected $collectionClass = null;
 
     /**
+     * The addon repository.
+     *
+     * @var null
+     */
+    protected $repository = null;
+
+    /**
      * Create a new AddonManagerAbstract instance.
      *
      * @param ClassLoader $loader
@@ -60,12 +67,10 @@ abstract class AddonManagerAbstract
             );
 
             // Register streams generated models
-            if (\Application::isInstalled()) {
-                $this->loader->addPsr4(
-                    'Streams\Model\\',
-                    'app/addons/models/streams/' . \Application::getAppRef() . '/' . '/src'
-                );
-            }
+            /*$this->loader->addPsr4(
+                'Streams\Model\\',
+                'app/addons/models/streams/' . \Application::getAppRef() . '/' . '/src'
+            );*/
 
             $this->registeredAddons[$slug] = array(
                 'path'      => $path,
@@ -354,5 +359,44 @@ abstract class AddonManagerAbstract
         }
 
         return true;
+    }
+
+    /**
+     * Set the repository.
+     *
+     * @param $repository
+     */
+    public function setRepository($repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Merge database data with our addons.
+     */
+    public function mergeData()
+    {
+        $data = $this->repository->all();
+
+        foreach ($data as $addonData) {
+            if ($addon = self::get($addonData->slug)) {
+                $addon->isInstalled = $addonData->is_installed;
+            }
+        }
+    }
+
+    /**
+     * Check if an addon is installed.
+     *
+     * @param $slug
+     * @return bool
+     */
+    public function isInstalled($slug)
+    {
+        if ($addon = self::get($slug)) {
+            return (bool)$addon->isInstalled;
+        }
+
+        return false;
     }
 }

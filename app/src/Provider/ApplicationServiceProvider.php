@@ -17,6 +17,14 @@ class ApplicationServiceProvider extends ServiceProvider
     }
 
     /**
+     * Boot up our environment.
+     */
+    public function boot()
+    {
+        $this->setupManagers();
+    }
+
+    /**
      * Register the application support class
      */
     protected function registerApplication()
@@ -37,11 +45,30 @@ class ApplicationServiceProvider extends ServiceProvider
         if (\Config::get('debug')) {
             if (!\Application::isInstalled()) {
                 if (\Request::segment(1) !== 'installer') {
-                    header('Location: installer');exit;
+                    header('Location: installer');
+                    exit;
                 }
             }
         } elseif (\Request::segment(1) !== 'installer') {
             \Application::locate();
+        }
+    }
+
+    /**
+     * Setup manager.
+     */
+    protected function setupManagers()
+    {
+        $addons = array(/*'Block', 'Extension', 'FieldType', */'Module', /*'Tag', */'Theme');
+
+        foreach ($addons as $addon) {
+
+            $interface = 'Addon\Module\Addons\Contract\\' . $addon . 'RepositoryInterface';
+            $manager   = '\\' . $addon;
+
+            $manager::setRepository(\App::make($interface));
+
+            $manager::mergeData();
         }
     }
 

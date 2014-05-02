@@ -32,8 +32,6 @@ class AddonServiceProvider extends ServiceProvider
         $this->bindAddonRepository('modules');
         $this->bindAddonRepository('tags');
         $this->bindAddonRepository('themes');
-
-        echo \App::make('Addon\Module\Addons\Contract\ModuleRepositoryInterface')->all();
     }
 
     /**
