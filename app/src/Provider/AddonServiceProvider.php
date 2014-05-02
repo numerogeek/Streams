@@ -1,6 +1,5 @@
 <?php namespace Streams\Provider;
 
-
 use Illuminate\Support\Str;
 use Composer\Autoload\ClassLoader;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +22,21 @@ class AddonServiceProvider extends ServiceProvider
     }
 
     /**
+     * Bind our addon repositories.
+     */
+    public function boot()
+    {
+        $this->bindAddonRepository('blocks');
+        $this->bindAddonRepository('extensions');
+        $this->bindAddonRepository('field_types');
+        $this->bindAddonRepository('modules');
+        $this->bindAddonRepository('tags');
+        $this->bindAddonRepository('themes');
+
+        echo \App::make('Addon\Module\Addons\Contract\ModuleRepositoryInterface')->all();
+    }
+
+    /**
      * Register addons.
      */
     public function registerAddons($type, $loader)
@@ -38,5 +52,20 @@ class AddonServiceProvider extends ServiceProvider
         );
 
         $this->app['streams.' . $type]->register();
+    }
+
+    /**
+     * Bind the repository class for an addon.
+     *
+     * @param $type
+     */
+    public function bindAddonRepository($type)
+    {
+        $classSegment = Str::studly(Str::singular($type));
+
+        $interface  = 'Addon\Module\Addons\Contract\\' . $classSegment . 'RepositoryInterface';
+        $repository = 'Addon\Module\Addons\Repository\Streams' . $classSegment . 'Repository';
+
+        \App::bind($interface, $repository);
     }
 }
