@@ -1,5 +1,6 @@
 <?php namespace Streams\Addon;
 
+use Streams\Handler\FieldTypeHandler;
 use Streams\Model\FieldModel;
 
 abstract class FieldTypeAbstract extends AddonAbstract

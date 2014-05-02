@@ -1,4 +1,4 @@
-<?php namespace Streams\Addon;
+<?php namespace Streams\Handler;
 
 class FieldTypeHandler
 {
