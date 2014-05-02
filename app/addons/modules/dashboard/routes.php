@@ -3,6 +3,6 @@
 Route::get(
     'admin/dashboard',
     function () {
-        echo 'The dashboard is where we begin.';
+        return \Template::render('module.dashboard::test');
     }
 );
