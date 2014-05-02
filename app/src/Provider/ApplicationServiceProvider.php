@@ -22,7 +22,7 @@ class ApplicationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (\Application::isInstalled()) {
+        if (\Request::segment(1) !== 'installer') {
             $this->registerEntryModels();
             $this->setupAddonManagers();
             $this->setupAssetPaths();
