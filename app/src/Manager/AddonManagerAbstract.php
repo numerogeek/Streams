@@ -66,12 +66,6 @@ abstract class AddonManagerAbstract
                 $path . '/src'
             );
 
-            // Register streams generated models
-            /*$this->loader->addPsr4(
-                'Streams\Model\\',
-                'app/addons/models/streams/' . \Application::getAppRef() . '/' . '/src'
-            );*/
-
             $this->registeredAddons[$slug] = array(
                 'path'      => $path,
                 'slug'      => $slug,
@@ -359,16 +353,6 @@ abstract class AddonManagerAbstract
         }
 
         return true;
-    }
-
-    /**
-     * Set the repository.
-     *
-     * @param $repository
-     */
-    public function setRepository($repository)
-    {
-        $this->repository = $repository;
     }
 
     /**
