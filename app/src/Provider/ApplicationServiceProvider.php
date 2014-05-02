@@ -14,7 +14,7 @@ class ApplicationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerApplication();
-        $this->locateOrInstall();
+        $this->locate();
     }
 
     /**
@@ -42,7 +42,7 @@ class ApplicationServiceProvider extends ServiceProvider
     /**
      * Locate our app or head to the installer.
      */
-    protected function locateOrInstall()
+    protected function locate()
     {
         if (\Config::get('debug')) {
             if (!\Application::isInstalled()) {
