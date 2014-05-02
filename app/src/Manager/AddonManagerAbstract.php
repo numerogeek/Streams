@@ -2,8 +2,8 @@
 
 use Addon\Module\Addons\Contract\AddonRepositoryInterface;
 use Composer\Autoload\ClassLoader;
-use Illuminate\Config\Repository;
 use Illuminate\Support\Str;
+use Streams\Filesystem\Filesystem;
 use Streams\Schema\FieldSchema;
 use Streams\Schema\StreamSchema;
 
@@ -45,6 +45,7 @@ abstract class AddonManagerAbstract
     public function __construct(Classloader $loader)
     {
         $this->loader = $loader;
+        $this->files  = new Filesystem;
     }
 
     /**
@@ -204,7 +205,7 @@ abstract class AddonManagerAbstract
      */
     public function getCoreAddonPaths()
     {
-        return glob(base_path() . '/app/addons/' . $this->folder . '/*');
+        return $this->files->getDirectoryPaths(base_path('app/addons/' . $this->folder));
     }
 
     /**
@@ -214,7 +215,7 @@ abstract class AddonManagerAbstract
      */
     public function getSharedAddonPaths()
     {
-        return glob(base_path() . '/addons/shared/' . $this->folder . '/*');
+        return $this->files->getDirectoryPaths(base_path('addons/shared/' . $this->folder));
     }
 
     /**
