@@ -67,9 +67,6 @@ abstract class AddonManagerAbstract
                 );
             }
 
-            // Register paths added above
-            $this->loader->register();
-
             $this->registeredAddons[$slug] = array(
                 'path'      => $path,
                 'slug'      => $slug,
@@ -77,6 +74,9 @@ abstract class AddonManagerAbstract
                 'namespace' => $this->getNamespace($type, $slug),
             );
         }
+
+        // Register paths added above
+        $this->loader->register();
 
         foreach ($this->registeredAddons as $info) {
 
