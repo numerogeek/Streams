@@ -6,6 +6,13 @@ use Streams\Collection\ModuleCollection;
 abstract class StreamsAddonRepositoryAbstract implements AddonRepositoryInterface
 {
     /**
+     * Runtime cache.
+     *
+     * @var array
+     */
+    protected $cache = array();
+
+    /**
      * Sync addons with their records in the database.
      *
      * @param ModuleCollection $addons
@@ -13,7 +20,7 @@ abstract class StreamsAddonRepositoryAbstract implements AddonRepositoryInterfac
     public function sync()
     {
         $existingAddons = $this->manager->getAll();
-        $databaseAddons = $this->addons->all();
+        $databaseAddons = $this->all();
 
         // Sync TO the database
         foreach ($existingAddons as $addon) {
@@ -34,6 +41,10 @@ abstract class StreamsAddonRepositoryAbstract implements AddonRepositoryInterfac
      */
     public function all()
     {
-        return $this->addons->all();
+        if (isset($this->cache['all'])) {
+            return $this->cache['all'];
+        } else {
+            return $this->cache['all'] = $this->addons->all();
+        }
     }
 }

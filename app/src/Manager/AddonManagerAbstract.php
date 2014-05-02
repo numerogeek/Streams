@@ -1,6 +1,8 @@
 <?php namespace Streams\Manager;
 
+use Addon\Module\Addons\Contract\AddonRepositoryInterface;
 use Composer\Autoload\ClassLoader;
+use Illuminate\Config\Repository;
 use Illuminate\Support\Str;
 use Streams\Schema\FieldSchema;
 use Streams\Schema\StreamSchema;
@@ -358,12 +360,12 @@ abstract class AddonManagerAbstract
     /**
      * Merge database data with our addons.
      */
-    public function mergeData()
+    public function mergeData(AddonRepositoryInterface $repository)
     {
-        $data = $this->repository->all();
+        $data = $repository->all();
 
         foreach ($data as $addonData) {
-            if ($addon = self::get($addonData->slug)) {
+            if ($addon = $this->get($addonData->slug)) {
                 $addon->isInstalled = $addonData->is_installed;
             }
         }

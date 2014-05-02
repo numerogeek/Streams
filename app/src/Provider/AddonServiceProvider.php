@@ -63,6 +63,6 @@ class AddonServiceProvider extends ServiceProvider
         $interface  = 'Addon\Module\Addons\Contract\\' . $classSegment . 'RepositoryInterface';
         $repository = 'Addon\Module\Addons\Repository\Streams' . $classSegment . 'Repository';
 
-        \App::bind($interface, $repository);
+        \App::singleton($interface, $repository);
     }
 }

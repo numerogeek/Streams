@@ -23,7 +23,7 @@ class ApplicationServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerEntryModels();
-        //$this->setupManagers();
+        $this->setupManagers();
     }
 
     /**
@@ -71,9 +71,7 @@ class ApplicationServiceProvider extends ServiceProvider
             $interface = 'Addon\Module\Addons\Contract\\' . $addon . 'RepositoryInterface';
             $manager   = '\\' . $addon;
 
-            $manager::setRepository(\App::make($interface));
-
-            $manager::mergeData();
+            $manager::mergeData(\App::make($interface));
         }
     }
 
