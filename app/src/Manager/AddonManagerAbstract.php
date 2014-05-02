@@ -120,9 +120,10 @@ abstract class AddonManagerAbstract
                     // Add lang namespace
                     \Lang::addNamespace($loaderNamespace, $info['path'] . '/lang');
 
-                    $addon->type = $info['type'];
-                    $addon->path = $info['path'];
-                    $addon->slug = $info['slug'];
+                    $addon->type            = $info['type'];
+                    $addon->path            = $info['path'];
+                    $addon->slug            = $info['slug'];
+                    $addon->loaderNamespace = $loaderNamespace;
 
                     return $addon;
                 }

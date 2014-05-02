@@ -24,6 +24,7 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         $this->registerEntryModels();
         $this->setupAddonManagers();
+        $this->setupAssetPaths();
         $this->setupTemplate();
     }
 
@@ -87,6 +88,26 @@ class ApplicationServiceProvider extends ServiceProvider
             'Streams\Model\\',
             'app/addons/models/streams/' . \Application::getAppRef()
         );
+    }
+
+    /**
+     * Setup paths for the asset class.
+     */
+    public function setupAssetPaths()
+    {
+        $addons = array( /*'Block', 'Extension', 'FieldType', */
+            'Module', /*'Tag', */
+            'Theme'
+        );
+
+        foreach ($addons as $addon) {
+
+            $manager   = '\\' . $addon;
+
+            foreach ($manager::getAll() as $addon) {
+                \Assets::addPaths($addon->loaderNamespace, $addon->path);
+            }
+        }
     }
 
     /**

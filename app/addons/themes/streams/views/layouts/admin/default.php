@@ -4,5 +4,5 @@
 
 <?php echo $this->content; ?>
 
-<?php Assets::add('../../test.js'); ?>
-<?php echo Assets::js(); ?>
+<?php \Assets::add('module.addons::test.js'); ?>
+<?php echo \Assets::js(); ?>

@@ -11,7 +11,7 @@ class FieldTypeFacade extends BaseFacade {
      */
     protected static function getFacadeAccessor()
     {
-        return 'streams.fieldtypes';
+        return 'streams.field_types';
     }
 
 }
