@@ -41,8 +41,7 @@ class AddonServiceProvider extends ServiceProvider
      */
     public function registerAddons($type, $loader)
     {
-        $singular = Str::singular($type);
-        $manager  = 'Streams\Manager\\' . Str::studly($singular) . 'Manager';
+        $manager = 'Streams\Manager\\' . Str::studly(Str::singular($type)) . 'Manager';
 
         $this->app->singleton(
             'streams.' . $type,
