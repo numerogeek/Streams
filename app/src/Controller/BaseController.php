@@ -15,6 +15,8 @@ class BaseController extends \Controller {
 		}
 
         $this->template = \App::make('streams.template');
+
+        \Application::boot();
 	}
 
 }
