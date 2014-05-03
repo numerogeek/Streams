@@ -1,7 +1,7 @@
 <html>
 <head>
-    <?php \Assets::add(url('pace.min.js')); ?>
-    <?php \Assets::add(url('pace.default.css')); ?>
+    <?php /*\Assets::add(url('pace.min.js')); */?><!--
+    --><?php /*\Assets::add(url('pace.default.css')); */?>
     <?php echo \Assets::js(); ?>
     <?php echo \Assets::css(); ?>
 </head>
