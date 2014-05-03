@@ -2,7 +2,6 @@
 
 class Filesystem
 {
-
     /**
      * Get directories (absolute paths)
      *
@@ -13,15 +12,18 @@ class Filesystem
     {
         $directories = array();
 
-        $iterator = new \DirectoryIterator($path);
+        if (is_dir($path)) {
 
-        foreach ($iterator as $fileInfo) {
-            if(!$fileInfo->isDot() and $fileInfo->isDir()) {
-                $directories[] = $fileInfo->getPathname();
-            }
-        };
+            // This is much faster than glob($path . '/*');
+            $iterator = new \DirectoryIterator($path);
+
+            foreach ($iterator as $fileInfo) {
+                if (!$fileInfo->isDot() and $fileInfo->isDir()) {
+                    $directories[] = $fileInfo->getPathname();
+                }
+            };
+        }
 
         return $directories;
     }
-
 }
