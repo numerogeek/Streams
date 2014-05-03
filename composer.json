@@ -6,6 +6,7 @@
     "require": {
         "artdarek/oauth-4-laravel": "dev-master",
         "barryvdh/laravel-debugbar": "1.*",
+        "beelab/bowerphp": "1.0.*@dev",
         "cartalyst/sentry": "2.1.*",
         "cebe/markdown": "*",
         "laravel/framework": "4.1.*",
