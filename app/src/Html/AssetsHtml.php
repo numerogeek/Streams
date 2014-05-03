@@ -34,7 +34,7 @@ class AssetsHtml extends Manager
             if ($extension == 'js') {
                 parent::add($this->getRealPath($asset, 'js'));
             } elseif ($extension == 'css') {
-                parent::add($this->getRealPath($asset, 'js'));
+                parent::addCss($this->getRealPath($asset, 'css'));
             }
         }
     }

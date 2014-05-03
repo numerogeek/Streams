@@ -24,10 +24,11 @@ class ModulesController extends AdminController
      */
     public function index()
     {
-        $modules = \Module::getAll();
+        $template = \App::make('streams.template');
+        $template->modules = $modules  = \Module::getAll();
 
         $this->modules->sync();
 
-        return \View::make('module.addons::admin/modules/index', compact('modules'));
+        return \Template::render('module.addons::admin/modules/index');
     }
 }
