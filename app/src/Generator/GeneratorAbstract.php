@@ -3,7 +3,7 @@
 use Illuminate\Filesystem\Filesystem as File;
 //use Lex\Parser;
 
-abstract class Generator {
+abstract class GeneratorAbstract {
 
     /**
      * File path to generate

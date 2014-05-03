@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 use Streams\Model\StreamModel;
 
-class EntryModelGenerator extends Generator
+class EntryModelGenerator extends GeneratorAbstract
 {
     protected $relationFields;
 
