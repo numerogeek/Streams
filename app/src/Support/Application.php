@@ -157,7 +157,7 @@ class Application
             $engine->addFolder('theme', $theme->path . '/views');
 
             // Set the default layout.
-            $template->layout('theme::layouts/admin/default');
+            $template->layout('theme::layouts/default');
         }
     }
 
