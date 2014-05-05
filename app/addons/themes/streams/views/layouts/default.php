@@ -21,7 +21,7 @@
 
 <section id="main">
 
-    <section class="container">
+    <section class="container-fluid">
 
         <?php echo $this->content; ?>
 
