@@ -23,7 +23,7 @@
                 <?php endforeach; ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/admin/logout">Ryan Thompson</a></li>
+                <li><a href="/admin/logout">Hello <strong>Ryan Thompson</strong></a></li>
                 <li><a class="icon" href="/admin/logout"><i class="ion-ios7-search-strong"></i></a></li>
                 <li><a class="icon" href="/admin/logout"><i class="ion-more"></i></a></li>
             </ul>
