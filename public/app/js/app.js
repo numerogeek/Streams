@@ -15,6 +15,11 @@
 //@codekit-append "bootstrap/transition.js"
 
 /**
+ * Plugins
+ */
+//@codekit-append "plugins/pace.min.js"
+
+/**
  * Theme
  */
 //@codekit-append "app/main.js"
