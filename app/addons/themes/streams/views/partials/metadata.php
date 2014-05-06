@@ -23,8 +23,8 @@
 <link rel="apple-touch-icon" sizes="114x114" href="favicon.ico" />
 <link rel="apple-touch-icon" sizes="144x144" href="favicon.ico" />
 
-<?php Assets::add('../../../bootstrap/css/bootstrap.min.css'); ?>
-<?php Assets::add('../../../bootstrap/js/jquery.min.js'); ?>
-<?php Assets::add('../../../bootstrap/js/bootstrap.min.js'); ?>
+<?php Assets::add('../../../css/app.css'); ?>
+<?php Assets::add('../../../js/jquery.min.js'); ?>
+<?php Assets::add('../../../js/app.min.js'); ?>
 <?php echo Assets::css(); ?>
 <?php echo Assets::js(); ?>

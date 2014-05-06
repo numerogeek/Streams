@@ -1,0 +1,43 @@
+.navbar {
+    &.navbar-default {
+        &.main {
+            border-radius: 0;
+            background-color: #353e43;
+            border: none;
+            .box-shadow(0 2px 4px 0 rgba(0,0,0,.35));
+
+            .navbar-collapse {
+                border: none;
+            }
+
+            .navbar-header {
+                .navbar-toggle {
+                    border: none;
+                    color: #6bda6b;
+                    .icon-bar {
+                        //background-color: #6bda6b;
+                        background-color: #4a5557;
+                    }
+                }
+            }
+
+            .navbar-brand {
+                background-color: #4a5557;
+                color: #6bda6b;
+            }
+
+            a {
+                color: #919596;
+                .transition(all 200ms);
+                &:hover {
+                    color: #fff;
+                }
+
+                &.icon {
+                    padding: 13px 10px;
+                    font-size: 24px;
+                }
+            }
+        }
+    }
+}
