@@ -98,8 +98,12 @@ class Application
      */
     protected function setupAddonManagers()
     {
-        $addons = array( /*'Block', 'Extension', 'FieldType', */
-            'Module', /*'Tag', */
+        $addons = array(
+            /*'Block',
+            'Extension',
+            'FieldType',*/
+            'Module',
+            /*'Tag', */
             'Theme'
         );
 
@@ -125,7 +129,7 @@ class Application
         foreach ($addons as $addon) {
             $manager = '\\' . $addon;
 
-            foreach ($manager::getAll() as $addon) {
+            foreach ($manager::getAll()->active() as $addon) {
                 \Assets::addPaths($addon->loaderNamespace, $addon->path);
             }
         }

@@ -19,4 +19,50 @@ abstract class AddonCollectionAbstract extends Collection
 
         return null;
     }
+
+    /**
+     * Return only installed addons.
+     *
+     * @return Collection
+     */
+    public function installed()
+    {
+        $installed = array();
+
+        foreach ($this->items as $item) {
+            if ($item->isInstalled()) {
+                $installed[] = $item;
+            }
+        }
+
+        return self::make($installed);
+    }
+
+    /**
+     * Return only enabled addons.
+     *
+     * @return Collection
+     */
+    public function enabled()
+    {
+        $enabled = array();
+
+        foreach ($this->items as $item) {
+            if ($item->isEnabled()) {
+                $enabled[] = $item;
+            }
+        }
+
+        return self::make($enabled);
+    }
+
+    /**
+     * Return only active plugins.
+     *
+     * @return mixed
+     */
+    public function active()
+    {
+        return $this->installed()->enabled();
+    }
 }
