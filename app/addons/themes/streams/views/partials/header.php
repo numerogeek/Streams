@@ -21,6 +21,11 @@
                         </a>
                     </li>
                 <?php endforeach; ?>
+                <li>
+                    <a href="#" class="add-navigation">
+                        <i class="ion-ios7-plus"></i> Add
+                    </a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/admin/logout">Hello <strong>Ryan Thompson</strong></a></li>
