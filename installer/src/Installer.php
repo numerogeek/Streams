@@ -44,6 +44,10 @@ class Installer
         $installerSchema = new \StreamsInstaller\InstallerSchema;
         $installerSchema->install();
 
+        // Install our addons
+        $InstallerAddonImporter = new \StreamsInstaller\InstallerAddonImporter;
+        $InstallerAddonImporter->install();
+
         // Install our core modules
         foreach (\Module::getAll() as $module) {
             if (!\Module::install($module->slug)) {

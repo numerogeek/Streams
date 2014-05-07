@@ -8,5 +8,14 @@
  */
 class InstallerAddonImporter
 {
+    public function install()
+    {
+        foreach (\Module::getAll() as $module) {
+            \Module::install($module->slug);
+        }
 
+        foreach (\Theme::getAll() as $theme) {
+            \Theme::install($theme->slug);
+        }
+    }
 }
