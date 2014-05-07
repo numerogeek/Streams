@@ -23,7 +23,7 @@
                 <?php endforeach; ?>
                 <li>
                     <a href="#" class="add-navigation">
-                        <i class="ion-ios7-plus"></i> Add
+                        <i class="ion-plus"></i> Add
                     </a>
                 </li>
             </ul>
