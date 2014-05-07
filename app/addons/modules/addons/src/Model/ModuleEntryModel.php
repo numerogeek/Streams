@@ -1,6 +1,6 @@
 <?php namespace Addon\Module\Addons\Model;
 
-use Streams\Model\AddonsModulesEntryModel;
+use Streams\Model\Addons\AddonsModulesEntryModel;
 
 class ModuleEntryModel extends AddonsModulesEntryModel
 {
