@@ -46,7 +46,7 @@ class Application
      * Set the database table prefix going forward.
      * We really don't need a core table from here on out.
      */
-    protected function setTablePrefix()
+    public function setTablePrefix()
     {
         \Schema::getConnection()->getSchemaGrammar()->setTablePrefix($this->getTablePrefix());
         \Schema::getConnection()->setTablePrefix($this->getTablePrefix());
