@@ -24,6 +24,7 @@
 <link rel="apple-touch-icon" sizes="144x144" href="favicon.ico" />
 
 <?php Assets::add('../../../css/app.css'); ?>
+<?php Assets::add('../../../js/modernizr.min.js'); ?>
 <?php Assets::add('../../../js/jquery.min.js'); ?>
 <?php Assets::add('../../../js/app.min.js'); ?>
 <?php echo Assets::css(); ?>

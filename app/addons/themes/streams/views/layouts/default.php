@@ -28,9 +28,15 @@
     </section>
 
 </section>
-<!-- #main -->
 
-<!-- Footer -->
+<nav id="myNavmenu" class="navmenu navmenu-default navmenu-fixed-right offcanvas" role="navigation">
+    <a class="navmenu-brand" href="#">Brand</a>
+    <ul class="nav navmenu-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Link</a></li>
+        <li><a href="#">Link</a></li>
+    </ul>
+</nav>
 
 </body>
 </html>

@@ -25,7 +25,11 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/admin/logout">Hello <strong>Ryan Thompson</strong></a></li>
                 <li><a class="icon" href="/admin/logout"><i class="ion-ios7-search-strong"></i></a></li>
-                <li><a class="icon" href="/admin/logout"><i class="ion-more"></i></a></li>
+                <li>
+                    <a class="icon" data-toggle="offcanvas" data-target="#myNavmenu" data-canvas="body" href="#">
+                        <i class="ion-more"></i>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->

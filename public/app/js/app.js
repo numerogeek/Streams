@@ -18,6 +18,7 @@
  * Plugins
  */
 //@codekit-append "plugins/pace.min.js"
+//@codekit-append "plugins/offcanvas.js"
 
 /**
  * Theme
