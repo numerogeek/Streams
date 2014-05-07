@@ -5,16 +5,7 @@
     <title>Streams</title>
     <style>
         body {
-            background-image: url('../_tmp/bg.jpg');
-            background-repeat: no-repeat;
-            background-position: top;
-            background-size: cover;
-        }
-
-        img {
-            margin-top: 100px;
-            margin-bottom: 15px;
-            width: 300px;
+            background-color: #2f353e;
         }
 
         form {
@@ -22,7 +13,7 @@
             margin: auto;
             padding: 20px;
             background: #fff;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
             border-radius: 2px;
             font-size: 13px;
             color: #90939a;
@@ -30,6 +21,30 @@
             -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
             -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
             box-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
+        }
+
+        form input[type="text"], form input[type="password"] {
+            border-radius: 3px;
+            border: 1px solid #efefef;
+            padding: 5px 0;
+            text-indent: 10px;
+            box-shadow: none;
+            width: 100%;
+        }
+
+        form input[type="submit"] {
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.3);
+            padding: 5px 5px 5px 8px;
+            border: 1px solid #f7f7f7;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        hr {
+            border: 1px solid #efefef;
+            border-width: 1px 0 0 0;
         }
     </style>
 </head>
@@ -39,7 +54,7 @@
 <br>
 
 <center>
-    <img src="../_tmp/logo.png">
+    <img src="http://anomaly.is/anomaly.jpg" width="300">
 </center>
 
 <?php echo Form::open(array('url' => 'admin/login', 'method' => 'post')); ?>
@@ -49,7 +64,7 @@
 <br>
 <?php echo Form::checkbox('remember', true, false, array('id' => 'remember')); ?>
 <label for="remember">Remember me</label>
-<br>
+<hr/>
 <?php echo Form::submit('Login'); ?>
 <?php echo Form::close(); ?>
 
