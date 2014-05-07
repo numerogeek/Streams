@@ -61,9 +61,7 @@ class Installer
      */
     public function complete()
     {
-        if (!\Config::get('debug')) {
-            $this->removeInstaller();
-        }
+        //$this->removeInstaller();
 
         return \Redirect::to('/');
     }
