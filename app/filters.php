@@ -16,7 +16,9 @@ App::before(function($request)
     if (\Request::segment(1) !== 'installer') {
         \Application::installOrLocate();
     } else {
-        \Application::boot();
+        if (Application::isInstalled()) {
+            \Application::boot();
+        }
     }
 
 });
