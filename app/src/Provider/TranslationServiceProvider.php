@@ -4,18 +4,16 @@ use Streams\Translation\Translator;
 
 class TranslationServiceProvider extends \Illuminate\Translation\TranslationServiceProvider
 {
-
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {
         $this->registerLoader();
 
-        $this->app->bindShared('translator', function($app)
-            {
+        $this->app->bindShared(
+            'translator',
+            function ($app) {
                 $loader = $app['translation.loader'];
 
                 // When registering the translator component, we'll need to set the default
@@ -28,6 +26,7 @@ class TranslationServiceProvider extends \Illuminate\Translation\TranslationServ
                 $trans->setFallback($app['config']['app.fallback_locale']);
 
                 return $trans;
-            });
+            }
+        );
     }
 }

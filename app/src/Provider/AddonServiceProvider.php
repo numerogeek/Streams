@@ -22,9 +22,12 @@ class AddonServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register addons.
+     * Register an addon type.
+     *
+     * @param $type
+     * @param $loader
      */
-    public function registerAddons($type, $loader)
+    protected function registerAddons($type, $loader)
     {
         $manager = 'Streams\Manager\\' . Str::studly(Str::singular($type)) . 'Manager';
 
@@ -37,5 +40,4 @@ class AddonServiceProvider extends ServiceProvider
 
         $this->app['streams.' . $type]->register();
     }
-
 }

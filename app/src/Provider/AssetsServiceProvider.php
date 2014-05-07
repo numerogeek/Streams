@@ -1,14 +1,12 @@
 <?php namespace Streams\Provider;
 
-use Illuminate\Support\ServiceProvider;
 use Streams\Html\AssetsHtml;
+use Illuminate\Support\ServiceProvider;
 
 class AssetsServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {

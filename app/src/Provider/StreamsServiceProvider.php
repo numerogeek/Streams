@@ -5,6 +5,9 @@ use Streams\Schema\StreamSchemaUtility;
 
 class StreamsServiceProvider extends ServiceProvider
 {
+    /**
+     * Register the service provider.
+     */
     public function register()
     {
         $this->app->bind(

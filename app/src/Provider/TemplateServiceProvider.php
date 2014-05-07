@@ -1,24 +1,14 @@
 <?php namespace Streams\Provider;
 
-use Illuminate\Support\ServiceProvider;
 use League\Plates\Engine;
+use Illuminate\Support\ServiceProvider;
 
 class TemplateServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
-    {
-        $this->registerTemplate();
-    }
-
-    /**
-     * Register Plates for our template engine.
-     */
-    protected function registerTemplate()
     {
         $engine = new Engine(base_path('app/views'));
 
