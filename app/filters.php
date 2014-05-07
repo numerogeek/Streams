@@ -13,7 +13,12 @@
 
 App::before(function($request)
 {
-    \Application::boot();
+    if (\Request::segment(1) !== 'installer') {
+        \Application::installOrLocate();
+    } else {
+        \Application::boot();
+    }
+
 });
 
 

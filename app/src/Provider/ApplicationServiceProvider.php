@@ -16,16 +16,6 @@ class ApplicationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot up our environment.
-     */
-    public function boot()
-    {
-        if (\Request::segment(1) !== 'installer') {
-            \Application::installOrLocate();
-        }
-    }
-
-    /**
      * Register the application support class
      */
     protected function registerApplication()
