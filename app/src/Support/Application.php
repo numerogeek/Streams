@@ -30,6 +30,13 @@ class Application
         $this->setupAddonManagers();
         $this->setupAssetPaths();
         $this->setupTemplate();
+
+        $this->bindAddonRepository('blocks');
+        $this->bindAddonRepository('extensions');
+        $this->bindAddonRepository('field_types');
+        $this->bindAddonRepository('modules');
+        $this->bindAddonRepository('tags');
+        $this->bindAddonRepository('themes');
     }
 
     /**
@@ -78,15 +85,30 @@ class Application
     public function installOrLocate()
     {
         if (\Config::get('debug')) {
-            if (!\Application::isInstalled()) {
+            if (!$this->isInstalled()) {
                 if (\Request::segment(1) !== 'installer') {
                     header('Location: installer');
                     exit;
                 }
             }
         } elseif (\Request::segment(1) !== 'installer') {
-            \Application::locate();
+            $this->locate();
         }
+    }
+
+    /**
+     * Bind the repository class for an addon.
+     *
+     * @param $type
+     */
+    public function bindAddonRepository($type)
+    {
+        $classSegment = \Str::studly(\Str::singular($type));
+
+        $interface  = 'Addon\Module\Addons\Contract\\' . $classSegment . 'RepositoryInterface';
+        $repository = 'Addon\Module\Addons\Repository\Streams' . $classSegment . 'Repository';
+
+        \App::singleton($interface, $repository);
     }
 
     /**
@@ -117,7 +139,7 @@ class Application
 
         $loader->addPsr4(
             'Streams\Model\\',
-            'app/addons/models/streams/' . \Application::getAppRef()
+            'app/addons/models/streams/' . $this->getAppRef()
         );
     }
 
