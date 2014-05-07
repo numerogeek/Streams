@@ -49,6 +49,7 @@ class EntryModelGenerator extends GeneratorAbstract
                 app_path("{$appRefPath}/{$namespace}/{$className}.php"),
                 array(
                     '{className}'      => $className,
+                    '{namespacePrefix}' => \Str::studly($namespace),
                     '{table}'          => "'" . $stream->prefix . $stream->slug . "'",
                     '{stream}'         => $this->compileStreamData($stream),
                     '{relations}'      => $this->compileRelations($stream),
@@ -103,9 +104,9 @@ class EntryModelGenerator extends GeneratorAbstract
 
             foreach ($assignment->field->getAttributes() as $key => $value) {
 
-                    $value = $this->adjustValue($value, in_array($key, array('field_name')));
+                $value = $this->adjustValue($value, in_array($key, array('field_name')));
 
-                    $string .= "\n{$this->s(20)}'{$key}' => {$value},";
+                $string .= "\n{$this->s(20)}'{$key}' => {$value},";
 
             }
 
