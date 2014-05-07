@@ -31,6 +31,7 @@ class InstallerSchema
 
         /*******************************************
          * REMOVE AFTER INSTALLED IS FINISHED!
+         * This should be the data from the form.
          *******************************************/
         DB::table('apps')->insert(
             array(
@@ -44,8 +45,9 @@ class InstallerSchema
          * EOF: REMOVE AFTER INSTALLED IS FINISHED!
          *******************************************/
 
-        // Change / get the table prefix
-        $connection->setTablePrefix($tablePrefix = \Application::getTablePrefix());
+        // Ok - now we're located
+        \Application::locate();
+        \Application::setTablePrefix();
 
         // Create streams table
         \Schema::dropIfExists( 'streams_streams');
