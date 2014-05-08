@@ -3,6 +3,7 @@
 abstract class UiAbstract
 {
     use \Streams\Traits\CallbacksTrait;
+    use \Streams\Traits\AccessorMutatorTrait;
 
     /**
      * The method to trigger with render.
@@ -46,7 +47,7 @@ abstract class UiAbstract
             return $this->output;
         }
 
-        //echo 'RENDER ME: ' . $this->output;
+        echo \View::make('blank', array('content' => $this->output));
     }
 
     /**
@@ -57,31 +58,5 @@ abstract class UiAbstract
     protected function getTriggerMethod()
     {
         return \Str::studly('trigger_' . $this->triggerMethod);
-    }
-
-    /**
-     * Set a property value.
-     *
-     * @param $property
-     * @param $value
-     * @return $this
-     */
-    public function set($property, $value)
-    {
-        $this->{$property} = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get a property value.
-     *
-     * @param $property
-     * @param $default
-     * @return mixed
-     */
-    public function get($property, $default)
-    {
-        return isset($this->{$property}) ? $this->{$property} : $default;
     }
 }

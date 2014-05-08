@@ -50,7 +50,7 @@ class EntryTableUi extends EntryUiAbstract
             $this->entries = $this->model->all();
         }
 
-        $this->output = $this->entries;
+        $this->output = $this->html->table($this->entries)->render(true);
 
         return $this;
     }
