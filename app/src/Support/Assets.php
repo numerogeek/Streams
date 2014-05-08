@@ -1,8 +1,8 @@
-<?php namespace Streams\Html;
+<?php namespace Streams\Support;
 
 use Stolz\Assets\Manager;
 
-class AssetsHtml extends Manager
+class Assets extends Manager
 {
     /**
      * An array of available paths for assets by their loader's namespace.
