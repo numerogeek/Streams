@@ -4,6 +4,8 @@ use Streams\Model\Addons\AddonsModulesEntryModel;
 
 class ModuleEntryModel extends AddonsModulesEntryModel
 {
+    protected $cacheMinutes = 30;
+
     /**
      * Collection class
      *
