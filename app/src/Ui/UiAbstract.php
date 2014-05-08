@@ -27,13 +27,6 @@ abstract class UiAbstract
     protected $model = null;
 
     /**
-     * Runtime cache.
-     *
-     * @var array
-     */
-    protected $cache = array();
-
-    /**
      * Render the current trigger method.
      *
      * @param bool $return
@@ -44,10 +37,10 @@ abstract class UiAbstract
         $this->{$this->getTriggerMethod()}();
 
         if ($return) {
-            return $this->output;
+            return \View::make('app/html/panel', array('content' => $this->output));
         }
 
-        echo \View::make('blank', array('content' => $this->output));
+        echo \View::make('app/html/panel', array('content' => $this->output));
     }
 
     /**
