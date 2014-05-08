@@ -4,6 +4,8 @@ use Streams\Model\Addons\AddonsFieldTypesEntryModel;
 
 class FieldTypeEntryModel extends AddonsFieldTypesEntryModel
 {
+    protected $cacheMinutes = 30;
+
     /**
      * Collection class
      *
