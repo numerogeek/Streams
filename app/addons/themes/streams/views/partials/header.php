@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <?php foreach (Module::getAll() as $module): ?>
-                    <li>
+                    <li <?php echo $module->slug == Request::segment(2) ? 'class="active"' : null; ?>>
                         <a href="<?php echo url('admin/' . $module->slug); ?>">
                             <?php echo $module->getName(); ?>
                         </a>
