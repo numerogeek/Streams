@@ -1,7 +1,7 @@
 <?php namespace Streams\Provider;
 
-use Streams\Html\AssetsHtml;
 use Illuminate\Support\ServiceProvider;
+use Streams\Support\Assets;
 
 class AssetsServiceProvider extends ServiceProvider
 {
@@ -13,7 +13,7 @@ class AssetsServiceProvider extends ServiceProvider
         $this->app->singleton(
             'streams.assets',
             function () {
-                return new AssetsHtml();
+                return new Assets();
             }
         );
     }
