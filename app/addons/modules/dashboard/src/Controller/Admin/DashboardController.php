@@ -10,8 +10,8 @@ class DashboardController extends AdminController
         $ui = new EntryTableUi();
         $model = new \Streams\Model\Addons\AddonsModulesEntryModel;
 
-        echo $ui->table($model)->render(true);
+        $table = $ui->table($model)->render(true);
 
-        return \Template::render('module.dashboard::test');
+        return $this->template->render('module.dashboard::test', compact('table'));
     }
 }
