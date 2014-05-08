@@ -121,6 +121,7 @@ return array(
         'Streams\Provider\StreamsServiceProvider',
         'Streams\Provider\AddonServiceProvider',
         'Streams\Provider\ApplicationServiceProvider',
+        'Streams\Provider\HelperServiceProvider',
     ),
     /*
     |--------------------------------------------------------------------------
@@ -197,6 +198,7 @@ return array(
         'Assets'              => 'Streams\Facade\AssetsFacade',
         'Template'            => 'Streams\Facade\TemplateFacade',
         'TemplateEngine'      => 'Streams\Facade\TemplateEngineFacade',
+        'EntryHelper'         => 'Streams\Facade\EntryHelperFacade',
     ),
 
 );
