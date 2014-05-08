@@ -17,9 +17,19 @@
 
 <body data-spy="scroll" data-target=".spybar">
 
-<?php $this->insert('theme::partials/header'); ?>
+<div id="launch" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 9999; display: none;">
+    <h1>
+        Oh hai
+        <br>
+        <small>
+            <a href="#" onclick="$('#main').toggleClass('blur'); $('#launch').toggle(); return false;">Bai</a>
+        </small>
+    </h1>
+</div>
 
 <section id="main">
+
+    <?php $this->insert('theme::partials/header'); ?>
 
     <section class="container-fluid">
 

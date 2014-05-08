@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="navbar-brand" href="#" onclick="$(body).toggleClass('blur'); return false;"><i class="ion-grid"></i>&nbsp;&nbsp;Streams</a>
+            <a class="navbar-brand" href="#" onclick="$('#main').toggleClass('blur'); $('#launch').toggle(); return false;"><i class="ion-grid"></i>&nbsp;&nbsp;Streams</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
