@@ -199,6 +199,7 @@ return array(
         'Template'            => 'Streams\Facade\TemplateFacade',
         'TemplateEngine'      => 'Streams\Facade\TemplateEngineFacade',
         'EntryHelper'         => 'Streams\Facade\EntryHelperFacade',
+        'CacheHelper'         => 'Streams\Facade\CacheHelperFacade',
     ),
 
 );
