@@ -32,15 +32,15 @@ abstract class HtmlAbstract
      * @param bool $return
      * @return mixed
      */
-    public function render($return = false)
+    public function render()
     {
         $this->{$this->getTriggerMethod()}();
 
-        if ($return) {
-            return $this->output;
-        }
+        $data = array(
+            'content' => $this->output,
+        );
 
-        \View::make('blank', array('content' => $this->output));
+        return \View::make('blank', $data);
     }
 
     /**

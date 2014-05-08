@@ -34,7 +34,11 @@ abstract class TableHtmlAbstract extends HtmlAbstract
      */
     protected function triggerTable()
     {
-        $this->output = 'POOPY TABLE';
+        $data = array(
+            'items' => $this->items,
+        );
+
+        $this->output = \View::make('app/html/table/table', $data);
 
         return $this;
     }
