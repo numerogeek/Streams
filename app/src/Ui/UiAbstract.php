@@ -40,7 +40,7 @@ abstract class UiAbstract
             return \View::make('app/html/panel', array('content' => $this->output));
         }
 
-        echo \View::make('app/html/panel', array('content' => $this->output));
+        echo \Template::render('app/html/panel/make', array('content' => $this->output));
     }
 
     /**

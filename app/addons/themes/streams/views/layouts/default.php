@@ -33,7 +33,7 @@
 
     <section class="container-fluid">
 
-        <?php echo $this->content; ?>
+        <?php echo $this->content(); ?>
 
     </section>
 

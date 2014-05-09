@@ -1,4 +1,3 @@
-<?php $this->start('content'); ?>
 <?php foreach ($this->modules as $module): ?>
     <p>
         <strong>
@@ -10,4 +9,3 @@
         <?php echo \HTML::link('admin/addons/installer/uninstall/module/'.$module->slug, 'Uninstall'); ?>
     </p>
 <?php endforeach; ?>
-<?php $this->end(); ?>

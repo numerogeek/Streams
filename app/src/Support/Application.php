@@ -148,6 +148,8 @@ class Application
         if ($theme) {
             $engine->addFolder('theme', $theme->path . '/views');
             $template->layout('theme::layouts/default');
+
+            $template->title = 'Untitled Page';
         }
     }
 
