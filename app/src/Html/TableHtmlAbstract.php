@@ -35,10 +35,10 @@ abstract class TableHtmlAbstract extends HtmlAbstract
     protected function triggerTable()
     {
         $data = array(
-            'tbody' => \View::make('app/html/table/partials/tbody', array('items' => $this->items)),
+            'tbody' => \View::make('html/partials/table/tbody', array('items' => $this->items)),
         );
 
-        $this->output = \View::make('app/html/table/make', $data);
+        $this->output = \View::make('html/table', $data);
 
         return $this;
     }

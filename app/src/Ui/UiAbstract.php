@@ -37,10 +37,10 @@ abstract class UiAbstract
         $this->{$this->getTriggerMethod()}();
 
         if ($return) {
-            return \View::make('app/html/panel', array('content' => $this->output));
+            return \View::make('html/panel', array('content' => $this->output));
         }
 
-        echo \Template::render('app/html/panel/make', array('content' => $this->output));
+        echo \Template::render('html/panel', array('content' => $this->output));
     }
 
     /**
