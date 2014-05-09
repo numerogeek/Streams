@@ -4,7 +4,12 @@ use Streams\Model\Addons\AddonsThemesEntryModel;
 
 class ThemeEntryModel extends AddonsThemesEntryModel
 {
-    protected $cacheMinutes = 30;
+    /**
+     * Minutes to cache queries for.
+     *
+     * @var int
+     */
+    protected $cacheMinutes = 60;
 
     /**
      * Collection class
