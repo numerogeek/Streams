@@ -36,11 +36,7 @@ abstract class HtmlAbstract
     {
         $this->{$this->getTriggerMethod()}();
 
-        $data = array(
-            'content' => $this->output,
-        );
-
-        return \View::make('blank', $data);
+        return $this->output;
     }
 
     /**
