@@ -5,6 +5,13 @@ use Streams\Model\EntryModel;
 class EntryTableUi extends EntryUiAbstract
 {
     /**
+     * View options for our table.
+     *
+     * @var null
+     */
+    public $viewOptions = null;
+
+    /**
      * Construct our class without bothering the parent.
      */
     public function boot()
@@ -43,7 +50,9 @@ class EntryTableUi extends EntryUiAbstract
             $this->entries = $this->model->all();
         }
 
-        $this->output = \View::make('streams/entry/table', array('entries' => $this->entries));
+        $columns = array('id') + array($this->model->getTitleColumn());
+
+        $this->output = \View::make('streams/entry/table', array('columns' => $columns, 'entries' => $this->entries));
 
         return $this;
     }

@@ -1,7 +1,9 @@
 <?php namespace Addon\Module\Addons\Controller\Admin;
 
+use Addon\Module\Addons\Model\ModuleEntryModel;
 use Streams\Controller\AdminController;
 use Addon\Module\Addons\Contract\ModuleRepositoryInterface;
+use Streams\Ui\EntryTableUi;
 
 class ModulesController extends AdminController
 {
@@ -15,6 +17,11 @@ class ModulesController extends AdminController
         parent::__construct();
 
         $this->modules = $modules;
+
+        $this->modules->sync();
+
+        $this->ui    = new EntryTableUi();
+        $this->model = new ModuleEntryModel();
     }
 
     /**
@@ -24,11 +31,6 @@ class ModulesController extends AdminController
      */
     public function index()
     {
-        $template = \App::make('streams.template');
-        $template->modules = $modules  = \Module::getAll();
-
-        $this->modules->sync();
-
-        return \Template::render('module.addons::admin/modules/index');
+        $this->ui->table($this->model)->render();
     }
 }

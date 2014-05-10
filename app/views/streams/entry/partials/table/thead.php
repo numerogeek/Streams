@@ -1,9 +1,9 @@
 <thead>
-<?php foreach ($items as $item): ?>
-    <tr>
-        <td>
-            <?php echo $item; ?>
-        </td>
-    </tr>
-<?php endforeach; ?>
+<tr>
+    <?php foreach ($columns as $column): ?>
+        <th>
+            <?= $column ?>
+        </th>
+    <?php endforeach ?>
+</tr>
 </thead>

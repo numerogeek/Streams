@@ -1,9 +1,11 @@
 <tbody>
 <?php foreach ($entries as $entry): ?>
     <tr>
-        <td>
-            <?php echo $entry; ?>
-        </td>
+        <?php foreach ($columns as $column): ?>
+            <td>
+                <?= $entry->{$column} ?>
+            </td>
+        <?php endforeach ?>
     </tr>
-<?php endforeach; ?>
+<?php endforeach ?>
 </tbody>
