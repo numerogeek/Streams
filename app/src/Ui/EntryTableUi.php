@@ -5,13 +5,6 @@ use Streams\Model\EntryModel;
 class EntryTableUi extends EntryUiAbstract
 {
     /**
-     * The table entry class to use.
-     *
-     * @var string
-     */
-    protected $htmlClass = 'Streams\Html\EntryTableHtml';
-
-    /**
      * Construct our class without bothering the parent.
      */
     public function boot()
@@ -50,7 +43,7 @@ class EntryTableUi extends EntryUiAbstract
             $this->entries = $this->model->all();
         }
 
-        $this->output = $this->html->table($this->entries)->render();
+        $this->output = \View::make('streams/entry/table', array('entries' => $this->entries));
 
         return $this;
     }

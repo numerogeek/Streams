@@ -1,8 +1,8 @@
 <tbody>
-<?php foreach ($items as $item): ?>
+<?php foreach ($entries as $entry): ?>
     <tr>
         <td>
-            <?php echo $item; ?>
+            <?php echo $entry; ?>
         </td>
     </tr>
 <?php endforeach; ?>

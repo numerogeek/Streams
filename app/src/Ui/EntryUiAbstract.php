@@ -14,8 +14,6 @@ abstract class EntryUiAbstract extends UiAbstract
      */
     public function __construct()
     {
-        $this->html = new $this->htmlClass;
-
         $this->boot();
     }
 

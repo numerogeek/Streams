@@ -1,1 +1,0 @@
-<strong><?php echo $entry->slug; ?></strong>
