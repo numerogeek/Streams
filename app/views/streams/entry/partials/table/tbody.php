@@ -1,9 +1,9 @@
 <tbody>
-<?php foreach ($entries as $entry): ?>
-    <tr>
-        <?php foreach ($columns as $column): ?>
-            <td>
-                <?= $entry->{$column} ?>
+<?php foreach ($rows as $row): ?>
+    <tr <?= $row['row'] ?>>
+        <?php foreach ($columns as $column => $options): ?>
+            <td <?= $row['column'][$column] ?>>
+                <?= $row['data'][$column] ?>
             </td>
         <?php endforeach ?>
     </tr>
