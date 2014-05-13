@@ -16,12 +16,10 @@ class ModulesController extends AdminController
     {
         parent::__construct();
 
-        $this->modules = $modules;
+        $modules->sync();
 
-        $this->modules->sync();
-
-        $this->ui    = new EntryTableUi();
-        $this->model = new ModuleEntryModel();
+        $this->table   = new EntryTableUi();
+        $this->modules = new ModuleEntryModel();
     }
 
     /**
@@ -31,6 +29,6 @@ class ModulesController extends AdminController
      */
     public function index()
     {
-        $this->ui->table($this->model)->render();
+        $this->table->make($this->modules)->render();
     }
 }
