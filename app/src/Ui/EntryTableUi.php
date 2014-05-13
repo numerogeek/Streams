@@ -54,6 +54,20 @@ class EntryTableUi extends EntryUiAbstract
     );
 
     /**
+     * Show the table footer?
+     *
+     * @var bool
+     */
+    public $showFooter = true;
+
+    /**
+     * Show the table headers?
+     *
+     * @var bool
+     */
+    public $showHeaders = true;
+
+    /**
      * Construct our class without bothering the parent.
      */
     public function boot()
@@ -153,6 +167,32 @@ class EntryTableUi extends EntryUiAbstract
     public function buttons(array $buttons)
     {
         $this->buttons = $buttons;
+
+        return $this;
+    }
+
+    /**
+     * Show the table footer?
+     *
+     * @param $show
+     * @return $this
+     */
+    public function showFooter($show)
+    {
+        $this->showFooter = $show;
+
+        return $this;
+    }
+
+    /**
+     * Show the table headers?
+     *
+     * @param $show
+     * @return $this
+     */
+    public function showHeaders($show)
+    {
+        $this->showHeaders = $show;
 
         return $this;
     }
