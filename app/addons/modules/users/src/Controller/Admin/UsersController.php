@@ -1,28 +1,42 @@
-<?php namespace User\Module\Users\Controller\Admin;
+<?php namespace Addon\Module\Users\Controller\Admin;
 
 use Streams\Controller\AdminController;
+use Streams\Model\Users\UsersUsersEntryModel;
+use Streams\Ui\EntryTableUi;
 
-class ModulesController extends AdminController
+class UsersController extends AdminController
 {
     /**
      * Create a new ModulesController instance.
-     *
-     * @param \Streams\Addon\ModuleManager $modules
      */
     public function __construct()
     {
         parent::__construct();
+
+        $this->table = new EntryTableUi();
+        $this->users = new UsersUsersEntryModel();
     }
 
     /**
-     * Display a table of all modules.
+     * Display a table of all users.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $table = 'Index';
-
-        return \View::make('module.users::admin/modules/index', compact('table'));
+        $this->table->make($this->users)->columns(
+            array(
+                'email',
+                'closure column' => array(
+                    'header' => 'Name',
+                    'value'  => function ($entry) {
+                            return "{$entry->first_name} {$entry->last_name}";
+                        }
+                ),
+                'parsed column'  => array(
+                    'value' => 'Boom.'
+                )
+            )
+        )->render();
     }
 }
