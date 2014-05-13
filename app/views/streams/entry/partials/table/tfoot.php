@@ -1,6 +1,6 @@
 <tfoot>
 <tr>
-    <td colspan="<?= count($columns) ?>">
+    <td colspan="100%">
         Footer
     </td>
 </tr>

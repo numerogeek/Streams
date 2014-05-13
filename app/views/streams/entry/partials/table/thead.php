@@ -5,5 +5,9 @@
             <?= $options['header'] ?>
         </th>
     <?php endforeach ?>
+
+    <?php if ($buttons): ?>
+        <th>&nbsp;</th>
+    <?php endif ?>
 </tr>
 </thead>

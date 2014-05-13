@@ -1,11 +1,13 @@
 <?php namespace Streams\Ui;
 
 use Streams\Model\EntryModel;
+use Streams\Traits\ButtonUiTrait;
 use Streams\Traits\TableUiTrait;
 
 class EntryTableUi extends EntryUiAbstract
 {
     use TableUiTrait;
+    use ButtonUiTrait;
 
     /**
      * Our streams model to render a table for.
@@ -34,6 +36,22 @@ class EntryTableUi extends EntryUiAbstract
      * @var null
      */
     public $columns = null;
+
+    /**
+     * Button template for each row.
+     *
+     * @var null
+     */
+    public $buttons = array(
+        array(
+            'url' => 'http://url.com',
+            'title' => 'Test',
+            'attributes' => array(
+                'data-foo' => 'Test',
+                'class' => 'btn btn-xs btn-success',
+            ),
+        )
+    );
 
     /**
      * Construct our class without bothering the parent.
@@ -81,7 +99,7 @@ class EntryTableUi extends EntryUiAbstract
         }
 
         // Finally prep the rows for the table.
-        $this->rows = $this->getRows($this->columns, $this->entries);
+        $this->rows = $this->getRows();
 
         $this->output = \View::make('streams/entry/table', get_object_vars($this));
 
@@ -124,5 +142,18 @@ class EntryTableUi extends EntryUiAbstract
     public function getColumns()
     {
         return array_flip($this->model->getStream()->view_options);
+    }
+
+    /**
+     * Set button to display in the table.
+     *
+     * @param $buttons
+     * @return $this
+     */
+    public function buttons(array $buttons)
+    {
+        $this->buttons = $buttons;
+
+        return $this;
     }
 }

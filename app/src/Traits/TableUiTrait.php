@@ -2,8 +2,6 @@
 
 trait TableUiTrait
 {
-    use ButtonUiTrait;
-
     /**
      * Get prepared rows for the view.
      *
@@ -11,13 +9,13 @@ trait TableUiTrait
      * @param $entries
      * @return array
      */
-    protected function getRows(&$columns, &$entries)
+    protected function getRows()
     {
-        $this->setDefaults($columns);
+        $this->setColumnDefaults($this->columns);
 
         $rows = array();
 
-        foreach ($entries as $entry) {
+        foreach ($this->entries as $entry) {
 
             $row = array(
                 'data'   => array(), // The column value.
@@ -25,8 +23,13 @@ trait TableUiTrait
                 'row'    => null, // The tr attributes.
             );
 
+            // Process buttons
+            if ($this->buttons) {
+                $row['buttons'] = $this->getRowButtons($entry);
+            }
+
             // This will is the column / row value.
-            foreach ($columns as $column => $options) {
+            foreach ($this->columns as $column => $options) {
                 $row['data'][$column]   = $this->getRowColumnData($column, $options, $entry);
                 $row['column'][$column] = null;
             }
@@ -42,7 +45,7 @@ trait TableUiTrait
      *
      * @param $columns
      */
-    protected function setDefaults(&$columns)
+    protected function setColumnDefaults(&$columns)
     {
         $defaults = array();
 
