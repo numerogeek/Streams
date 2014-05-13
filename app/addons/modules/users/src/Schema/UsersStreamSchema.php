@@ -42,6 +42,8 @@ class UsersStreamSchema extends StreamSchema
             'email'        => 'test@domain.com',
             'password'     => 'password',
             'is_activated' => true,
+            'first_name'   => 'Mr.',
+            'last_name'    => 'Anderson',
         );
 
         try {
