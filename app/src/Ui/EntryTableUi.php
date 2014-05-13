@@ -42,16 +42,7 @@ class EntryTableUi extends EntryUiAbstract
      *
      * @var null
      */
-    public $buttons = array(
-        array(
-            'url' => 'http://url.com',
-            'title' => 'Test',
-            'attributes' => array(
-                'data-foo' => 'Test',
-                'class' => 'btn btn-xs btn-success',
-            ),
-        )
-    );
+    public $buttons = null;
 
     /**
      * Show the table footer?
