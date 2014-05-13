@@ -38,10 +38,24 @@ class ModulesController extends AdminController
                             return $entry;
                         }
                 ),
-                'parsed column' => array(
+                'parsed column'  => array(
                     'value' => 'Boom.'
                 )
             )
-        )->render();
+        )
+            ->buttons(
+                array(
+                    array(
+                        'url'        => 'http://url.com',
+                        'title'      => function ($entry) {
+                                return 'Do something with ' . $entry->slug;
+                            },
+                        'attributes' => array(
+                            'data-foo' => 'Test',
+                            'class'    => 'btn btn-xs btn-success',
+                        ),
+                    )
+                )
+            )->render();
     }
 }
