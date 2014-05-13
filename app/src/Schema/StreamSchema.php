@@ -61,7 +61,7 @@ class StreamSchema extends SchemaTypeAbstract
      *
      * @var array
      */
-    public $viewOptions = array('id', 'created_by');
+    public $viewOptions = array('id', 'created_at');
 
     /**
      * Menu path
