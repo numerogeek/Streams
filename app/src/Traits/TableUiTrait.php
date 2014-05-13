@@ -20,9 +20,9 @@ trait TableUiTrait
         foreach ($entries as $entry) {
 
             $row = array(
-                'data'   => array(),    // The column value.
-                'column' => array(),    // The td attributes.
-                'row'    => null,       // The tr attributes.
+                'data'   => array(), // The column value.
+                'column' => array(), // The td attributes.
+                'row'    => null, // The tr attributes.
             );
 
             // This will is the column / row value.
@@ -44,28 +44,35 @@ trait TableUiTrait
      */
     protected function setDefaults(&$columns)
     {
+        $defaults = array();
+
         // First make sure columns have a header.
         foreach ($columns as $column => $options) {
-            if (is_string($options)) {
-                unset($columns[$column]);
-                $column = $options;
+            if (is_string($options) and $column = $options) {
+                $defaults[$column] = array();
+            } else {
+                $defaults[$column] = $options;
             }
 
             // Options must be an array.
             if (!is_array($options)) {
-                $columns[$column] = array();
+                $defaults[$column] = array();
             }
 
             // Default to a sensible header.
             if (!isset($options['header'])) {
-                $columns[$column]['header'] = \Str::studly($column);
+                $defaults[$column]['header'] = \Str::studly($column);
             }
 
             // No buttons by default.
             if (!isset($options['buttons'])) {
-                $columns[$column]['buttons'] = null;
+                $defaults[$column]['buttons'] = null;
             }
         }
+
+        $columns = $defaults;
+
+        unset($defaults);
     }
 
     /**
@@ -87,7 +94,7 @@ trait TableUiTrait
 
                 // If it's a string - parse it out.
             } elseif (is_string($options['value'])) {
-                return 'PARSED: ' . $options['value'] . ' - ' . $entry->{$column};
+                return 'PARSED: ' . $options['header'] . ' - ' . $options['value'];
             }
 
             // Generate the value the ol' fashioned way.
