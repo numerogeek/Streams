@@ -445,7 +445,7 @@ class EntryModel extends EloquentModel
      */
     public function flushCacheCollection()
     {
-        ci()->cache->collection($this->getCacheCollectionKey('entries'))->flush();
+        //ci()->cache->collection($this->getCacheCollectionKey('entries'))->flush();
     }
 
     /**
