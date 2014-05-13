@@ -12,7 +12,7 @@
 <html lang="en">
 
 <head>
-    <?php $this->insert('theme::partials/metadata'); ?>
+    <?php $this->insert('theme::partials/metadata', array('title' => $this->title)); ?>
 </head>
 
 <body data-spy="scroll" data-target=".spybar">

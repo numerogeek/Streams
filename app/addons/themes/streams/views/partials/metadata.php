@@ -13,7 +13,7 @@
 <meta property="og:site_name" content=""/>
 <meta property="og:type" content="website"/>
 
-<title>Test &bull; Title</title>
+<title><?= $this->title; ?></title>
 
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
