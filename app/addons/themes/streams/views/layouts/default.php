@@ -15,7 +15,7 @@
     <?php $this->insert('theme::partials/metadata', array('title' => $this->title)); ?>
 </head>
 
-<body data-spy="scroll" data-target=".spybar">
+<body data-spy="scroll" data-target=".spybar" data-layout="default">
 
 <div id="launch" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 9999; display: none;">
     <h1>
@@ -34,6 +34,10 @@
     <section class="container-fluid">
 
         <?php echo $this->content(); ?>
+
+        <small class="text-muted">
+            &copy; <?= date('Y'); ?> AnomalyLabs
+        </small>
 
     </section>
 
