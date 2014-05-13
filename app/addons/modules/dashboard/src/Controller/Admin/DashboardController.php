@@ -7,9 +7,9 @@ class DashboardController extends AdminController
 {
     public function index()
     {
-        $ui = new EntryTableUi();
+        $table = new EntryTableUi();
         $model = new \Streams\Model\Addons\AddonsModulesEntryModel;
 
-        $ui->table($model)->render();
+        $table->make($model)->render();
     }
 }
