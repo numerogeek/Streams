@@ -3,6 +3,13 @@
 trait TableUiTrait
 {
     /**
+     * Column to for the table.
+     *
+     * @var null
+     */
+    public $columns = null;
+
+    /**
      * Get prepared rows for the view.
      *
      * @param $columns

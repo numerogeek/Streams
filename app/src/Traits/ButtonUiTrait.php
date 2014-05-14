@@ -3,6 +3,13 @@
 trait ButtonUiTrait
 {
     /**
+     * Button template for each row.
+     *
+     * @var null
+     */
+    public $buttons = null;
+
+    /**
      * Get buttons for a given row.
      *
      * @param $buttons

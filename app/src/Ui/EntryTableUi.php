@@ -31,20 +31,6 @@ class EntryTableUi extends EntryUiAbstract
     public $title = null;
 
     /**
-     * Column to for the table.
-     *
-     * @var null
-     */
-    public $columns = null;
-
-    /**
-     * Button template for each row.
-     *
-     * @var null
-     */
-    public $buttons = null;
-
-    /**
      * Show the table footer?
      *
      * @var bool
