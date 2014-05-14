@@ -3,6 +3,14 @@
 class BaseController extends \Controller
 {
     /**
+     * Create a new BaseController instance.
+     */
+    public function __construct()
+    {
+        $this->boot();
+    }
+
+    /**
      * Setup the layout used by the controller.
      *
      * @return void
