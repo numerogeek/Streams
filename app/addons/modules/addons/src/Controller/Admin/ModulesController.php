@@ -31,12 +31,12 @@ class ModulesController extends AdminController
                     'id',
                     'slug',
                     'closure column' => array(
-                        'value' => function ($entry) {
+                        'data' => function ($entry) {
                                 return $entry;
                             }
                     ),
                     'parsed column'  => array(
-                        'value' => 'Boom.'
+                        'data' => 'Boom.'
                     )
                 )
             )

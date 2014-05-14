@@ -100,15 +100,15 @@ trait TableUiTrait
     protected function getRowColumnData($column, $options, $entry)
     {
         // Is there a rule for the value being passed along?
-        if (isset($options['value'])) {
+        if (isset($options['data'])) {
 
             // Check if the value is a closure.
-            if (is_callable($options['value'])) {
-                return call_user_func($options['value'], $entry);
+            if (is_callable($options['data'])) {
+                return call_user_func($options['data'], $entry);
 
                 // If it's a string - parse it out.
-            } elseif (is_string($options['value'])) {
-                return 'PARSED: ' . $options['header'] . ' - ' . $options['value'];
+            } elseif (is_string($options['data'])) {
+                return 'PARSED: ' . $options['header'] . ' - ' . $options['data'];
             }
 
             // Generate the value the ol' fashioned way.

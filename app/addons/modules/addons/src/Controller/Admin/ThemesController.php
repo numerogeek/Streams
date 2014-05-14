@@ -24,6 +24,6 @@ class ThemesController extends AdminController
      */
     public function index()
     {
-        $this->table->make($this->themes)->columns(array('id', 'slug', 'test column' => array('value' => 'Test')))->render();
+        $this->table->make($this->themes)->columns(array('id', 'slug', 'test column' => array('data' => 'Test')))->render();
     }
 }
