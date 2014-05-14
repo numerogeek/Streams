@@ -72,6 +72,10 @@ trait TableUiTrait
             // Default to a sensible header.
             if (!isset($options['header'])) {
                 $defaults[$column]['header'] = \Str::studly($column);
+
+                // Translate the header if applicable
+            } elseif (strpos($options['header'], '::') !== false) {
+                $defaults[$column]['header'] = trans($options['header']);
             }
 
             // No buttons by default.
