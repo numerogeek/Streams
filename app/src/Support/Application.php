@@ -109,10 +109,12 @@ class Application
 
         foreach ($addons as $addon) {
 
-            $interface = 'Addon\Module\Addons\Contract\\' . $addon . 'RepositoryInterface';
-            $manager   = '\\' . $addon;
+            $model   = 'Addon\Module\Addons\Model\\' . $addon . 'EntryModel';
+            $manager = '\\' . $addon;
 
-            $manager::mergeData(\App::make($interface));
+            $model = new $model;
+
+            $manager::mergeData($model);
         }
     }
 

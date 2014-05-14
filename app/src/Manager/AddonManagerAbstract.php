@@ -1,9 +1,9 @@
 <?php namespace Streams\Manager;
 
-use Addon\Module\Addons\Contract\AddonRepositoryInterface;
 use Composer\Autoload\ClassLoader;
 use Illuminate\Support\Str;
 use Streams\Filesystem\Filesystem;
+use Streams\Model\EntryModel;
 use Streams\Schema\FieldSchema;
 use Streams\Schema\StreamSchema;
 
@@ -42,10 +42,10 @@ abstract class AddonManagerAbstract
      *
      * @param ClassLoader $loader
      */
-    public function __construct(Classloader $loader)
+    public function __construct()
     {
-        $this->loader = $loader;
-        $this->files  = new Filesystem;
+        $this->loader = new ClassLoader();
+        $this->files  = new Filesystem();
     }
 
     /**
@@ -361,10 +361,12 @@ abstract class AddonManagerAbstract
 
     /**
      * Merge database data with our addons.
+     *
+     * @param EntryModel $model
      */
-    public function mergeData(AddonRepositoryInterface $repository)
+    public function mergeData(EntryModel $model)
     {
-        $data = $repository->all();
+        $data = $model->all();
 
         foreach ($data as $addonData) {
             if ($addon = $this->get($addonData->slug)) {
