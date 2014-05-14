@@ -11,6 +11,14 @@ class BaseController extends \Controller
     }
 
     /**
+     * Construct without bothering the parents.
+     */
+    public function boot()
+    {
+        // Nothing to do here..
+    }
+
+    /**
      * Setup the layout used by the controller.
      *
      * @return void
