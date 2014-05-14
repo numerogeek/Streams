@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top main" role="navigation">
-    <!--<div class="container">-->
+    <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <a type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -38,6 +38,6 @@
             </ul>
         </div>
         <!-- /.navbar-collapse -->
-    <!--</div>-->
+    </div>
     <!-- /.container-fluid -->
 </nav>
