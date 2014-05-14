@@ -1,9 +1,12 @@
 <?php namespace Addon\Module\Addons\Model;
 
+use Addon\Module\Addons\Traits\SyncTrait;
 use Streams\Model\Addons\AddonsThemesEntryModel;
 
 class ThemeEntryModel extends AddonsThemesEntryModel
 {
+    use SyncTrait;
+
     /**
      * Minutes to cache queries for.
      *
@@ -17,4 +20,11 @@ class ThemeEntryModel extends AddonsThemesEntryModel
      * @var string
      */
     public $collectionClass = 'Addon\Module\Addons\Collection\ThemeEntryCollection';
+
+    /**
+     * Manager class
+     *
+     * @var string
+     */
+    public $managerClass = 'Streams\Manager\ThemeManager';
 }

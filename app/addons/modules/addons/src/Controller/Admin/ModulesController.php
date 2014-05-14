@@ -2,24 +2,19 @@
 
 use Addon\Module\Addons\Model\ModuleEntryModel;
 use Streams\Controller\AdminController;
-use Addon\Module\Addons\Contract\ModuleRepositoryInterface;
 use Streams\Ui\EntryTableUi;
 
 class ModulesController extends AdminController
 {
     /**
-     * Create a new ModulesController instance.
-     *
-     * @param \Streams\Addon\ModuleManager $modules
+     * Construct without bothering the parents.
      */
-    public function __construct(ModuleRepositoryInterface $modules)
+    public function boot()
     {
-        parent::__construct();
-
-        $modules->sync();
-
         $this->table   = new EntryTableUi();
         $this->modules = new ModuleEntryModel();
+
+        $this->modules->sync();
     }
 
     /**

@@ -1,9 +1,12 @@
 <?php namespace Addon\Module\Addons\Model;
 
+use Addon\Module\Addons\Traits\SyncTrait;
 use Streams\Model\Addons\AddonsModulesEntryModel;
 
 class ModuleEntryModel extends AddonsModulesEntryModel
 {
+    use SyncTrait;
+
     /**
      * Minutes to cache queries for.
      *
@@ -17,4 +20,11 @@ class ModuleEntryModel extends AddonsModulesEntryModel
      * @var string
      */
     public $collectionClass = 'Addon\Module\Addons\Collection\ModuleEntryCollection';
+
+    /**
+     * Manager class
+     *
+     * @var string
+     */
+    public $managerClass = 'Streams\Manager\ModuleManager';
 }
