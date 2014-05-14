@@ -7,12 +7,10 @@ use Streams\Ui\EntryTableUi;
 class UsersController extends AdminController
 {
     /**
-     * Create a new ModulesController instance.
+     * Construct without bothering the parents.
      */
-    public function __construct()
+    public function boot()
     {
-        parent::__construct();
-
         $this->table = new EntryTableUi();
         $this->users = new UsersUsersEntryModel();
     }
