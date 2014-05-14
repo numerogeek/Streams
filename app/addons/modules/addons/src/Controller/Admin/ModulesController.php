@@ -24,20 +24,22 @@ class ModulesController extends AdminController
      */
     public function index()
     {
-        $this->table->make($this->modules)->columns(
-            array(
-                'id',
-                'slug',
-                'closure column' => array(
-                    'value' => function ($entry) {
-                            return $entry;
-                        }
-                ),
-                'parsed column'  => array(
-                    'value' => 'Boom.'
+        $this->table
+            ->make($this->modules)
+            ->columns(
+                array(
+                    'id',
+                    'slug',
+                    'closure column' => array(
+                        'value' => function ($entry) {
+                                return $entry;
+                            }
+                    ),
+                    'parsed column'  => array(
+                        'value' => 'Boom.'
+                    )
                 )
             )
-        )
             ->buttons(
                 array(
                     array(
