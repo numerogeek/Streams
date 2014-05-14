@@ -45,14 +45,6 @@ class EntryTableUi extends EntryUiAbstract
     public $showHeaders = true;
 
     /**
-     * Construct our class without bothering the parent.
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
-
-    /**
      * Make an entry table.
      *
      * @param      $slug
