@@ -31,6 +31,20 @@ class EntryTableUi extends EntryUiAbstract
     public $title = null;
 
     /**
+     * What column to order by.
+     *
+     * @var null
+     */
+    public $orderBy = 'id';
+
+    /**
+     * What to sort orderBy fields in.
+     *
+     * @var string
+     */
+    public $sort = 'ASC';
+
+    /**
      * Show the table footer?
      *
      * @var bool
@@ -76,9 +90,18 @@ class EntryTableUi extends EntryUiAbstract
             $this->columns = $this->getColumns();
         }
 
+        // Ordering
+        if (is_array($this->orderBy)) {
+            foreach ($this->orderBy as $orderBy => $sort) {
+                $this->model->orderBy($orderBy, $sort);
+            }
+        } else {
+            $this->model->orderBy($this->orderBy, $this->sort);
+        }
+
         // Get the entry data.
         if (!$this->entries) {
-            $this->entries = $this->model->all();
+            $this->entries = $this->model->get();
         }
 
         // Finally prep the rows for the table.
