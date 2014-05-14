@@ -12,18 +12,6 @@ class AdminController extends BaseController
     );
 
     /**
-     * Create a new AdminController instance
-     */
-    public function __construct()
-    {
-        $moduleSlug = \Request::segment(2);
-
-        if ($moduleSlug !== null and !in_array($moduleSlug, $this->ignore)) {
-            \Module::get(strtolower(\Request::segment(2)));
-        }
-    }
-
-    /**
      * Display the admin login page.
      */
     public function login()
